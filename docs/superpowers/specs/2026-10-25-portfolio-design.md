@@ -20,6 +20,20 @@ Each phase ships on its own and gets its own implementation plan.
 
 SEO basics (titles, descriptions, canonicals) and the performance/RTL rules apply from Phase 1.
 
+## Stories: overview and journey
+
+Every project has two layers, so the site works for a 30-second skim and for a reader who wants the whole story.
+
+- **Overview:** the brief layer. A few paragraphs on what it is, the stack, status and links. This is the project page and the card on index pages.
+- **Journey:** the long layer. A chaptered, dated, first-person story of how the project came to be: where the idea came from, what was built when, what broke, what changed, what it meant. Lives at `/personal/games/[slug]/journey` (same for lab entries), reads like the manga volume on About, and ends with a link to the next project's journey.
+- **Devlog series:** journal posts tagged `project: <slug>` appear in that project's journey as dated side-entries and on its project page as "From the devlog".
+- Work entries: Tanami keeps only its role line. CuspIO gets the brief overview only. No journey for either (confidentiality). A journey for a past employer would be written as a personal-growth story with no client or product detail, only if the owner asks.
+- Not every project needs a journey. Depth is the owner's choice per project: some stay overview-only forever.
+
+Phasing: Phase 1 ships overview pages plus the journey template with one flagship journey (S.M.O.B.B., the longest-running: July 2023 to 2026). Phase 2 adds the devlog link-up and journeys for skoobl and smoke-break. Further journeys land whenever written.
+
+Raw material: each project's git history gives dates, milestones and the shape of the story. I can extract a dated skeleton per project for the owner to write the voice over. Journey text is the owner's story, edited by them, and follows the content rules (no AI tooling mentioned).
+
 ## Stack and hosting
 
 - Astro, static output, content collections (markdown) for all entries.
@@ -36,6 +50,7 @@ SEO basics (titles, descriptions, canonicals) and the performance/RTL rules appl
 /personal                      Personal index: Games + Lab
 /personal/games/[slug]         Game page
 /personal/games/[slug]/play    Embedded playable build (iframe, fullscreen button)
+/personal/games/[slug]/journey Long-form chaptered story of the project (lab entries likewise)
 /personal/lab/[slug]           Small project page
 /journal  /journal/[slug]      Daily posts, tag filter, RSS at /rss.xml
 /about                         Chaptered story + "now" blurb
@@ -56,6 +71,8 @@ Nav: Work, Personal, Journal, About, Contact, plus a persistent "Get in touch" b
 - `lab`: `title, summary, stack[], repoUrl?, collaborators[]`.
 - `journal`: `title, date, tags[]`, optional `project`. Filename `YYYY-MM-DD-slug.md`. `npm run new "title"` scaffolds today's file.
 - `about`: `order, title`. One file per chapter.
+- `journeys`: `src/content/journeys/<project-slug>/NN-title.md`. Frontmatter: `project, order, title, date`. One file per chapter of a project's long story.
+- Every `games`/`lab` entry gains `status: live | released | prototype | showcase | archived`, `lastWorked` (date) and an optional `journey: true` flag that shows the "Read the journey" link.
 
 ## Content plan
 
