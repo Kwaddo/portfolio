@@ -32,7 +32,7 @@ Every project has two layers, so the site works for a 30-second skim and for a r
 
 ### Story intake workflow
 
-1. Owner writes raw text, as long and candid as wanted, into `_inbox/<slug>.md`. `_inbox/` is git-ignored: raw drafts are never committed or published.
+1. Owner writes raw text, as long and candid as wanted, into `~/Documents/notes/Portfolio Stories.md` (sectioned: A site voice, B project journeys, C involvements, D journal seeds, each with priority P1-P3). That vault is outside this repo. `_inbox/` (git-ignored) is the fallback for any extra raw file. Raw drafts are never committed or published.
 2. Claude edits it into `src/content/journeys/<slug>/NN-title.md` chapters: structure, tone, tightening, less-revealing wording. Facts and the owner's meaning are kept; nothing is invented. Anything unclear is asked, not guessed.
 3. Claude returns a short **change note** per story: what was cut, softened or generalized, and anything that might be sensitive (names, clients, money, health, family, employer internals, anything mentioning AI tooling).
 4. Owner approves the edited version. Only then is it committed.
