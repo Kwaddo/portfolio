@@ -259,11 +259,11 @@ All must be true before the site is announced (checked in the last task of Phase
 - Confidentiality: Tanami wording and all employer descriptions checked against the owner's contracts and any public-mention rules; collaborator naming confirmed (done: owner confirmed).
 - Real-device pass: iOS Safari, Android Chrome, desktop Firefox and keyboard-only navigation; halftone never reduces text contrast below 4.5:1.
 - Lighthouse mobile at or above 95 for performance and accessibility on landing, a work page, a game page and the journal index.
-- Link check clean; no forbidden strings in `dist/` (AI tooling names, phone number, plain email address).
+- Link check clean; no forbidden strings in `dist/` (AI tooling names, phone number, plain email address). Exception by owner choice: the downloadable resume PDF carries the owner's public email address as text.
 - Decisions recorded: custom domain or `kwaddo.github.io`; analytics yes or no (default: none).
 - GitHub profile name and bio updated to Ali Khalaf and linked to the site; LinkedIn updated with the site link.
 - Soft share to a few people for a 5-second landing test before wider sharing.
-- History scrub before the first public push: the working repo contains planning docs (`docs/`) and early commits that must not ship. Publish a history without `docs/`, with author name "Ali Khalaf" and the GitHub noreply email, and with no commit message mentioning AI tooling (verified by grepping `git log`). Planning docs move to the private notes vault.
+- Publication: the working repo's history is not publishable (planning docs under `docs/`, early commits holding sensitive literals in old blobs, author name "Quad"). Publish ONE fresh commit of the final tree without `docs/`, authored "Ali Khalaf" with the GitHub noreply email, and verify the public copy has no AI-tooling strings, no phone number, no plain email in any text file, and no `docs/`. Planning docs move to the private notes vault.
 
 ## Out of scope (now)
 

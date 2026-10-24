@@ -8,7 +8,7 @@
 
 **Tech Stack:** Phase 1 and 2 stack plus `sharp` (OG card rendering), `@lhci/cli` 0.15.1, Playwright Firefox and WebKit.
 
-**Prerequisite:** Phases 1 and 2 are complete (`git tag phase-1`, `git tag phase-2` exist; `npm run verify` and `npm run e2e` pass).
+**Prerequisite:** Phases 1 and 2 are complete (branches `phase-1` and `phase-2` exist and `phase-3` stacks on them; no git tags exist; `npm run verify` and `npm run e2e` pass).
 
 ## Global Constraints
 
@@ -870,6 +870,7 @@ Every outward-facing step below needs the owner's explicit "yes" immediately bef
 
 Domain: keep `https://kwaddo.github.io` (default) or a custom domain. If custom: add `public/CNAME` containing the domain, then replace `https://kwaddo.github.io` with the new origin in `astro.config.mjs` (`site`), `src/data/site.ts` (`url`), `public/robots.txt` (sitemap line), and the expected value in `tests/seo.test.ts` (canonical). Keep the S.M.O.B.B. iframe URL as is: with a custom domain on the user site, GitHub serves project sites under that domain and redirects the old address. Run `npm run verify`.
 Analytics: none (default). Do not add any.
+Resume PDF: the PDF contains the owner's real email address as extractable text (the site itself assembles it client-side, but a downloadable resume normally carries it). Default: accept it (the owner chose to publish this address). To avoid it instead, make `src/styles/print.css` / `resume.astro` render the spelled-out form for print and regenerate with `npm run resume:pdf`. Record the owner's choice here before Step 3.
 
 - [ ] **Step 2: Save the planning docs outside the repository**
 
@@ -879,56 +880,62 @@ cp -R ~/Documents/portfolio/docs/. ~/Documents/notes/portfolio-docs/
 ```
 The `docs/` folder is never published.
 
-- [ ] **Step 3: Build the scrubbed public history in a scratch clone**
+- [ ] **Step 3: Build the public repository as ONE commit from the final tree**
 
+The working repo's history is not publishable: eleven early commits contain the real phone number, the plain email address and the AI-tool name list in source blobs (they were removed from the latest tree, but remain in old commits), every commit is authored "Quad", and `docs/` holds the same literals. Rewriting history with `filter-branch` is fragile for this, so publish a single fresh commit of the final tree instead. `git archive` exports tracked files only (`.superpowers/` and `_inbox/` are untracked and cannot leak).
+
+First make `main` point at the final branch (it is currently a docs-only commit):
+```bash
+cd ~/Documents/portfolio
+git branch -f main phase-3   # use the latest content branch if the content tasks added more commits
+```
+Then:
 ```bash
 S=/private/tmp/claude-501/-Users-delirium-Documents/80aa3b97-3695-4dc5-9447-cd293c634fb2/scratchpad
-rm -rf $S/portfolio-public
-git clone --no-local ~/Documents/portfolio $S/portfolio-public
+rm -rf $S/portfolio-public && mkdir -p $S/portfolio-public
+git -C ~/Documents/portfolio archive main | tar -x -C $S/portfolio-public
+rm -rf $S/portfolio-public/docs
 cd $S/portfolio-public
-export FILTER_BRANCH_SQUELCH_WARNING=1
-git filter-branch -f --prune-empty \
-  --index-filter 'git rm -r -q --cached --ignore-unmatch docs' \
-  --msg-filter "perl -0pe 's/^Co-Authored-By:[^\n]*\n?//gim; s/\s+\z/\n/'" \
-  --env-filter 'N="Ali Khalaf"; E="139044444+Kwaddo@users.noreply.github.com"; export GIT_AUTHOR_NAME="$N" GIT_AUTHOR_EMAIL="$E" GIT_COMMITTER_NAME="$N" GIT_COMMITTER_EMAIL="$E"' \
-  --tag-name-filter cat -- --all
-git for-each-ref --format='%(refname)' refs/original | xargs -n1 git update-ref -d
-git reflog expire --expire=now --all && git gc -q --prune=now
+git init -q -b main && git add -A
+git -c user.name='Ali Khalaf' -c user.email='139044444+Kwaddo@users.noreply.github.com' commit -q -m 'feat: portfolio site'
 ```
+Note: do NOT publish the `phase-*` branches or any other ref of the working repo.
 
-- [ ] **Step 4: Verify the scrubbed clone is clean**
+- [ ] **Step 4: Verify the public repository is clean**
 
 ```bash
 cd $S/portfolio-public
+echo "commits: $(git rev-list --count HEAD)"
 echo "docs in tree: $(git ls-tree -r HEAD --name-only | grep -c '^docs/')"
-echo "bad strings in history: $(git log --all --format='%an <%ae>%n%cn <%ce>%n%B' | grep -ciE 'claude|anthropic|superpowers|co-authored|alimohsen')"
-echo "Quad in history: $(git log --all --format='%an%n%cn%n%B' | grep -ciw 'quad')"
-echo "bad strings in files: $(git grep -ciE 'claude|anthropic|superpowers' HEAD -- . | wc -l)"
-echo "plain email or phone in files: $(git grep -ciE '[a-z0-9._+-]+@gmail\.com|[^0-9]3[0-9]{3}[ -]?[0-9]{4}[^0-9]' HEAD -- . ':!package-lock.json' | wc -l)"
-git log --all --format='%an <%ae>' | sort | uniq -c
+echo "AI tooling in message/author: $(git log --format='%an <%ae>%n%cn <%ce>%n%B' | grep -ciE 'claude|anthropic|superpowers|co-authored|copilot|chatgpt|openai')"
+echo "Quad in message/author: $(git log --format='%an%n%cn%n%B' | grep -ciw 'quad')"
+echo "AI tooling in text files: $(git grep -cIiE 'claude|anthropic|superpowers|copilot|chatgpt|openai' HEAD -- . ':!package-lock.json' | wc -l)"
+echo "phone or plain email in text files: $(git grep -cIE '36000253|[a-z0-9._+-]+@gmail\.com' HEAD -- . ':!package-lock.json' | wc -l)"
+git log --format='%an <%ae>' | sort | uniq -c
 fnm exec --using=22.23.4 npm ci
 fnm exec --using=22.23.4 npm run verify
 ```
-Expected: `docs in tree: 0`, the four bad-string counts `0` (history, Quad, files, plain email or phone), a single author line `Ali Khalaf <139044444+Kwaddo@users.noreply.github.com>`, and `npm run verify` passes inside the clone. If anything is non-zero, fix the offending commit or file in the working repo, redo Steps 3-4. Show the owner the results.
+Expected: `commits: 1`, `docs in tree: 0`, the four counts `0`, a single author line `Ali Khalaf <139044444+Kwaddo@users.noreply.github.com>`, and `npm run verify` passes inside the public copy. (`-I` skips binary files: the resume PDF legitimately contains the owner's public email address, which the owner chose to publish; see Step 1.) If anything is non-zero, fix it in the working repo, redo Steps 3-4, and show the owner the results.
 
 - [ ] **Step 5 (ask first): Create the public repository and push**
 
-Ask: "Create `Kwaddo/Kwaddo.github.io` as a public repository and push the scrubbed history?" On yes:
+Ask: "Create `Kwaddo/Kwaddo.github.io` as a public repository (nothing is pushed yet)?" On yes:
 ```bash
 cd $S/portfolio-public
-gh repo create Kwaddo/Kwaddo.github.io --public --source=. --remote=origin --push
+gh repo create Kwaddo/Kwaddo.github.io --public --description 'Ali Khalaf: portfolio' --source=. --remote=origin
 ```
-Expected: the repository exists and `main` is pushed. The deploy workflow runs on that push.
+Expected: the repository exists and is empty; the local `main` has one commit. Do NOT use `--push`: the first push triggers the Deploy workflow, which fails if Pages is not enabled yet (Step 6 enables it first).
 
 - [ ] **Step 6 (ask first): Enable Pages from Actions and confirm the deploy**
 
-Ask, then:
+Ask: "Enable GitHub Pages (source: GitHub Actions) and push `main` now?" On yes:
 ```bash
 gh api -X POST repos/Kwaddo/Kwaddo.github.io/pages -f build_type=workflow
+cd $S/portfolio-public && git push -u origin main
 gh run list -R Kwaddo/Kwaddo.github.io --limit 3
 gh run watch -R Kwaddo/Kwaddo.github.io
 ```
-If the `POST` reports Pages already exists, use `-X PUT` with the same field. Expected: the Deploy workflow finishes green.
+If the `POST` reports Pages already exists, use `-X PUT` with the same field. Pages is enabled before the push so the first Deploy run can succeed. Expected: the Deploy workflow finishes green (if it ran before Pages was enabled, re-run with `gh workflow run Deploy -R Kwaddo/Kwaddo.github.io`).
 Then:
 ```bash
 curl -sI https://kwaddo.github.io/ | head -1
@@ -941,9 +948,9 @@ Expected: `200`, `200` (the S.M.O.B.B. project site still works under the user s
 
 Open the live site and run `npm run check:dist`-style spot checks against the deployed HTML:
 ```bash
-for p in / /work/tanami/ /about/ /contact/ /resume/; do curl -s https://kwaddo.github.io$p | grep -ciE 'claude|anthropic|mailto:|36000253|alimohsen999@gmail'; done
+for p in / /work/tanami/ /about/ /contact/ /resume/; do curl -s https://kwaddo.github.io$p | grep -ciE 'claude|anthropic|36000253|alimohsen999@gmail'; done
 ```
-Expected: five zeros. Fetch `https://kwaddo.github.io/Ali-Khalaf-CV.pdf` and confirm it downloads.
+Expected: five zeros. (Do not include `mailto:` in this pattern: the inlined copy-email script legitimately contains that text; the build gate already forbids `mailto:` links in markup.) Fetch `https://kwaddo.github.io/Ali-Khalaf-CV.pdf` and confirm it downloads.
 
 - [ ] **Step 8 (ask first): Align the owner's public identity**
 
@@ -956,7 +963,7 @@ Suggest, and apply only with approval, a one-line link to the site in the `Kwadd
 
 - [ ] **Step 9: Switch the working repo to the published history (owner-approved)**
 
-The working repo in `~/Documents/portfolio` still has the old history and `docs/`. With the owner's agreement, replace it with the published clone so both copies match:
+The working repo in `~/Documents/portfolio` still has the old history and `docs/`. From now on, edits to the site (journal posts, stories, media) should be made in a clone of the published repository, which has no planning docs. With the owner's agreement:
 ```bash
 mv ~/Documents/portfolio ~/Documents/portfolio-old
 git clone git@github.com:Kwaddo/Kwaddo.github.io ~/Documents/portfolio
