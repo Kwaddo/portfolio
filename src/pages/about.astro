@@ -4,8 +4,9 @@ import Base from '../layouts/Base.astro';
 import { byOrder, published } from '../lib/content';
 import { site } from '../data/site';
 import { skills } from '../data/skills';
-import { credentials } from '../data/credentials';
+import Timeline from '../components/Timeline.astro';
 
+const timeline = published(await getCollection('timeline'));
 const chapters = byOrder(published(await getCollection('about')));
 const rendered = await Promise.all(chapters.map(async (c) => ({ c, Content: (await render(c)).Content })));
 ---
@@ -47,17 +48,9 @@ const rendered = await Promise.all(chapters.map(async (c) => ({ c, Content: (awa
       <ul class="tags">{skills.stack.map((s) => <li>{s}</li>)}</ul>
     </section>
 
-    <section class="stack" aria-labelledby="education">
-      <h2 id="education">Education</h2>
-      <ul class="prose">
-        {
-          credentials.map((c) => (
-            <li>
-              <strong>{c.award}</strong>, {c.school}. {c.status}, {c.period}.
-            </li>
-          ))
-        }
-      </ul>
+    <section class="stack" aria-labelledby="timeline-title">
+      <h2 id="timeline-title">Timeline</h2>
+      <Timeline entries={timeline} />
     </section>
   </div>
 </Base>

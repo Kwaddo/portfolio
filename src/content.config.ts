@@ -93,4 +93,24 @@ const journal = defineCollection({
   }),
 });
 
-export const collections = { work, games, lab, about, journeys, journal };
+const timeline = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/timeline' }),
+  schema: z
+    .object({
+      start: z.string().regex(/^\d{4}-\d{2}$/),
+      end: z.string().regex(/^(\d{4}-\d{2}|present)$/),
+      kind: z.enum(['work', 'education', 'project', 'event']),
+      title: z.string(),
+      org: z.string().optional(),
+      summary: z.string().optional(),
+      link: z.string().optional(),
+      journey: z.boolean().default(false),
+      draft: z.boolean().default(false),
+    })
+    .refine((d) => !(d.journey && d.kind === 'project'), {
+      message: 'project timeline entries link to their project page; their journeys live under /personal/',
+      path: ['journey'],
+    }),
+});
+
+export const collections = { work, games, lab, about, journeys, journal, timeline };

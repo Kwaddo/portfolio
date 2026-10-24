@@ -567,3 +567,36 @@ a.panel:focus-visible .badge--archived {
   gap: 0.75rem;
   justify-content: space-between;
 }
+
+/* ---------- timeline ---------- */
+.timeline {
+  display: grid;
+  gap: 1rem;
+  margin: 0;
+  padding: 0;
+  padding-inline-start: 1rem;
+  border-inline-start: var(--rule);
+  list-style: none;
+}
+.timeline__item {
+  display: grid;
+  gap: 0.25rem 1.5rem;
+}
+@media (min-width: 40rem) {
+  .timeline__item {
+    grid-template-columns: 11rem 1fr;
+  }
+}
+.timeline__period {
+  color: var(--tone);
+  font-size: 0.9rem;
+}
+.timeline__title {
+  font-weight: 700;
+}
+.timeline__org {
+  font-weight: 400;
+}
+.timeline__summary {
+  color: var(--tone);
+}

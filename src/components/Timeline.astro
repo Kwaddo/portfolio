@@ -1,0 +1,26 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { periodLabel, sortTimeline } from '../lib/timeline';
+
+interface Props {
+  entries: CollectionEntry<'timeline'>[];
+}
+const items = sortTimeline(Astro.props.entries);
+const href = (e: CollectionEntry<'timeline'>) => (e.data.journey ? `/about/${e.id}/` : e.data.link);
+---
+<ol class="timeline">
+  {
+    items.map((e) => (
+      <li class="timeline__item">
+        <p class="timeline__period">{periodLabel(e.data.start, e.data.end)}</p>
+        <div>
+          <p class="timeline__title">
+            {href(e) ? <a href={href(e)}>{e.data.title}</a> : e.data.title}
+            {e.data.org && <span class="timeline__org"> · {e.data.org}</span>}
+          </p>
+          {e.data.summary && <p class="timeline__summary">{e.data.summary}</p>}
+        </div>
+      </li>
+    ))
+  }
+</ol>
