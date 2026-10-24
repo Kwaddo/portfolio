@@ -178,6 +178,23 @@ docs/superpowers/specs/
 - Persistent "Get in touch" nav button, linking to `/contact` (mailto fallback).
 - Availability line on the landing (e.g. open to work / freelance), edited in one frontmatter field.
 
+## Copy-email button
+
+On `/contact`, the resume and the Work with me block, next to the address: a "Copy email" button that writes the address to the clipboard (`navigator.clipboard`, falling back to selecting the text), then shows "Copied" for 2 seconds in an `aria-live="polite"` region. It works without a mailto handler. The address is still assembled client-side from split parts; with JavaScript off, the `<noscript>` plain-text fallback is shown and the button is hidden. Keyboard focusable, with a visible focus state. Phase 1.
+
+## Dependency upkeep
+
+`.github/dependabot.yml` with two ecosystems: `npm` and `github-actions`, weekly, grouped into one PR per ecosystem (minor and patch together), max 5 open PRs. The CI build and checks run on every Dependabot PR; the owner merges when green. Major upgrades (Astro majors in particular) are reviewed by hand. Phase 1.
+
+## Publishing workflow (no CMS)
+
+Content is markdown files in git; there is no CMS. To publish: add or edit a file, commit to `main`, GitHub Actions rebuilds and deploys (a minute or two).
+
+- New post: `npm run new "title"` creates `src/content/journal/YYYY-MM-DD-slug.md` with frontmatter filled in. Edits can also be made in the GitHub web editor from any device.
+- Drafts: every collection has `draft: boolean` (default false). Draft entries are excluded from the build output, index pages, RSS and sitemap.
+- Stories are written in the private notes vault, then edited into the repo as described in the intake workflow.
+- Revisit a web-based CMS only if writing straight into files becomes a real obstacle (see Out of scope).
+
 ## Work with me
 
 A short block on the landing page (below the split entry) and again on `/contact`, with 3-4 lines:
@@ -231,7 +248,7 @@ Screenshots and GIFs are captured per project from local copies, one at a time, 
 
 ## Out of scope (now)
 
-Comments, analytics, CMS, search, translations (RTL layout is prepared; content is not translated), newsletter. Revisit if needed.
+Comments, analytics, a web-based CMS (see Publishing workflow), search, translations (RTL layout is prepared; content is not translated), newsletter. Revisit if needed.
 
 ## Open items
 
