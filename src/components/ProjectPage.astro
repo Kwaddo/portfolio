@@ -1,9 +1,12 @@
 ---
-import { render, type CollectionEntry } from 'astro:content';
+import { getCollection, render, type CollectionEntry } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import StatusBadge from './StatusBadge.astro';
 import Shot from './Shot.astro';
 import { formatMonth } from '../lib/dates';
+import Devlog from './Devlog.astro';
+import { forProject, newestFirst, toDevlog } from '../lib/journal';
+import { published } from '../lib/content';
 
 interface Props {
   kind: 'games' | 'lab';
@@ -12,6 +15,7 @@ interface Props {
 const { kind, entry } = Astro.props;
 const { data } = entry;
 const { Content } = await render(entry);
+const devlog = toDevlog(forProject(newestFirst(published(await getCollection('journal'))), entry.id));
 
 const base = `/personal/${kind}/${entry.id}/`;
 const playable = 'playable' in data ? data.playable : 'none';
@@ -68,5 +72,6 @@ const external = { target: '_blank', rel: 'noopener noreferrer' } as const;
         </p>
       )
     }
+    <Devlog items={devlog} />
   </article>
 </Base>
