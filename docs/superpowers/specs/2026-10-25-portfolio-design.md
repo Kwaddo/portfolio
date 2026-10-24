@@ -30,6 +30,10 @@ Every project has two layers, so the site works for a 30-second skim and for a r
 - **Involvements get journeys too** (employers, Reboot, university), not only projects. The owner supplies the raw story; the published version is edited for professionalism and discretion. Employer journeys carry no client, product, internal-tool, metric or colleague detail beyond what the timeline already states; they tell the growth story (what was learned, what changed). Tanami's public page stays a role line; its journey, if any, is the same kind of discreet growth story. CuspIO's overview stays brief.
 - Not every project needs a journey. Depth is the owner's choice per project: some stay overview-only forever.
 
+### Journal titling
+
+Journal entries have no headline. The date is the title everywhere: the entry heading (a large manga-style date stamp, with the ISO date in a `<time datetime>` element), the index list (date plus the first two lines as an excerpt), prev/next links, the browser `<title>` ("24 October 2026 | Journal | Ali Khalaf"), the meta description (first sentence of the entry) and RSS item titles.
+
 ### Story intake workflow
 
 1. Owner writes raw text, as long and candid as wanted, into `~/Documents/notes/Portfolio Stories.md` (sectioned: A site voice, B project journeys, C involvements, D journal seeds, each with priority P1-P3). That vault is outside this repo. `_inbox/` (git-ignored) is the fallback for any extra raw file. Raw drafts are never committed or published.
@@ -59,7 +63,7 @@ Raw material: each project's git history gives dates, milestones and the shape o
 /personal/games/[slug]/play    Embedded playable build (iframe, fullscreen button)
 /personal/games/[slug]/journey Long-form chaptered story of the project (lab entries likewise)
 /personal/lab/[slug]           Small project page
-/journal  /journal/[slug]      Daily posts, tag filter, RSS at /rss.xml
+/journal  /journal/[date]      Daily posts titled by date, tag filter, RSS at /rss.xml
 /about                         Chaptered story + "now" blurb
 /resume                        Print-styled resume page + PDF download
 /uses                          Tools and setup
@@ -76,7 +80,7 @@ Nav: Work, Personal, Journal, About, Contact, plus a persistent "Get in touch" b
 - `work`: `title, role, period, stack[], summary, confidential: bool`, optional screenshots.
 - `games`: `title, summary, playable: embed | external | none, playUrl?, repoUrl?, collaborators[]`.
 - `lab`: `title, summary, stack[], repoUrl?, collaborators[]`.
-- `journal`: `title, date, tags[]`, optional `project`. Filename `YYYY-MM-DD-slug.md`. `npm run new "title"` scaffolds today's file.
+- `journal`: `date, tags[]`, optional `project`. **No title field: each entry is titled by its date** (e.g. "24 October 2026"). Filename `YYYY-MM-DD.md` (a second post the same day: `YYYY-MM-DD-2.md`). URL `/journal/YYYY-MM-DD`. `npm run new` scaffolds today's file.
 - `about`: `order, title`. One file per chapter.
 - `journeys`: `src/content/journeys/<project-slug>/NN-title.md`. Frontmatter: `project, order, title, date`. One file per chapter of a project's long story.
 - Every `games`/`lab` entry gains `status: live | released | prototype | showcase | archived`, `lastWorked` (date) and an optional `journey: true` flag that shows the "Read the journey" link.
@@ -190,7 +194,7 @@ On `/contact`, the resume and the Work with me block, next to the address: a "Co
 
 Content is markdown files in git; there is no CMS. To publish: add or edit a file, commit to `main`, GitHub Actions rebuilds and deploys (a minute or two).
 
-- New post: `npm run new "title"` creates `src/content/journal/YYYY-MM-DD-slug.md` with frontmatter filled in. Edits can also be made in the GitHub web editor from any device.
+- New post: `npm run new` creates `src/content/journal/YYYY-MM-DD.md` (suffix `-2` if one exists) with the date and empty tags filled in. Edits can also be made in the GitHub web editor from any device.
 - Drafts: every collection has `draft: boolean` (default false). Draft entries are excluded from the build output, index pages, RSS and sitemap.
 - Stories are written in the private notes vault, then edited into the repo as described in the intake workflow.
 - Revisit a web-based CMS only if writing straight into files becomes a real obstacle (see Out of scope).
