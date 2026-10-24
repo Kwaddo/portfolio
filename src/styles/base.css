@@ -1,0 +1,144 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-padding-block-start: calc(var(--nav-h) + 1rem);
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font: 400 1rem/1.6 var(--font-body);
+  overflow-wrap: break-word;
+}
+
+img,
+video,
+iframe {
+  max-inline-size: 100%;
+}
+img {
+  block-size: auto;
+}
+
+h1,
+h2,
+h3 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+}
+h1 {
+  font-size: clamp(2.5rem, 9vw, 5rem);
+}
+h2 {
+  font-size: clamp(1.75rem, 5vw, 2.75rem);
+}
+h3 {
+  font-size: 1.5rem;
+}
+p {
+  margin: 0;
+}
+a {
+  color: inherit;
+  text-underline-offset: 0.2em;
+  text-decoration-thickness: 2px;
+}
+:focus-visible {
+  outline: 3px solid var(--ink);
+  outline-offset: 3px;
+}
+.on-ink :focus-visible {
+  outline-color: var(--paper);
+}
+
+main {
+  display: block;
+  padding-block: clamp(1.5rem, 4vw, 3rem);
+}
+.wrap {
+  max-inline-size: var(--wrap);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+.stack > * + * {
+  margin-block-start: clamp(1rem, 2.5vw, 1.75rem);
+}
+.prose {
+  max-inline-size: var(--measure);
+}
+.prose > * + * {
+  margin-block-start: 1rem;
+}
+.prose ul,
+.prose ol {
+  padding-inline-start: 1.25rem;
+}
+.lede {
+  max-inline-size: var(--measure);
+  color: var(--tone);
+  font-size: 1.15rem;
+}
+
+.visually-hidden {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+.skip {
+  position: absolute;
+  inset-inline-start: var(--gutter);
+  inset-block-start: -4rem;
+  z-index: 100;
+  padding: 0.5rem 1rem;
+  background: var(--ink);
+  color: var(--paper);
+}
+.skip:focus {
+  inset-block-start: 0.5rem;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.tags li {
+  padding: 0.1rem 0.6rem;
+  border: 2px solid var(--ink);
+  font-size: 0.85rem;
+}
+.notice {
+  padding: 1rem;
+  border: var(--rule);
+  border-style: dashed;
+  background: var(--tone-fill);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}

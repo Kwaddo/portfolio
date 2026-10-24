@@ -1,0 +1,14 @@
+---
+import { site } from '../data/site';
+const year = new Date().getFullYear();
+---
+<footer class="footer on-ink">
+  <div class="wrap footer__inner">
+    <p>&copy; {year} {site.name}</p>
+    <ul>
+      <li><a href={site.links.github} rel="me noopener">GitHub</a></li>
+      <li><a href={site.links.linkedin} rel="me noopener">LinkedIn</a></li>
+    </ul>
+    <a href="#main">Back to top</a>
+  </div>
+</footer>

@@ -1,0 +1,14 @@
+:root {
+  --paper: #fafafa;
+  --ink: #0a0a0a;
+  --tone: #5c5c5c; /* secondary text, 6.4:1 on paper */
+  --tone-fill: #e6e6e6; /* flat screentone fill, never behind small text */
+  --font-display: 'Anton', 'Arial Narrow', Impact, sans-serif;
+  --font-body: 'Inter Variable', system-ui, -apple-system, 'Segoe UI', 'Geeza Pro', 'Noto Sans Arabic', sans-serif;
+  --rule: 3px solid var(--ink);
+  --gutter: clamp(0.75rem, 3vw, 1.75rem);
+  --measure: 68ch;
+  --wrap: 72rem;
+  --nav-h: 3.5rem;
+  color-scheme: light;
+}
