@@ -14,6 +14,7 @@
     "check": "astro check",
     "test": "vitest run",
     "new": "node scripts/new-post.mjs",
+    "resume:pdf": "node scripts/make-resume-pdf.mjs",
     "check:dist": "node scripts/check-dist.mjs",
     "e2e": "playwright test",
     "verify": "npm run check && npm run test && npm run build && npm run check:dist"

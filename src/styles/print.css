@@ -1,0 +1,45 @@
+@media print {
+  @page {
+    size: A4;
+    margin: 14mm;
+  }
+  body {
+    font-size: 10pt;
+    line-height: 1.45;
+  }
+  .nav,
+  .footer,
+  .skip,
+  .btn,
+  .no-print,
+  .tone {
+    display: none !important;
+  }
+  main {
+    padding: 0;
+  }
+  .wrap {
+    max-inline-size: none;
+    padding-inline: 0;
+  }
+  a {
+    text-decoration: none;
+  }
+  h1 {
+    font-size: 24pt;
+  }
+  h2 {
+    margin-block-start: 6mm;
+    padding-block-end: 1mm;
+    border-block-end: 1.5pt solid var(--ink);
+    font-size: 13pt;
+  }
+  .resume .timeline {
+    border-inline-start: 0;
+    padding-inline-start: 0;
+  }
+  .timeline__item,
+  .resume__project {
+    break-inside: avoid;
+  }
+}
