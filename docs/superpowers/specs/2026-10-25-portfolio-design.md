@@ -27,8 +27,15 @@ Every project has two layers, so the site works for a 30-second skim and for a r
 - **Overview:** the brief layer. A few paragraphs on what it is, the stack, status and links. This is the project page and the card on index pages.
 - **Journey:** the long layer. A chaptered, dated, first-person story of how the project came to be: where the idea came from, what was built when, what broke, what changed, what it meant. Lives at `/personal/games/[slug]/journey` (same for lab entries), reads like the manga volume on About, and ends with a link to the next project's journey.
 - **Devlog series:** journal posts tagged `project: <slug>` appear in that project's journey as dated side-entries and on its project page as "From the devlog".
-- Work entries: Tanami keeps only its role line. CuspIO gets the brief overview only. No journey for either (confidentiality). A journey for a past employer would be written as a personal-growth story with no client or product detail, only if the owner asks.
+- **Involvements get journeys too** (employers, Reboot, university), not only projects. The owner supplies the raw story; the published version is edited for professionalism and discretion. Employer journeys carry no client, product, internal-tool, metric or colleague detail beyond what the timeline already states; they tell the growth story (what was learned, what changed). Tanami's public page stays a role line; its journey, if any, is the same kind of discreet growth story. CuspIO's overview stays brief.
 - Not every project needs a journey. Depth is the owner's choice per project: some stay overview-only forever.
+
+### Story intake workflow
+
+1. Owner writes raw text, as long and candid as wanted, into `_inbox/<slug>.md`. `_inbox/` is git-ignored: raw drafts are never committed or published.
+2. Claude edits it into `src/content/journeys/<slug>/NN-title.md` chapters: structure, tone, tightening, less-revealing wording. Facts and the owner's meaning are kept; nothing is invented. Anything unclear is asked, not guessed.
+3. Claude returns a short **change note** per story: what was cut, softened or generalized, and anything that might be sensitive (names, clients, money, health, family, employer internals, anything mentioning AI tooling).
+4. Owner approves the edited version. Only then is it committed.
 
 Phasing: Phase 1 ships overview pages plus the journey template with one flagship journey (S.M.O.B.B., the longest-running: July 2023 to 2026). Phase 2 adds the devlog link-up and journeys for skoobl and smoke-break. Further journeys land whenever written.
 
