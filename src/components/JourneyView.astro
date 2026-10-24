@@ -1,0 +1,44 @@
+---
+import { render, type CollectionEntry } from 'astro:content';
+import Base from '../layouts/Base.astro';
+
+interface Props {
+  title: string;
+  chapters: CollectionEntry<'journeys'>[];
+  backHref: string;
+  next?: { title: string; href: string };
+}
+const { title, chapters, backHref, next } = Astro.props;
+const rendered = await Promise.all(
+  chapters.map(async (chapter) => ({ chapter, Content: (await render(chapter)).Content })),
+);
+const month = (d: Date) => d.toLocaleDateString('en-US', { month: 'long', year: 'numeric', timeZone: 'UTC' });
+---
+<Base title={`${title}: the journey`} description={`The story behind ${title}, told in chapters.`}>
+  <div class="wrap stack">
+    <p><a class="back" href={backHref}>About {title}</a></p>
+    <h1>{title}: the journey</h1>
+    {
+      rendered.map(({ chapter, Content }, i) => (
+        <>
+          {i > 0 && <hr class="wash" />}
+          <article class="chapter">
+            <p class="chapter__no">Chapter {i + 1}</p>
+            <div class="prose">
+              <h2>{chapter.data.title}</h2>
+              {chapter.data.date && <p class="chapter__date">{month(chapter.data.date)}</p>}
+              <Content />
+            </div>
+          </article>
+        </>
+      ))
+    }
+    {
+      next && (
+        <p>
+          <a class="btn btn--solid" href={next.href}>Next journey: {next.title}</a>
+        </p>
+      )
+    }
+  </div>
+</Base>
