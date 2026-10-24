@@ -128,9 +128,9 @@ docs/superpowers/specs/
 | Aug 2024 - Aug 2026 | education | Reboot Coding Institute, graduated with DevOps. |
 | Sep 2021 - Aug 2026 | education | University of Bahrain, Bachelor's in Software Engineering, graduated. |
 
-  Notes: employers get the CV-level description only, with no client or product detail beyond what is listed (Tanami: role line only). Repo milestones (S.M.O.B.B. 2023, skoobl, hackathons) are added as `project` entries between these. Sources: LinkedIn (titles for Tanami, dates for Croozz) and the pre-Tanami CV (Babel Pastries and the descriptions). Where they differ, LinkedIn wins: Croozz is Feb 2025 - Jan 2026 there but Jan - Dec 2025 on the CV; Tech Bay title is "Software Developer" on LinkedIn but "Junior Software Engineer" on the CV (CV title used). Entries are not linked to specific projects unless the owner says so (CuspIO's employer is unconfirmed).
+  Notes: employers get the CV-level description only, with no client or product detail beyond what is listed (Tanami: role line only). Repo milestones (S.M.O.B.B. 2023, skoobl, hackathons) are added as `project` entries between these. Sources: LinkedIn (titles for Tanami, dates for Croozz) and the pre-Tanami CV (Babel Pastries and the descriptions). Where they differ, LinkedIn wins (confirmed by the owner): Croozz is Feb 2025 - Jan 2026 there but Jan - Dec 2025 on the CV; Tech Bay title is "Software Developer" on LinkedIn but "Junior Software Engineer" on the CV (CV title used). Entries are not linked to specific projects unless the owner says so (CuspIO's employer is unconfirmed).
 - **Credentials rule:** only two are shown: Reboot Coding Institute (graduated, DevOps) and University of Bahrain (graduated, Bachelor's in Software Engineering). No other certifications. High school is omitted.
-- **Contact privacy:** the CV carries a phone number and a Gmail address. Neither is published on the site or in the generated resume. Contact page shows GitHub and LinkedIn only until the owner picks a public email.
+- **Contact:** the Gmail address from the CV is the public contact email (owner's choice), shown on `/contact`, the resume and the nav CTA (`mailto:`). To limit scraping, the address is assembled client-side from split parts, with a plain-text fallback inside `<noscript>`. The phone number is not published anywhere. GitHub and LinkedIn links are also listed.
 - **Stack list** (About and resume): Go, JavaScript, TypeScript, NestJS, React, Next.js, Vue, React Native, PHP Laravel, C#/ASP.NET, Rust. Languages: English, Arabic.
 - Journey facts from LinkedIn also seed the About facts strip and chapter stubs. The story text stays the owner's.
 
@@ -184,9 +184,7 @@ Comments, analytics, CMS, search, translations (RTL layout is prepared; content 
 
 - No headline/tagline for now (owner's call). Landing shows "Ali Khalaf, Software Engineer".
 - About story text is drafted from verified facts in `docs/about-draft.md`; owner edits it.
-- Public contact email choice (see Contact privacy).
 - Whether CuspIO was built under one of the listed employers (affects its framing).
-- Croozz dates differ between LinkedIn and the CV (see timeline notes).
 - Tanami `period`: now "Jun 2026 - present", title "Software Engineer".
 - Screenshots and GIFs for skoobl, smoke-break, smart-road, dopher-alpha, CuspIO to be provided or captured.
 - Create the GitHub repo and configure Pages when ready to deploy.
