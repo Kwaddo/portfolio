@@ -1,0 +1,63 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import { byOrder, published } from '../lib/content';
+import { site } from '../data/site';
+import { skills } from '../data/skills';
+import { credentials } from '../data/credentials';
+
+const chapters = byOrder(published(await getCollection('about')));
+const rendered = await Promise.all(chapters.map(async (c) => ({ c, Content: (await render(c)).Content })));
+---
+<Base title="About" description="The story of Ali Khalaf: a software engineer from Bahrain who learns by building.">
+  <div class="wrap stack">
+    <h1>About</h1>
+    <dl class="facts">
+      <div><dt>Name</dt><dd>{site.name}</dd></div>
+      <div><dt>Role</dt><dd>{site.role}</dd></div>
+      <div><dt>Based in</dt><dd>{site.location}</dd></div>
+      <div><dt>Languages</dt><dd>{skills.languages.join(', ')}</dd></div>
+      <div>
+        <dt>Elsewhere</dt>
+        <dd>
+          <a href={site.links.github} rel="me noopener">GitHub</a> ·
+          <a href={site.links.linkedin} rel="me noopener">LinkedIn</a>
+        </dd>
+      </div>
+    </dl>
+
+    {
+      rendered.map(({ c, Content }, i) => (
+        <>
+          {i > 0 && <hr class="wash" />}
+          <article class="chapter">
+            <p class="chapter__no">Chapter {i + 1}</p>
+            <div class="prose">
+              <h2>{c.data.title}</h2>
+              <Content />
+            </div>
+          </article>
+        </>
+      ))
+    }
+
+    <hr class="wash" />
+    <section class="stack" aria-labelledby="stack">
+      <h2 id="stack">Stack</h2>
+      <ul class="tags">{skills.stack.map((s) => <li>{s}</li>)}</ul>
+    </section>
+
+    <section class="stack" aria-labelledby="education">
+      <h2 id="education">Education</h2>
+      <ul class="prose">
+        {
+          credentials.map((c) => (
+            <li>
+              <strong>{c.award}</strong>, {c.school}. {c.status}, {c.period}.
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+  </div>
+</Base>
