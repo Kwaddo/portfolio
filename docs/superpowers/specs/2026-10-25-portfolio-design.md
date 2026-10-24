@@ -151,6 +151,16 @@ docs/superpowers/specs/
 - Persistent "Get in touch" nav button, linking to `/contact` (mailto fallback).
 - Availability line on the landing (e.g. open to work / freelance), edited in one frontmatter field.
 
+## Work with me
+
+A short block on the landing page (below the split entry) and again on `/contact`, with 3-4 lines:
+
+- **What I take on:** full-stack web, mobile apps (React Native, Flutter-adjacent), backend services (Go, Laravel, Node), and game prototypes.
+- **How to start:** email with a short brief (what you're building, timeline, budget range); reply within the stated response time.
+- **Availability:** driven by the single availability field in frontmatter (see Calls to action).
+
+Copy is drafted in Phase 1 and edited by the owner. No rates are published.
+
 ## SEO and sharing
 
 - Per-page `<title>` and meta description from frontmatter, canonical URLs, `sitemap.xml`, `robots.txt`, RSS.
@@ -182,6 +192,8 @@ docs/superpowers/specs/
 
 - No mention of AI coding tools or assistant involvement anywhere on the site: copy, `/uses`, journal templates, repo READMEs shown, or screenshots. Screenshots must not show assistant UIs, terminals or logs containing such references.
 - Tanami: role line only, as above.
+- **Identity:** the public name is **Ali Khalaf** everywhere on the site (nav, titles, meta, JSON-LD, resume). "Kwaddo" appears only as the GitHub handle inside links. "Quad" is never shown. GitHub profile name and git author name are to be aligned to the real name (owner action, see open items).
+- Collaborators may be named (owner confirmed they are fine with it): SilentYsf, aburxwais, Moa-01/Moataz Ibrahim and others on shared projects. Use the names they use publicly on GitHub.
 - Every screenshot is reviewed by the owner before publish. EXIF/location metadata is stripped from all images (the Astro image pipeline re-encodes them).
 - Embedded games use `<iframe sandbox="allow-scripts allow-same-origin allow-pointer-lock allow-fullscreen">` with `allow="fullscreen"`, loaded only after a click. No other third-party embeds.
 - Build checks (Phase 3, CI): Lighthouse (mobile) against the performance and accessibility targets, plus a link check.
@@ -198,6 +210,7 @@ Comments, analytics, CMS, search, translations (RTL layout is prepared; content 
 
 - No headline/tagline for now (owner's call). Landing shows "Ali Khalaf, Software Engineer".
 - About story text is drafted from verified facts in `docs/about-draft.md`; owner edits it.
+- Align GitHub profile name ("Quad" today) and global git `user.name` ("Quad") to "Ali Khalaf"; update the GitHub bio and the `Kwaddo` profile README to point to the site.
 - Unverified: live game URLs have not been opened, and smart-road controls and gridlock package names are guesses (checked during the capture pass).
 - Screenshots and GIFs for skoobl, smoke-break, smart-road, dopher-alpha, CuspIO to be provided or captured.
 - Create the GitHub repo and configure Pages when ready to deploy.
