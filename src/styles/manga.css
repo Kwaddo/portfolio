@@ -243,6 +243,10 @@ a.panel:focus-visible .panel__meta,
 a.panel:focus-visible .panel__text {
   color: var(--paper);
 }
+a.panel:hover .badge--archived,
+a.panel:focus-visible .badge--archived {
+  color: var(--paper);
+}
 @supports (animation-timeline: view()) {
   .panel {
     animation: panel-reveal linear both;
@@ -278,6 +282,9 @@ a.panel:focus-visible .panel__text {
   border-block-end: var(--rule);
   background: var(--paper);
   transform: rotate(45deg);
+}
+[dir='rtl'] .bubble::after {
+  transform: rotate(-45deg);
 }
 .bubble h1 {
   font-size: clamp(2rem, 7vw, 3.25rem);
@@ -325,6 +332,14 @@ a.panel:focus-visible .panel__text {
 .split__door:focus-visible {
   outline: 4px solid currentColor;
   outline-offset: -10px;
+}
+.split__door--work:focus-visible {
+  background: var(--ink);
+  color: var(--paper);
+}
+.split__door--personal:focus-visible {
+  background: var(--paper);
+  color: var(--ink);
 }
 @media (min-width: 48rem) {
   .split {
@@ -460,6 +475,12 @@ a.panel:focus-visible .panel__text {
   border: var(--rule);
   background: var(--ink);
   color: var(--paper);
+}
+.player :focus-visible {
+  outline-color: var(--paper);
+}
+.player__bar :focus-visible {
+  outline-color: var(--ink);
 }
 .player__stage {
   position: relative;
