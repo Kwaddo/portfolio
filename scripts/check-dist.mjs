@@ -19,7 +19,7 @@ for (const file of walk(root)) {
   violations.push(...findViolations(relative(root, file), readFileSync(file, 'utf8')));
 }
 
-const required = ['rss.xml', 'sitemap-index.xml', 'robots.txt'];
+const required = ['rss.xml', 'sitemap-index.xml', 'robots.txt', '404.html'];
 for (const file of required) {
   if (!existsSync(join(root, file))) violations.push(`${file}: missing from dist`);
 }
