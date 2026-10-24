@@ -1,0 +1,72 @@
+---
+import { render, type CollectionEntry } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import StatusBadge from './StatusBadge.astro';
+import Shot from './Shot.astro';
+import { formatMonth } from '../lib/dates';
+
+interface Props {
+  kind: 'games' | 'lab';
+  entry: CollectionEntry<'games'> | CollectionEntry<'lab'>;
+}
+const { kind, entry } = Astro.props;
+const { data } = entry;
+const { Content } = await render(entry);
+
+const base = `/personal/${kind}/${entry.id}/`;
+const playable = 'playable' in data ? data.playable : 'none';
+const playUrl = 'playUrl' in data ? data.playUrl : undefined;
+const downloadUrl = 'downloadUrl' in data ? data.downloadUrl : undefined;
+const liveUrl = 'liveUrl' in data ? data.liveUrl : undefined;
+const external = { target: '_blank', rel: 'noopener noreferrer' } as const;
+---
+<Base title={data.title} description={data.summary}>
+  <article class="wrap stack">
+    <p><a class="back" href="/personal/">All personal projects</a></p>
+    <h1>{data.title}</h1>
+    <p class="lede">{data.summary}</p>
+    <p>
+      <StatusBadge status={data.status} /> Last worked on {formatMonth(data.lastWorked)}
+    </p>
+    {data.stack.length > 0 && <ul class="tags">{data.stack.map((s) => <li>{s}</li>)}</ul>}
+
+    {data.cover && <Shot src={data.cover} alt={data.coverAlt!} eager />}
+
+    <div class="prose"><Content /></div>
+
+    <p class="email">
+      {playable === 'embed' && <a class="btn btn--solid" href={`${base}play/`}>Play</a>}
+      {playable === 'external' && playUrl && <a class="btn btn--solid" href={playUrl} {...external}>Play</a>}
+      {liveUrl && <a class="btn btn--solid" href={liveUrl} {...external}>Open live site</a>}
+      {downloadUrl && <a class="btn" href={downloadUrl} {...external}>Download</a>}
+      {data.repoUrl && <a class="btn" href={data.repoUrl} {...external}>Source</a>}
+      {data.journey && <a class="btn" href={`${base}journey/`}>Read the journey</a>}
+    </p>
+
+    {
+      data.gallery.length > 0 && (
+        <section aria-labelledby="gallery">
+          <h2 id="gallery">Gallery</h2>
+          <div class="shots">
+            {data.gallery.map((g) => <Shot src={g.src} alt={g.alt} caption={g.caption} />)}
+          </div>
+        </section>
+      )
+    }
+
+    {
+      data.collaborators.length > 0 && (
+        <p>
+          Built with{' '}
+          {data.collaborators.map((c, i) => (
+            <>
+              {i > 0 && ', '}
+              {c.url ? <a href={c.url} {...external}>{c.name}</a> : c.name}
+            </>
+          ))}
+          .
+        </p>
+      )
+    }
+  </article>
+</Base>
