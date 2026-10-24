@@ -5,12 +5,14 @@ import { byOrder, published } from '../lib/content';
 import { site } from '../data/site';
 import { skills } from '../data/skills';
 import Timeline from '../components/Timeline.astro';
+import { jsonLdScript, personLd } from '../lib/jsonld';
 
 const timeline = published(await getCollection('timeline'));
 const chapters = byOrder(published(await getCollection('about')));
 const rendered = await Promise.all(chapters.map(async (c) => ({ c, Content: (await render(c)).Content })));
 ---
 <Base title="About" description="The story of Ali Khalaf: a software engineer from Bahrain who learns by building.">
+  <script slot="head" type="application/ld+json" set:html={jsonLdScript(personLd())} />
   <div class="wrap stack">
     <h1>About</h1>
     <dl class="facts">

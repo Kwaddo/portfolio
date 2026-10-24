@@ -45,6 +45,10 @@ describe('findViolations', () => {
     expect(findViolations('a/index.html', '<p>by Kwaddo</p>')).toHaveLength(1);
     expect(findViolations('a/index.html', '<a href="https://kwaddo.github.io/">x</a>')).toEqual([]);
   });
+  test('allows the handle inside JSON-LD URLs', () => {
+    const ld = '<script type="application/ld+json">{"url":"https://github.com/Kwaddo"}</script>';
+    expect(findViolations('a/index.html', ld)).toEqual([]);
+  });
   test('flags Quad anywhere', () => {
     expect(findViolations('a/index.html', '<p>Quad</p>')).toHaveLength(1);
   });

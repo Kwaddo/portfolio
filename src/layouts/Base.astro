@@ -46,6 +46,7 @@ const image = canonical(ogImageFor(Astro.url.pathname));
     <meta property="og:image:height" content="630" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:image" content={image} />
+    <slot name="head" />
   </head>
   <body>
     <a class="skip" href="#main">Skip to content</a>

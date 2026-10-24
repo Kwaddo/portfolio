@@ -23,7 +23,7 @@ export function findViolations(path: string, html: string): string[] {
   for (const { name, re, markupOnly } of FORBIDDEN) {
     if (re.test(markupOnly ? markup : html)) out.push(`${path}: ${name}`);
   }
-  if (/kwaddo/i.test(html.replace(ATTRS, ''))) out.push(`${path}: Kwaddo handle shown as text`);
+  if (/kwaddo/i.test(html.replace(/<script type="application\/ld\+json">[\s\S]*?<\/script>/g, '').replace(ATTRS, ''))) out.push(`${path}: Kwaddo handle shown as text`);
   if (path.startsWith('work/tanami/') && /<(img|picture|video|iframe)\b/i.test(html)) {
     out.push(`${path}: media on confidential page`);
   }
