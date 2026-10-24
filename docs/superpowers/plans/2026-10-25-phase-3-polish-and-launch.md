@@ -251,7 +251,8 @@ describe('personLd', () => {
   });
   test('never contains an email or phone number', () => {
     const text = JSON.stringify(ld);
-    expect(text).not.toMatch(/@gmail|mailto|36000253|telephone|"email"/i);
+    expect(text).not.toMatch(/[\w.+-]+@[\w-]+\.[a-z]{2,}|mailto|telephone|"email"/i);
+    expect(text).not.toMatch(/\b(?:\+?973[\s-]?)?3\d{3}[\s-]?\d{4}\b/);
   });
 });
 
@@ -903,11 +904,12 @@ echo "docs in tree: $(git ls-tree -r HEAD --name-only | grep -c '^docs/')"
 echo "bad strings in history: $(git log --all --format='%an <%ae>%n%cn <%ce>%n%B' | grep -ciE 'claude|anthropic|superpowers|co-authored|alimohsen')"
 echo "Quad in history: $(git log --all --format='%an%n%cn%n%B' | grep -ciw 'quad')"
 echo "bad strings in files: $(git grep -ciE 'claude|anthropic|superpowers' HEAD -- . | wc -l)"
+echo "plain email or phone in files: $(git grep -ciE '[a-z0-9._+-]+@gmail\.com|[^0-9]3[0-9]{3}[ -]?[0-9]{4}[^0-9]' HEAD -- . ':!package-lock.json' | wc -l)"
 git log --all --format='%an <%ae>' | sort | uniq -c
 fnm exec --using=22.23.4 npm ci
 fnm exec --using=22.23.4 npm run verify
 ```
-Expected: `docs in tree: 0`, the three bad-string counts `0`, a single author line `Ali Khalaf <139044444+Kwaddo@users.noreply.github.com>`, and `npm run verify` passes inside the clone. If anything is non-zero, fix the offending commit or file in the working repo, redo Steps 3-4. Show the owner the results.
+Expected: `docs in tree: 0`, the four bad-string counts `0` (history, Quad, files, plain email or phone), a single author line `Ali Khalaf <139044444+Kwaddo@users.noreply.github.com>`, and `npm run verify` passes inside the clone. If anything is non-zero, fix the offending commit or file in the working repo, redo Steps 3-4. Show the owner the results.
 
 - [ ] **Step 5 (ask first): Create the public repository and push**
 
