@@ -72,7 +72,7 @@ Out for now: Pick, Akalaat (973 Engineering).
 
 go-byte, overworld, 01-displayer, codeweavers-build-hackathon, LPS (private: screenshot only, no repo link).
 
-Team projects, collaborators credited: gridlock (Rust FPS), nocturne-network (needs a short write-up, no README exists).
+Team projects, collaborators credited: gridlock (Rust FPS), nocturne-network (CV role: bridge between frontend and backend, coordinating integration and code quality; needs a short write-up, no README exists).
 
 Excluded: Undervault, sb-game, dopher-engine, go-chess, ant-order, bsf-engine, snowline-forum, atm-management-system, kwaddot, reboot-hackathon-website-2025, etern, realmweavers-engine.
 
@@ -121,13 +121,17 @@ docs/superpowers/specs/
 | Period | Kind | Entry |
 |---|---|---|
 | Jun 2026 - present | work | Software Engineer, Tanami (full-time). Role line only. |
-| Feb 2025 - Jan 2026 | work | Full-stack Developer, Croozz Technologies (part-time, Bahrain, hybrid). Skills: web technologies, React.js. |
-| Oct 2025 - Nov 2025 | work | Software Developer, Tech Bay IT Solutions (internship). |
-| Jun 2025 - Jul 2025 | work | Software Development Intern, DOO (Bahrain, hybrid). Skills: internet software, back-end web development. |
-| Aug 2024 - Aug 2026 | education | Reboot Coding Institute. |
-| Sep 2021 - Aug 2026 | education | University of Bahrain, BSc Software Engineering. |
+| Nov 2025 - Dec 2025 | work | Full Stack Engineer, Babel Pastries. Built a TV slideshow application with admin panel and engine, deployed; trained a new developer on Laravel + React (Vite). |
+| Oct 2025 - Nov 2025 | work | Junior Software Engineer, Tech Bay IT Solutions. Trained on Dynamics 365 and internal systems; client work, many government-related. |
+| Jun 2025 - Jul 2025 | work | Software Engineer Intern, DOO Mena. Built a backend system for one section; early frontend work. |
+| Feb 2025 - Jan 2026 | work | Full-stack Developer, Croozz Technologies (part-time, Bahrain, hybrid). Small, fast-moving team shipping frequent updates. |
+| Aug 2024 - Aug 2026 | education | Reboot Coding Institute, graduated with DevOps. |
+| Sep 2021 - Aug 2026 | education | University of Bahrain, Bachelor's in Software Engineering, graduated. |
 
-  Notes: Croozz, Tech Bay and DOO are employers, so they get the same role-line-only treatment as Tanami (no client or product detail) unless the owner says otherwise. Repo milestones (skoobl, S.M.O.B.B., hackathons) are added as `project` entries between these. The earlier "Tanami since Sep 2025" guess from repo dates is wrong; LinkedIn dates win. Entries are not linked to specific projects unless the owner says so (e.g. CuspIO's employer is unconfirmed).
+  Notes: employers get the CV-level description only, with no client or product detail beyond what is listed (Tanami: role line only). Repo milestones (S.M.O.B.B. 2023, skoobl, hackathons) are added as `project` entries between these. Sources: LinkedIn (titles for Tanami, dates for Croozz) and the pre-Tanami CV (Babel Pastries and the descriptions). Where they differ, LinkedIn wins: Croozz is Feb 2025 - Jan 2026 there but Jan - Dec 2025 on the CV; Tech Bay title is "Software Developer" on LinkedIn but "Junior Software Engineer" on the CV (CV title used). Entries are not linked to specific projects unless the owner says so (CuspIO's employer is unconfirmed).
+- **Credentials rule:** only two are shown: Reboot Coding Institute (graduated, DevOps) and University of Bahrain (graduated, Bachelor's in Software Engineering). No other certifications. High school is omitted.
+- **Contact privacy:** the CV carries a phone number and a Gmail address. Neither is published on the site or in the generated resume. Contact page shows GitHub and LinkedIn only until the owner picks a public email.
+- **Stack list** (About and resume): Go, JavaScript, TypeScript, NestJS, React, Next.js, Vue, React Native, PHP Laravel, C#/ASP.NET, Rust. Languages: English, Arabic.
 - Journey facts from LinkedIn also seed the About facts strip and chapter stubs. The story text stays the owner's.
 
 ## Calls to action
@@ -178,8 +182,11 @@ Comments, analytics, CMS, search, translations (RTL layout is prepared; content 
 
 ## Open items
 
-- LinkedIn headline, About text, skills list and certifications are not yet provided (only Experience and Education were pasted).
+- No headline/tagline for now (owner's call). Landing shows "Ali Khalaf, Software Engineer".
+- About story text is drafted from verified facts in `docs/about-draft.md`; owner edits it.
+- Public contact email choice (see Contact privacy).
 - Whether CuspIO was built under one of the listed employers (affects its framing).
+- Croozz dates differ between LinkedIn and the CV (see timeline notes).
 - Tanami `period`: now "Jun 2026 - present", title "Software Engineer".
 - Screenshots and GIFs for skoobl, smoke-break, smart-road, dopher-alpha, CuspIO to be provided or captured.
 - Create the GitHub repo and configure Pages when ready to deploy.
