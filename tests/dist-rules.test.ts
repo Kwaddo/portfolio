@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import { findViolations } from '../scripts/dist-rules';
+import { findViolations, ogImageOf } from '../scripts/dist-rules';
 import { site } from '../src/data/site';
 import { toAddress, toSpelledOut } from '../src/lib/email';
 
@@ -47,5 +47,15 @@ describe('findViolations', () => {
   });
   test('flags Quad anywhere', () => {
     expect(findViolations('a/index.html', '<p>Quad</p>')).toHaveLength(1);
+  });
+});
+
+describe('ogImageOf', () => {
+  test('reads the path of the og:image meta tag', () => {
+    const html = '<meta property="og:image" content="https://kwaddo.github.io/og/work.png" />';
+    expect(ogImageOf(html)).toBe('/og/work.png');
+  });
+  test('returns undefined when absent', () => {
+    expect(ogImageOf('<html></html>')).toBeUndefined();
   });
 });

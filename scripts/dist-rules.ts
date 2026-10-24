@@ -29,3 +29,8 @@ export function findViolations(path: string, html: string): string[] {
   }
   return out;
 }
+
+export function ogImageOf(html: string): string | undefined {
+  const match = html.match(/<meta property="og:image" content="([^"]+)"/);
+  return match ? new URL(match[1]).pathname : undefined;
+}

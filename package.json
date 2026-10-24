@@ -15,6 +15,7 @@
     "test": "vitest run",
     "new": "node scripts/new-post.mjs",
     "resume:pdf": "node scripts/make-resume-pdf.mjs",
+    "og": "node scripts/make-og.mjs",
     "check:dist": "node scripts/check-dist.mjs",
     "e2e": "playwright test",
     "verify": "npm run check && npm run test && npm run build && npm run check:dist"
@@ -29,6 +30,7 @@
   "devDependencies": {
     "@astrojs/check": "0.9.12",
     "@playwright/test": "1.64.1",
+    "sharp": "0.35.5",
     "typescript": "6.0.3",
     "vitest": "5.0.5"
   }

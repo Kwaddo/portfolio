@@ -1,6 +1,6 @@
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { join, relative } from 'node:path';
-import { findViolations } from './dist-rules.ts';
+import { findViolations, ogImageOf } from './dist-rules.ts';
 
 const root = new URL('../dist', import.meta.url).pathname;
 
@@ -16,7 +16,12 @@ const violations = [];
 let pages = 0;
 for (const file of walk(root)) {
   pages += 1;
-  violations.push(...findViolations(relative(root, file), readFileSync(file, 'utf8')));
+  const html = readFileSync(file, 'utf8');
+  const rel = relative(root, file);
+  violations.push(...findViolations(rel, html));
+  const og = ogImageOf(html);
+  if (!og) violations.push(`${rel}: no og:image`);
+  else if (!existsSync(join(root, og))) violations.push(`${rel}: og:image ${og} is not in dist`);
 }
 
 const required = ['rss.xml', 'sitemap-index.xml', 'robots.txt', '404.html'];
