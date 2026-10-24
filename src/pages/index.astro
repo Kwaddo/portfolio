@@ -1,4 +1,27 @@
 ---
 import Base from '../layouts/Base.astro';
+import SpeechBubble from '../components/SpeechBubble.astro';
+import WorkWithMe from '../components/WorkWithMe.astro';
+import { site } from '../data/site';
 ---
-<Base><div class="wrap"><h1>Ali Khalaf</h1></div></Base>
+<Base>
+  <section class="hero wrap">
+    <SpeechBubble>
+      <h1>{site.name}, {site.role}</h1>
+      <p>{site.availability}</p>
+    </SpeechBubble>
+  </section>
+  <section class="split" aria-label="Choose a track">
+    <a class="split__door split__door--work" href="/work/">
+      <span class="tone" aria-hidden="true"></span>
+      <h2>Work</h2>
+      <p>Roles, and the systems behind them.</p>
+    </a>
+    <a class="split__door split__door--personal on-ink" href="/personal/">
+      <span class="tone tone--paper" aria-hidden="true"></span>
+      <h2>Personal</h2>
+      <p>Games, experiments and the stories behind them.</p>
+    </a>
+  </section>
+  <WorkWithMe />
+</Base>

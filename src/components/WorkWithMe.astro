@@ -1,0 +1,15 @@
+---
+import CopyEmail from './CopyEmail.astro';
+import { site } from '../data/site';
+---
+<section class="wwm wrap" aria-labelledby="wwm-title">
+  <h2 id="wwm-title">Work with me</h2>
+  <ul class="wwm__list">
+    <li>Full-stack web: React, TypeScript, Laravel and Go.</li>
+    <li>Mobile apps with React Native.</li>
+    <li>Backend services in Go, Laravel and NestJS.</li>
+    <li>Game prototypes and small multiplayer games.</li>
+  </ul>
+  <p>To start, send a short brief: what you're building, your timeline and a budget range. {site.responseTime}</p>
+  <CopyEmail />
+</section>
