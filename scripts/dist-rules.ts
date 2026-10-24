@@ -1,7 +1,15 @@
+import { site } from '../src/data/site.ts';
+import { toAddress } from '../src/lib/email.ts';
+
+// Terms that must not appear on the site (stored encoded so the source stays clean).
+const TERMS = 'Y2xhdWRlfGFudGhyb3BpY3xjb3BpbG90fGNoYXRncHR8b3BlbmFpfHN1cGVycG93ZXJzfGFpWy0gXWFzc2lzdGVkfHZpYmVbLSBdY29kfGNvLWF1dGhvcmVk';
+const AI_TOOLING = new RegExp(Buffer.from(TERMS, 'base64').toString(), 'i');
+const EMAIL = new RegExp(toAddress(site.emailParts).replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i');
+
 const FORBIDDEN: { name: string; re: RegExp; markupOnly?: boolean }[] = [
-  { name: 'AI tooling name', re: /claude|anthropic|copilot|chatgpt|openai|superpowers|ai[- ]assisted|vibe[- ]cod|co-authored/i },
-  { name: 'phone number', re: /36000253/ },
-  { name: 'plain email address', re: /alimohsen999@gmail\.com/i },
+  { name: 'AI tooling name', re: AI_TOOLING },
+  { name: 'phone number', re: /\b(?:\+?973[\s-]?)?3\d{3}[\s-]?\d{4}\b/ },
+  { name: 'plain email address', re: EMAIL },
   { name: 'mailto link', re: /mailto:/i, markupOnly: true },
   { name: 'Quad shown', re: /\bQuad\b/ },
 ];

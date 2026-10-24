@@ -14,6 +14,7 @@ const work = byOrder(published(await getCollection('work')));
       {
         work.map((entry) => (
           <ProjectCard
+            level={2}
             href={`/work/${entry.id}/`}
             title={entry.data.title}
             summary={entry.data.summary}

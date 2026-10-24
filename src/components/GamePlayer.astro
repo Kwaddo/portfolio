@@ -33,11 +33,13 @@ const { src, title, poster, posterAlt } = Astro.props;
       frame.title = root.dataset.title!;
       frame.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-pointer-lock allow-fullscreen');
       frame.setAttribute('allow', 'fullscreen');
+      frame.tabIndex = 0;
       stage.replaceChildren(frame);
+      frame.focus();
       fullscreen.hidden = false;
     });
     fullscreen.addEventListener('click', () => {
-      stage.querySelector('iframe')?.requestFullscreen();
+      stage.querySelector('iframe')?.requestFullscreen().catch(() => {});
     });
   });
 </script>

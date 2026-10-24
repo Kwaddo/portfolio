@@ -33,12 +33,14 @@ import { toSpelledOut } from '../lib/email';
     link.href = `mailto:${address}`;
     link.textContent = address;
     button.hidden = false;
+    let timer: ReturnType<typeof setTimeout>;
     button.addEventListener('click', async () => {
       const ok = await copy(address, link);
       const message = ok ? 'Copied' : 'Selected, press copy to finish';
       status.textContent = message;
       button.textContent = ok ? 'Copied' : 'Copy email';
-      setTimeout(() => {
+      clearTimeout(timer);
+      timer = setTimeout(() => {
         status.textContent = '';
         button.textContent = 'Copy email';
       }, 2000);

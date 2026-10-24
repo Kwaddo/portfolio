@@ -11,8 +11,10 @@ interface Props {
   cover?: ImageMetadata;
   coverAlt?: string;
   meta?: string;
+  level?: 2 | 3;
 }
-const { href, title, summary, status, cover, coverAlt, meta } = Astro.props;
+const { href, title, summary, status, cover, coverAlt, meta, level = 3 } = Astro.props;
+const Tag = level === 2 ? 'h2' : 'h3';
 ---
 <a class="panel" href={href}>
   {
@@ -24,7 +26,7 @@ const { href, title, summary, status, cover, coverAlt, meta } = Astro.props;
   }
   <div class="panel__body">
     {status && <StatusBadge status={status} />}
-    <h3 class="panel__title">{title}</h3>
+    <Tag class="panel__title">{title}</Tag>
     {meta && <p class="panel__meta">{meta}</p>}
     <p class="panel__text">{summary}</p>
     <span class="panel__more" aria-hidden="true">Read more</span>
