@@ -162,7 +162,10 @@ docs/superpowers/specs/
 | Aug 2024 - Aug 2026 | education | Reboot Coding Institute, graduated with DevOps. |
 | Sep 2021 - Aug 2026 | education | University of Bahrain, Bachelor's in Software Engineering, graduated. |
 
-  Display order is by end date, newest first, with the current role pinned on top.
+| (year TBD) | event | StartUp Bahrain, three editions. Years and roles supplied by the owner. |
+| (year TBD) | event | Build Hackathon at Reboot Coding Institute. Year, team, role and result supplied by the owner; may be the `codeweavers-build-hackathon` repo (to confirm). |
+
+  Display order is by end date, newest first, with the current role pinned on top. `event` entries (hackathons, programs) are placed by year once the owner supplies it, and are not shown on the timeline until dated.
 
   Notes: employers get the CV-level description only, with no client or product detail beyond what is listed (Tanami: role line only). Repo milestones (S.M.O.B.B. 2023, skoobl, hackathons) are added as `project` entries between these. Sources: LinkedIn (titles for Tanami, dates for Croozz) and the pre-Tanami CV (Babel Pastries and the descriptions). Where they differ, LinkedIn wins (confirmed by the owner): Croozz is Feb 2025 - Jan 2026 there but Jan - Dec 2025 on the CV; Tech Bay title is "Software Developer" on LinkedIn but "Junior Software Engineer" on the CV (CV title used). Entries are not linked to specific projects unless the owner says so (CuspIO's employer is unconfirmed).
 - **Credentials rule:** only two are shown: Reboot Coding Institute (graduated, DevOps) and University of Bahrain (graduated, Bachelor's in Software Engineering). No other certifications. High school is omitted.
