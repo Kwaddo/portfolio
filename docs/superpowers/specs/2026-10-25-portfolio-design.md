@@ -53,7 +53,7 @@ Nav: Work, Personal, Journal, About, Contact, plus a persistent "Get in touch" b
 
 | Entry | Treatment |
 |---|---|
-| Tanami Capital | Named. One short stub: role line, dates, generic stack tags (full-stack, mobile, web). **No** screenshots, product or feature names, metrics, client or domain detail, or repo links. Page states the work is confidential. Title and dates are placeholders until supplied. |
+| Tanami | Named. One short stub: "Software Engineer, Jun 2026 - present",  generic stack tags (full-stack, mobile, web). **No** screenshots, product or feature names, metrics, client or domain detail, or repo links. Page states the work is confidential.  |
 | CuspIO | Full case study with screenshots (project is dissolved). Owner confirms each image before publish. |
 
 Out for now: Pick, Akalaat (973 Engineering).
@@ -116,6 +116,18 @@ docs/superpowers/specs/
 - A timeline strip (Work index and About) lists roles, projects, education and hackathons by date. It shows continuity without product detail, and Tanami appears as one line.
 - Source: LinkedIn profile plus repo history. Data lives in `src/content/timeline/*.md` (`date, kind, title, org?`), one file per milestone.
 - `/resume` renders the same data, print-styled, with a PDF download. The PDF is generated once and committed to `public/`.
+- Seed data (from the owner's LinkedIn, pasted 2026-10-25):
+
+| Period | Kind | Entry |
+|---|---|---|
+| Jun 2026 - present | work | Software Engineer, Tanami (full-time). Role line only. |
+| Feb 2025 - Jan 2026 | work | Full-stack Developer, Croozz Technologies (part-time, Bahrain, hybrid). Skills: web technologies, React.js. |
+| Oct 2025 - Nov 2025 | work | Software Developer, Tech Bay IT Solutions (internship). |
+| Jun 2025 - Jul 2025 | work | Software Development Intern, DOO (Bahrain, hybrid). Skills: internet software, back-end web development. |
+| Aug 2024 - Aug 2026 | education | Reboot Coding Institute. |
+| Sep 2021 - Aug 2026 | education | University of Bahrain, BSc Software Engineering. |
+
+  Notes: Croozz, Tech Bay and DOO are employers, so they get the same role-line-only treatment as Tanami (no client or product detail) unless the owner says otherwise. Repo milestones (skoobl, S.M.O.B.B., hackathons) are added as `project` entries between these. The earlier "Tanami since Sep 2025" guess from repo dates is wrong; LinkedIn dates win. Entries are not linked to specific projects unless the owner says so (e.g. CuspIO's employer is unconfirmed).
 - Journey facts from LinkedIn also seed the About facts strip and chapter stubs. The story text stays the owner's.
 
 ## Calls to action
@@ -166,6 +178,8 @@ Comments, analytics, CMS, search, translations (RTL layout is prepared; content 
 
 ## Open items
 
-- Tanami title and dates, education, certifications, headline: pending LinkedIn data (automated fetch is blocked; needs a profile PDF export, a paste, or a browser-session read).
+- LinkedIn headline, About text, skills list and certifications are not yet provided (only Experience and Education were pasted).
+- Whether CuspIO was built under one of the listed employers (affects its framing).
+- Tanami `period`: now "Jun 2026 - present", title "Software Engineer".
 - Screenshots and GIFs for skoobl, smoke-break, smart-road, dopher-alpha, CuspIO to be provided or captured.
 - Create the GitHub repo and configure Pages when ready to deploy.
