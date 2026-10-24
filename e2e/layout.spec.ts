@@ -12,6 +12,10 @@ const routes = [
   '/personal/lab/nocturne-network/',
   '/about/',
   '/contact/',
+  '/journal/',
+  '/resume/',
+  '/uses/',
+  '/404.html',
 ];
 
 for (const dir of ['ltr', 'rtl'] as const) {
