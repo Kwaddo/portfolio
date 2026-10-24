@@ -28,11 +28,14 @@ Personal portfolio, journal and game host. Replaces the GitHub Pages usage at `k
 /personal/games/[slug]/play    Embedded playable build (iframe, fullscreen button)
 /personal/lab/[slug]           Small project page
 /journal  /journal/[slug]      Daily posts, tag filter, RSS at /rss.xml
-/about                         Chaptered story
+/about                         Chaptered story + "now" blurb
+/resume                        Print-styled resume page + PDF download
+/uses                          Tools and setup
 /contact                       Email, GitHub, links
+/404                           Themed not-found page
 ```
 
-Nav: Work, Personal, Journal, About, Contact.
+Nav: Work, Personal, Journal, About, Contact, plus a persistent "Get in touch" button.
 
 ## Content model
 
@@ -108,13 +111,61 @@ public/ (media, fonts, play/)
 docs/superpowers/specs/
 ```
 
+## Timeline and resume
+
+- A timeline strip (Work index and About) lists roles, projects, education and hackathons by date. It shows continuity without product detail, and Tanami appears as one line.
+- Source: LinkedIn profile plus repo history. Data lives in `src/content/timeline/*.md` (`date, kind, title, org?`), one file per milestone.
+- `/resume` renders the same data, print-styled, with a PDF download. The PDF is generated once and committed to `public/`.
+- Journey facts from LinkedIn also seed the About facts strip and chapter stubs. The story text stays the owner's.
+
+## Calls to action
+
+- Persistent "Get in touch" nav button, linking to `/contact` (mailto fallback).
+- Availability line on the landing (e.g. open to work / freelance), edited in one frontmatter field.
+
+## SEO and sharing
+
+- Per-page `<title>` and meta description from frontmatter, canonical URLs, `sitemap.xml`, `robots.txt`, RSS.
+- Open Graph and Twitter cards: one manga-style 1200x630 card per page, generated at build time from title + panel template, with a static fallback.
+- JSON-LD `Person` on `/about`.
+
+## Mobile and performance budget
+
+- Design at 360px first; no horizontal scroll at any width.
+- Game iframes are click-to-load (poster + Play button); nothing from `public/play/` loads until clicked.
+- Images: Astro image pipeline (AVIF/WebP, `srcset`, explicit width/height), `loading="lazy"` below the fold. GIFs converted to muted looping video.
+- Fonts: at most two families, self-hosted, `font-display: swap`, subset.
+- Halftone, speed lines and panel-reveal are CSS only. Heavy effects disabled under `prefers-reduced-motion` and on small screens where costly.
+- Budget: landing under 200 KB transferred excluding images, Lighthouse performance and accessibility at or above 95 on mobile.
+
+## RTL readiness
+
+- Logical CSS properties everywhere (`margin-inline`, `padding-block`, `inset-inline`, `text-align: start`), never left/right.
+- Manga panel grids and the reading order flip under `dir="rtl"` (which suits right-to-left manga reading); directional icons and the split landing mirror.
+- Text lives in content files, so a later `/ar/` locale is additive. No translation in this scope. Fonts chosen must have an Arabic fallback.
+
+## Small extras
+
+- Themed 404 page.
+- "Now" blurb on About (what I'm building and learning, dated).
+- `/uses` page: editor, languages, hardware and general dev stack.
+
+## Content rules
+
+- No mention of AI coding tools or assistant involvement anywhere on the site: copy, `/uses`, journal templates, repo READMEs shown, or screenshots. Screenshots must not show assistant UIs, terminals or logs containing such references.
+- Tanami: role line only, as above.
+- Every screenshot is reviewed by the owner before publish.
+
+## Capture pass
+
+Screenshots and GIFs are captured per project from local copies, one at a time, into `public/media/<slug>/`, each reviewed before commit. Details and run commands live in `docs/capture-plan.md`.
+
 ## Out of scope (now)
 
-Comments, analytics, CMS, search, i18n, newsletter. Revisit if needed.
+Comments, analytics, CMS, search, translations (RTL layout is prepared; content is not translated), newsletter. Revisit if needed.
 
 ## Open items
 
-- Tanami title and dates (placeholders until supplied).
-- Education (placeholder).
+- Tanami title and dates, education, certifications, headline: pending LinkedIn data (automated fetch is blocked; needs a profile PDF export, a paste, or a browser-session read).
 - Screenshots and GIFs for skoobl, smoke-break, smart-road, dopher-alpha, CuspIO to be provided or captured.
 - Create the GitHub repo and configure Pages when ready to deploy.
