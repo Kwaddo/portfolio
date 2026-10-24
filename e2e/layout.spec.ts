@@ -21,7 +21,8 @@ const routes = [
 for (const dir of ['ltr', 'rtl'] as const) {
   for (const route of routes) {
     test(`${route} fits the viewport (${dir})`, async ({ page }) => {
-      await page.goto(route);
+      const res = await page.goto(route);
+      expect(res?.status(), `${route} should exist`).toBe(200);
       await page.evaluate((d) => {
         document.documentElement.dir = d;
       }, dir);

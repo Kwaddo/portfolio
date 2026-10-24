@@ -6,7 +6,7 @@ export const stripMarkdown = (md: string): string =>
     .replace(/\[([^\]]+)\]\([^)]*\)/g, '$1')
     .replace(/^#{1,6}\s+/gm, '')
     .replace(/^>\s?/gm, '')
-    .replace(/[*_~]+/g, '')
+    .replace(/(^|\s)[*_~]{1,3}(?=\S)|(?<=\S)[*_~]{1,3}(?=\s|$|[.,;:!?])/g, '$1')
     .replace(/\s+/g, ' ')
     .trim();
 
@@ -14,7 +14,9 @@ export const excerpt = (md: string, max = 180): string => {
   const text = stripMarkdown(md);
   if (text.length <= max) return text;
   const cut = text.slice(0, max);
-  return `${cut.slice(0, cut.lastIndexOf(' ')).trimEnd()}…`;
+  if (text[max] === ' ') return `${cut}…`;
+  const at = cut.lastIndexOf(' ');
+  return `${(at === -1 ? cut : cut.slice(0, at)).trimEnd()}…`;
 };
 
 export const firstSentence = (md: string): string => {
@@ -23,11 +25,11 @@ export const firstSentence = (md: string): string => {
   return match ? match[0] : excerpt(text, 160);
 };
 
-export const newestFirst = <T extends { data: { date: Date } }>(entries: T[]): T[] =>
-  [...entries].sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+export const newestFirst = <T extends { id: string; data: { date: Date } }>(entries: T[]): T[] =>
+  [...entries].sort((a, b) => b.data.date.getTime() - a.data.date.getTime() || (a.id < b.id ? 1 : -1));
 
 export const tagsOf = (entries: { data: { tags: string[] } }[]): string[] =>
-  [...new Set(entries.flatMap((e) => e.data.tags))].sort();
+  [...new Set(entries.flatMap((e) => e.data.tags))].sort((a, b) => a.localeCompare(b, undefined, { sensitivity: 'base' }));
 
 export const tagSlug = (tag: string): string =>
   tag

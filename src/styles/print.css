@@ -29,6 +29,7 @@
     font-size: 24pt;
   }
   h2 {
+    break-after: avoid;
     margin-block-start: 6mm;
     padding-block-end: 1mm;
     border-block-end: 1.5pt solid var(--ink);
@@ -37,6 +38,9 @@
   .resume .timeline {
     border-inline-start: 0;
     padding-inline-start: 0;
+  }
+  .resume section {
+    break-inside: avoid;
   }
   .timeline__item,
   .resume__project {

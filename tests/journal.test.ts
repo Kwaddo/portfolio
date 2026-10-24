@@ -92,3 +92,26 @@ describe('project devlog', () => {
     expect(items).toEqual([{ href: '/journal/2026-10-02/', date: new Date('2026-10-02'), text: 'Body of 2026-10-02. More text.' }]);
   });
 });
+
+describe('polish', () => {
+  test('excerpt cuts a spaceless token at max', () => {
+    expect(excerpt('x'.repeat(200), 20)).toBe(`${'x'.repeat(20)}…`);
+  });
+  test('excerpt keeps the last word on an exact boundary', () => {
+    expect(excerpt('alpha beta gamma', 10)).toBe('alpha beta…');
+  });
+  test('stripMarkdown keeps in-word underscores and code asterisks', () => {
+    expect(stripMarkdown('use snake_case and `a*b` here')).toBe('use snake_case and a*b here');
+  });
+  test('stripMarkdown removes word-boundary emphasis', () => {
+    expect(stripMarkdown('*bold* and _italic_ and **x**.')).toBe('bold and italic and x.');
+  });
+  test('newestFirst breaks date ties by id descending', () => {
+    const x = post('2026-10-25', '2026-10-25');
+    const y = post('2026-10-25-2', '2026-10-25');
+    expect(newestFirst([x, y]).map((p) => p.id)).toEqual(['2026-10-25-2', '2026-10-25']);
+  });
+  test('tagsOf sorts case-insensitively', () => {
+    expect(tagsOf([{ data: { tags: ['Rust', 'go'] } }])).toEqual(['go', 'Rust']);
+  });
+});

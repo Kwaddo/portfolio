@@ -12,6 +12,8 @@ Requires Node 22.23.4 or newer (see `.node-version`).
     npm run dev        # http://localhost:4321
     npm run verify     # type check, unit tests, build and content rules
     npm run e2e        # Playwright layout and behaviour checks
+    npm run new        # scaffold today's journal entry
+    npm run resume:pdf # regenerate the resume PDF (run npm run build first)
 
 ## Add content
 

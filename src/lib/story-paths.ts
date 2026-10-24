@@ -4,10 +4,12 @@ import { forProject, newestFirst, toDevlog } from './journal';
 import { nextStory, sortTimeline } from './timeline';
 
 export async function storyPaths() {
-  const [timeline, chapters, journal] = await Promise.all([
+  const [timeline, chapters, journal, games, lab] = await Promise.all([
     getCollection('timeline'),
     getCollection('journeys'),
     getCollection('journal'),
+    getCollection('games'),
+    getCollection('lab'),
   ]);
   const sorted = sortTimeline(published(timeline));
   const live = published(chapters);
@@ -16,6 +18,11 @@ export async function storyPaths() {
   return sorted
     .filter((e) => e.data.journey)
     .map((entry) => {
+      if ([...games, ...lab].some((g) => g.id === entry.id)) {
+        throw new Error(
+          `timeline/${entry.id} has journey: true but "${entry.id}" is also a game/lab id; journey chapters would render on two routes. Rename the timeline entry.`,
+        );
+      }
       const own = journeyChapters(live, entry.id);
       if (own.length === 0) {
         throw new Error(`timeline/${entry.id} has journey: true but no chapters in src/content/journeys/${entry.id}/`);
