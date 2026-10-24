@@ -518,3 +518,10 @@ a.panel:focus-visible .badge--archived {
   background: var(--paper);
   color: var(--ink);
 }
+
+.back::before {
+  content: '\2190 ';
+}
+[dir='rtl'] .back::before {
+  content: '\2192 ';
+}

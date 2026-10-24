@@ -1,0 +1,28 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
+import { byOrder, published } from '../../lib/content';
+
+const work = byOrder(published(await getCollection('work')));
+---
+<Base title="Work" description="Roles and systems Ali Khalaf has worked on. Some of it is confidential, so those pages say little on purpose.">
+  <div class="wrap stack">
+    <h1>Work</h1>
+    <p class="lede">Roles and the systems behind them. Some of it is confidential, so those pages say little on purpose.</p>
+    <div class="panel-grid">
+      {
+        work.map((entry) => (
+          <ProjectCard
+            href={`/work/${entry.id}/`}
+            title={entry.data.title}
+            summary={entry.data.summary}
+            meta={`${entry.data.role} · ${entry.data.period}`}
+            cover={entry.data.cover}
+            coverAlt={entry.data.coverAlt}
+          />
+        ))
+      }
+    </div>
+  </div>
+</Base>

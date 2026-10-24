@@ -1,0 +1,32 @@
+---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import StatusBadge from './StatusBadge.astro';
+
+interface Props {
+  href: string;
+  title: string;
+  summary: string;
+  status?: 'live' | 'released' | 'prototype' | 'showcase' | 'archived';
+  cover?: ImageMetadata;
+  coverAlt?: string;
+  meta?: string;
+}
+const { href, title, summary, status, cover, coverAlt, meta } = Astro.props;
+---
+<a class="panel" href={href}>
+  {
+    cover && (
+      <div class="panel__media">
+        <Image src={cover} alt={coverAlt ?? ''} widths={[400, 800]} sizes="(min-width: 48rem) 33vw, 100vw" />
+      </div>
+    )
+  }
+  <div class="panel__body">
+    {status && <StatusBadge status={status} />}
+    <h3 class="panel__title">{title}</h3>
+    {meta && <p class="panel__meta">{meta}</p>}
+    <p class="panel__text">{summary}</p>
+    <span class="panel__more" aria-hidden="true">Read more</span>
+  </div>
+</a>

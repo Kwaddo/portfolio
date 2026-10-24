@@ -1,0 +1,26 @@
+---
+import { getCollection, render } from 'astro:content';
+import { Image } from 'astro:assets';
+import Base from '../../layouts/Base.astro';
+import { published } from '../../lib/content';
+
+export async function getStaticPaths() {
+  const work = published(await getCollection('work'));
+  return work.map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+}
+
+const { entry } = Astro.props;
+const { data } = entry;
+const { Content } = await render(entry);
+---
+<Base title={data.title} description={data.summary}>
+  <article class="wrap stack">
+    <p><a class="back" href="/work/">All work</a></p>
+    <h1>{data.title}</h1>
+    <p class="lede">{data.role} · {data.period}</p>
+    {data.stack.length > 0 && <ul class="tags">{data.stack.map((s) => <li>{s}</li>)}</ul>}
+    {data.confidential && <p class="notice">This work is confidential. This page lists only my role and dates.</p>}
+    {data.cover && <Image src={data.cover} alt={data.coverAlt!} widths={[480, 960, 1440]} sizes="(min-width: 72rem) 68rem, 100vw" />}
+    <div class="prose"><Content /></div>
+  </article>
+</Base>
