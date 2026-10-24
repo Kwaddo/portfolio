@@ -64,7 +64,8 @@ Raw material: each project's git history gives dates, milestones and the shape o
 /personal/games/[slug]/journey Long-form chaptered story of the project (lab entries likewise)
 /personal/lab/[slug]           Small project page
 /journal  /journal/[date]      Daily posts titled by date, tag filter, RSS at /rss.xml
-/about                         Chaptered story + "now" blurb
+/about                         Chaptered story + timeline + "now" blurb
+/about/[slug]                  Involvement journey (employers, Reboot, university, programs)
 /resume                        Print-styled resume page + PDF download
 /uses                          Tools and setup
 /contact                       Email, GitHub, links
@@ -262,6 +263,7 @@ All must be true before the site is announced (checked in the last task of Phase
 - Decisions recorded: custom domain or `kwaddo.github.io`; analytics yes or no (default: none).
 - GitHub profile name and bio updated to Ali Khalaf and linked to the site; LinkedIn updated with the site link.
 - Soft share to a few people for a 5-second landing test before wider sharing.
+- History scrub before the first public push: the working repo contains planning docs (`docs/`) and early commits that must not ship. Publish a history without `docs/`, with author name "Ali Khalaf" and the GitHub noreply email, and with no commit message mentioning AI tooling (verified by grepping `git log`). Planning docs move to the private notes vault.
 
 ## Out of scope (now)
 
