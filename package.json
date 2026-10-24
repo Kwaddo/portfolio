@@ -17,8 +17,9 @@
     "resume:pdf": "node scripts/make-resume-pdf.mjs",
     "og": "node scripts/make-og.mjs",
     "check:dist": "node scripts/check-dist.mjs",
+    "check:links": "node scripts/check-links.mjs",
     "e2e": "playwright test",
-    "verify": "npm run check && npm run test && npm run build && npm run check:dist"
+    "verify": "npm run check && npm run test && npm run build && npm run check:dist && npm run check:links"
   },
   "dependencies": {
     "@astrojs/rss": "4.0.19",
