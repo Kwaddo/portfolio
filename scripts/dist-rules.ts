@@ -23,7 +23,10 @@ export function findViolations(path: string, html: string): string[] {
   for (const { name, re, markupOnly } of FORBIDDEN) {
     if (re.test(markupOnly ? markup : html)) out.push(`${path}: ${name}`);
   }
-  if (/kwaddo/i.test(html.replace(/<script type="application\/ld\+json">[\s\S]*?<\/script>/g, '').replace(ATTRS, ''))) out.push(`${path}: Kwaddo handle shown as text`);
+  let visible = html.replace(/<script type="application\/ld\+json">[\s\S]*?<\/script>/g, '').replace(ATTRS, '');
+  // Sitemap and RSS legitimately carry the site URL in these elements and attributes.
+  if (path.endsWith('.xml')) visible = visible.replace(/<(loc|link|guid)\b[^>]*>[\s\S]*?<\/\1>/g, '').replace(/\s(?:href|url)="[^"]*"/g, '');
+  if (/kwaddo/i.test(visible)) out.push(`${path}: Kwaddo handle shown as text`);
   if (path.startsWith('work/tanami/') && /<(img|picture|video|iframe)\b/i.test(html)) {
     out.push(`${path}: media on confidential page`);
   }

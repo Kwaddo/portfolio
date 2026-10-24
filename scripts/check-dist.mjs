@@ -8,17 +8,19 @@ function* walk(dir) {
   for (const name of readdirSync(dir)) {
     const full = join(dir, name);
     if (statSync(full).isDirectory()) yield* walk(full);
-    else if (name.endsWith('.html')) yield full;
+    else if (name.endsWith('.html') || name.endsWith('.xml')) yield full;
   }
 }
 
 const violations = [];
 let pages = 0;
+const xml = [];
 for (const file of walk(root)) {
   pages += 1;
   const html = readFileSync(file, 'utf8');
   const rel = relative(root, file);
   violations.push(...findViolations(rel, html));
+  if (file.endsWith('.xml')) { xml.push(rel); continue; }
   const og = ogImageOf(html);
   if (!og) violations.push(`${rel}: no og:image`);
   else if (!existsSync(join(root, og))) violations.push(`${rel}: og:image ${og} is not in dist`);
@@ -33,4 +35,4 @@ if (violations.length > 0) {
   console.error(`Content rules broken (${violations.length}):\n${violations.join('\n')}`);
   process.exit(1);
 }
-console.log(`check-dist: ${pages} pages clean`);
+console.log(`check-dist: ${pages} pages clean (xml scanned: ${xml.join(', ')})`);

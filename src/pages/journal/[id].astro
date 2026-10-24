@@ -15,7 +15,8 @@ const { entry, entries } = Astro.props;
 const { Content } = await render(entry);
 const { newer, older } = neighbors(entries, entry.id);
 
-const [games, lab] = await Promise.all([getCollection('games'), getCollection('lab')]);
+const games = published(await getCollection('games'));
+const lab = published(await getCollection('lab'));
 const project = entry.data.project;
 const projectHref = !project
   ? undefined

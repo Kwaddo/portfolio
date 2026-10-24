@@ -12,6 +12,7 @@ function* walk(dir) {
   }
 }
 
+const isFile = (p) => existsSync(p) && statSync(p).isFile();
 const problems = [];
 let checked = 0;
 for (const file of walk(root)) {
@@ -19,7 +20,7 @@ for (const file of walk(root)) {
   const page = relative(root, file);
   for (const target of new Set(extractTargets(html))) {
     checked += 1;
-    if (!distPathFor(target).some((p) => existsSync(join(root, p)))) problems.push(`${page}: broken link ${target}`);
+    if (!distPathFor(target).some((p) => isFile(join(root, p)))) problems.push(`${page}: broken link ${target}`);
   }
   for (const id of new Set(sameDocFragments(html))) {
     if (!hasId(html, id)) problems.push(`${page}: missing #${id}`);
@@ -28,6 +29,10 @@ for (const file of walk(root)) {
 
 if (problems.length > 0) {
   console.error(`Link problems (${problems.length}):\n${problems.join('\n')}`);
+  process.exit(1);
+}
+if (checked === 0) {
+  console.error('check-links: no internal links were checked; the extractor matched nothing');
   process.exit(1);
 }
 console.log(`check-links: ${checked} internal links ok`);

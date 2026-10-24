@@ -31,5 +31,6 @@ describe('fragments', () => {
   test('hasId finds an element id', () => {
     expect(hasId('<main id="main">', 'main')).toBe(true);
     expect(hasId('<main id="other">', 'main')).toBe(false);
+    expect(hasId('<div data-id="main">', 'main')).toBe(false);
   });
 });

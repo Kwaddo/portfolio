@@ -27,5 +27,5 @@ export function sameDocFragments(html: string): string[] {
 }
 
 export function hasId(html: string, id: string): boolean {
-  return html.includes(`id="${id}"`);
+  return new RegExp(`\\sid="${id.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}"`).test(html);
 }

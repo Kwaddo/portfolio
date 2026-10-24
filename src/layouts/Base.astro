@@ -14,11 +14,13 @@ interface Props {
   title?: string;
   description?: string;
   lang?: 'en' | 'ar';
+  noindex?: boolean;
 }
 const {
   title,
   description = `${site.name} is a ${site.role.toLowerCase()} in ${site.location}. Work, games and the stories behind them.`,
   lang = 'en',
+  noindex = false,
 } = Astro.props;
 const dir = lang === 'ar' ? 'rtl' : 'ltr';
 const url = canonical(Astro.url.pathname);
@@ -46,6 +48,7 @@ const image = canonical(ogImageFor(Astro.url.pathname));
     <meta property="og:image:height" content="630" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:image" content={image} />
+    {noindex && <meta name="robots" content="noindex" />}
     <slot name="head" />
   </head>
   <body>

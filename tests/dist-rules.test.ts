@@ -54,6 +54,21 @@ describe('findViolations', () => {
   });
 });
 
+describe('findViolations on xml', () => {
+  test('a sitemap with the site URL in <loc> passes', () => {
+    expect(findViolations('sitemap-0.xml', '<urlset><url><loc>https://kwaddo.github.io/x/</loc></url></urlset>')).toEqual([]);
+  });
+  test('RSS link and guid URLs pass, but the handle in a description is flagged', () => {
+    const item = (d: string) => `<item><link>https://kwaddo.github.io/j/</link><guid isPermaLink="true">https://kwaddo.github.io/j/</guid><description>${d}</description></item>`;
+    expect(findViolations('rss.xml', item('hello'))).toEqual([]);
+    expect(findViolations('rss.xml', item('by Kwaddo'))).toHaveLength(1);
+  });
+  test('other rules still scan the whole xml', () => {
+    expect(findViolations('rss.xml', `<description>${address}</description>`)).toHaveLength(1);
+    expect(findViolations('rss.xml', `<description>${decode('Q2xhdWRl')}</description>`)).toHaveLength(1);
+  });
+});
+
 describe('ogImageOf', () => {
   test('reads the path of the og:image meta tag', () => {
     const html = '<meta property="og:image" content="https://kwaddo.github.io/og/work.png" />';
