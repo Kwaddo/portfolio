@@ -10,6 +10,16 @@ Personal portfolio, journal and game host. Replaces the GitHub Pages usage at `k
 - A chaptered **About** story the owner writes over time.
 - Black-and-white manga look, pleasant to browse.
 
+## Phases
+
+Each phase ships on its own and gets its own implementation plan.
+
+1. **Phase 1, core site:** theme, landing, Work (Tanami stub, CuspIO overview), Personal (games + lab index and detail pages), About with the chapter drafts, Contact, nav with "Get in touch", mobile/RTL-safe CSS, deploy to Pages. Media comes from the capture plan, top 5 projects first.
+2. **Phase 2, living content:** journal (posts, tags, RSS, `npm run new`), timeline, `/resume` + PDF, `/uses`, themed 404, "now" blurb.
+3. **Phase 3, polish:** static per-section Open Graph cards, remaining Lab entries and media, Lighthouse/link checks in CI, JSON-LD.
+
+SEO basics (titles, descriptions, canonicals) and the performance/RTL rules apply from Phase 1.
+
 ## Stack and hosting
 
 - Astro, static output, content collections (markdown) for all entries.
@@ -53,8 +63,8 @@ Nav: Work, Personal, Journal, About, Contact, plus a persistent "Get in touch" b
 
 | Entry | Treatment |
 |---|---|
-| Tanami | Named. One short stub: "Software Engineer, Jun 2026 - present",  generic stack tags (full-stack, mobile, web). **No** screenshots, product or feature names, metrics, client or domain detail, or repo links. Page states the work is confidential.  |
-| CuspIO | Full case study with screenshots (project is dissolved). Owner confirms each image before publish. |
+| Tanami | Named. One short stub: "Software Engineer, Jun 2026 - present", generic stack tags (full-stack, mobile, web). **No** screenshots, product or feature names, metrics, client or domain detail, or repo links. Page states the work is confidential. |
+| CuspIO | Brief system overview, not a deep case study. The owner had a light oversight role (barely involved via Dilmune) on a healthcare management platform that is being dissolved. Covers what the system was, the stack and the owner's oversight role. At most a few screenshots from synthetic demo data, each owner-approved; no patient data of any kind. |
 
 Out for now: Pick, Akalaat (973 Engineering).
 
@@ -62,9 +72,9 @@ Out for now: Pick, Akalaat (973 Engineering).
 
 | Game | Playable | Notes |
 |---|---|---|
-| skoobl | external (`dilmune.app`) | Needs a Redis/websocket backend, cannot run on Pages. Public repo. |
-| S.M.O.B.B. | embed (existing web build) | Repo is public as of 2026-10-25. Link release downloads. |
-| smoke-break | external (`smoke-break.vercel.app`) | Credit SilentYsf as co-author. |
+| skoobl | none (showcase) | No longer hosted. Showcase page: media, description, public repo link. Revisit if it is hosted again. |
+| S.M.O.B.B. | embed (iframe of existing `kwaddo.github.io/smobb`) | Repo is public as of 2026-10-25. No copy of the build in this repo. Link release downloads. |
+| smoke-break | embed (iframe of existing `smoke-break.vercel.app`, if it permits framing; otherwise external link) | Credit SilentYsf as co-author. Verify the URL is live and frameable before building. |
 | dopher-alpha | none | Go raycaster. Repo private: description and preview GIF only, no repo link. |
 | smart-road | none | Rust traffic sim, local only. Uses its car/intersection images. |
 
@@ -80,11 +90,11 @@ Rule: private repos get description, media and live/download links only.
 
 ### About
 
-Chaptered "Volume 1". Chapter stubs ship empty with a clear placeholder state; the owner writes the text. A facts strip (name, Bahrain, what I do, links) sits on top, skills and timeline below.
+Chaptered "Volume 1". Chapter text is seeded from `docs/about-draft.md` (verified facts only); the owner edits it over time. A facts strip (name, Bahrain, what I do, links) sits on top, skills and timeline below.
 
 ## UX path
 
-1. Landing: diagonal split panel, Work left, Personal right, name and tagline in a speech bubble. Journal ticker below.
+1. Landing: diagonal split panel, Work left, Personal right, "Ali Khalaf, Software Engineer" in a speech bubble (no tagline). Journal ticker below (Phase 2).
 2. Index pages: manga page grid of irregular panels. Hover inverts the panel and slides in the caption.
 3. Detail pages read as chapters (Problem, Role, Build, Result). Footer link goes to the next entry.
 4. Sticky nav on every page.
@@ -114,9 +124,9 @@ docs/superpowers/specs/
 ## Timeline and resume
 
 - A timeline strip (Work index and About) lists roles, projects, education and hackathons by date. It shows continuity without product detail, and Tanami appears as one line.
-- Source: LinkedIn profile plus repo history. Data lives in `src/content/timeline/*.md` (`date, kind, title, org?`), one file per milestone.
+- Source: LinkedIn, the pre-Tanami CV and repo history. Data lives in `src/content/timeline/*.md` (`date, kind, title, org?`), one file per milestone.
 - `/resume` renders the same data, print-styled, with a PDF download. The PDF is generated once and committed to `public/`.
-- Seed data (from the owner's LinkedIn, pasted 2026-10-25):
+- Seed data (LinkedIn text pasted by the owner plus the CV, 2026-10-25), newest first by start date:
 
 | Period | Kind | Entry |
 |---|---|---|
@@ -128,11 +138,13 @@ docs/superpowers/specs/
 | Aug 2024 - Aug 2026 | education | Reboot Coding Institute, graduated with DevOps. |
 | Sep 2021 - Aug 2026 | education | University of Bahrain, Bachelor's in Software Engineering, graduated. |
 
+  Display order is by end date, newest first, with the current role pinned on top.
+
   Notes: employers get the CV-level description only, with no client or product detail beyond what is listed (Tanami: role line only). Repo milestones (S.M.O.B.B. 2023, skoobl, hackathons) are added as `project` entries between these. Sources: LinkedIn (titles for Tanami, dates for Croozz) and the pre-Tanami CV (Babel Pastries and the descriptions). Where they differ, LinkedIn wins (confirmed by the owner): Croozz is Feb 2025 - Jan 2026 there but Jan - Dec 2025 on the CV; Tech Bay title is "Software Developer" on LinkedIn but "Junior Software Engineer" on the CV (CV title used). Entries are not linked to specific projects unless the owner says so (CuspIO's employer is unconfirmed).
 - **Credentials rule:** only two are shown: Reboot Coding Institute (graduated, DevOps) and University of Bahrain (graduated, Bachelor's in Software Engineering). No other certifications. High school is omitted.
 - **Contact:** the Gmail address from the CV is the public contact email (owner's choice), shown on `/contact`, the resume and the nav CTA (`mailto:`). To limit scraping, the address is assembled client-side from split parts, with a plain-text fallback inside `<noscript>`. The phone number is not published anywhere. GitHub and LinkedIn links are also listed.
 - **Stack list** (About and resume): Go, JavaScript, TypeScript, NestJS, React, Next.js, Vue, React Native, PHP Laravel, C#/ASP.NET, Rust. Languages: English, Arabic.
-- Journey facts from LinkedIn also seed the About facts strip and chapter stubs. The story text stays the owner's.
+- Journey facts seed the About facts strip and chapters; the owner edits the final text.
 
 ## Calls to action
 
@@ -142,7 +154,7 @@ docs/superpowers/specs/
 ## SEO and sharing
 
 - Per-page `<title>` and meta description from frontmatter, canonical URLs, `sitemap.xml`, `robots.txt`, RSS.
-- Open Graph and Twitter cards: one manga-style 1200x630 card per page, generated at build time from title + panel template, with a static fallback.
+- Open Graph and Twitter cards (Phase 3): a handful of static manga-style 1200x630 images, one per section (landing, work, personal, journal, about), referenced from frontmatter. No build-time image generation dependency.
 - JSON-LD `Person` on `/about`.
 
 ## Mobile and performance budget
@@ -170,7 +182,9 @@ docs/superpowers/specs/
 
 - No mention of AI coding tools or assistant involvement anywhere on the site: copy, `/uses`, journal templates, repo READMEs shown, or screenshots. Screenshots must not show assistant UIs, terminals or logs containing such references.
 - Tanami: role line only, as above.
-- Every screenshot is reviewed by the owner before publish.
+- Every screenshot is reviewed by the owner before publish. EXIF/location metadata is stripped from all images (the Astro image pipeline re-encodes them).
+- Embedded games use `<iframe sandbox="allow-scripts allow-same-origin allow-pointer-lock allow-fullscreen">` with `allow="fullscreen"`, loaded only after a click. No other third-party embeds.
+- Build checks (Phase 3, CI): Lighthouse (mobile) against the performance and accessibility targets, plus a link check.
 
 ## Capture pass
 
@@ -184,7 +198,6 @@ Comments, analytics, CMS, search, translations (RTL layout is prepared; content 
 
 - No headline/tagline for now (owner's call). Landing shows "Ali Khalaf, Software Engineer".
 - About story text is drafted from verified facts in `docs/about-draft.md`; owner edits it.
-- Whether CuspIO was built under one of the listed employers (affects its framing).
-- Tanami `period`: now "Jun 2026 - present", title "Software Engineer".
+- Unverified: live game URLs have not been opened, and smart-road controls and gridlock package names are guesses (checked during the capture pass).
 - Screenshots and GIFs for skoobl, smoke-break, smart-road, dopher-alpha, CuspIO to be provided or captured.
 - Create the GitHub repo and configure Pages when ready to deploy.
