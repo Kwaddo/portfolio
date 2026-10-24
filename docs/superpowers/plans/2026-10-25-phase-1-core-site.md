@@ -338,7 +338,7 @@ describe('formatMonth', () => {
 - [ ] **Step 2: Run tests to verify they fail**
 
 Run: `npm run test`
-Expected: FAIL, "Failed to resolve import" for each `src/lib/*` module.
+Expected: FAIL, "Cannot find module" (or a failed import) for each `src/lib/*` module.
 
 - [ ] **Step 3: Write the data files**
 
@@ -458,7 +458,7 @@ export const formatMonth = (d: Date): string =>
 npm run test
 npm run check
 ```
-Expected: all tests PASS (about 16); `0 errors`.
+Expected: all tests PASS (18); `0 errors`.
 
 - [ ] **Step 6: Commit**
 
@@ -498,9 +498,15 @@ describe('findViolations', () => {
   test('flags the phone number', () => {
     expect(findViolations('a/index.html', '<p>+973-36000253</p>')).toHaveLength(1);
   });
-  test('flags a plain email address and any mailto link', () => {
+  test('flags a plain email address and a mailto link in markup', () => {
     expect(findViolations('a/index.html', '<p>alimohsen999@gmail.com</p>')).toHaveLength(1);
     expect(findViolations('a/index.html', '<a href="mailto:x@y.z">x</a>')).toHaveLength(1);
+  });
+  test('allows the string mailto: inside a script (the client-side assembler)', () => {
+    expect(findViolations('a/index.html', '<script>link.href=`mailto:${a}`</script>')).toEqual([]);
+  });
+  test('still flags the plain address inside a script', () => {
+    expect(findViolations('a/index.html', '<script>x="alimohsen999@gmail.com"</script>')).toHaveLength(1);
   });
   test('allows the spelled-out email', () => {
     expect(findViolations('a/index.html', '<p>alimohsen999 [at] gmail [dot] com</p>')).toEqual([]);
@@ -528,10 +534,11 @@ Expected: FAIL, cannot resolve `../scripts/dist-rules`.
 
 `scripts/dist-rules.ts`:
 ```ts
-const FORBIDDEN: { name: string; re: RegExp }[] = [
+const FORBIDDEN: { name: string; re: RegExp; markupOnly?: boolean }[] = [
   { name: 'AI tooling name', re: /claude|anthropic|copilot|chatgpt|openai|superpowers|ai[- ]assisted|vibe[- ]cod|co-authored/i },
   { name: 'phone number', re: /36000253/ },
-  { name: 'plain email address or mailto', re: /alimohsen999@gmail\.com|mailto:/i },
+  { name: 'plain email address', re: /alimohsen999@gmail\.com/i },
+  { name: 'mailto link', re: /mailto:/i, markupOnly: true },
   { name: 'Quad shown', re: /\bQuad\b/ },
 ];
 
@@ -539,8 +546,10 @@ const ATTRS = /\s(?:href|src|content|data-src|srcset|action)="[^"]*"/g;
 
 export function findViolations(path: string, html: string): string[] {
   const out: string[] = [];
-  for (const { name, re } of FORBIDDEN) {
-    if (re.test(html)) out.push(`${path}: ${name}`);
+  // Astro inlines small scripts; the copy-email script legitimately contains the text "mailto:".
+  const markup = html.replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, '');
+  for (const { name, re, markupOnly } of FORBIDDEN) {
+    if (re.test(markupOnly ? markup : html)) out.push(`${path}: ${name}`);
   }
   if (/kwaddo/i.test(html.replace(ATTRS, ''))) out.push(`${path}: Kwaddo handle shown as text`);
   if (path.startsWith('work/tanami/') && /<(img|picture|video|iframe)\b/i.test(html)) {
@@ -1832,22 +1841,26 @@ In 2026 I graduated from both Reboot, with DevOps, and the University of Bahrain
 git rm docs/about-draft.md
 ```
 
-- [ ] **Step 7: Verify the schemas accept the content and reject bad content**
+- [ ] **Step 7: Verify the content builds, then commit**
 
 ```bash
 npm run verify
-```
-Expected: passes (content syncs, 1 page built).
-
-Then prove the guard rails: temporarily remove the `playUrl:` line from `src/content/games/smobb.md` and run `npm run build`.
-Expected: build FAILS with `playUrl is required when playable is not none`. Restore with `git checkout src/content/games/smobb.md`. Then temporarily add `cover: ../../assets/x.png` to `src/content/work/tanami.md`; expected failure mentions `coverAlt` or a missing image. Restore with `git checkout src/content/work/tanami.md`.
-
-- [ ] **Step 8: Commit**
-
-```bash
 git add src/content.config.ts src/content docs
 git commit -m "feat: add content collections and initial entries"
 ```
+Expected: verify passes (content syncs, 1 page built); the commit succeeds. Build output may warn that `src/content/journeys/` does not exist or is empty; that is harmless until journeys content exists.
+
+- [ ] **Step 8: Prove the schema guard rails, then restore**
+
+The files are tracked now, so `git checkout` restores them.
+
+Temporarily remove the `playUrl:` line from `src/content/games/smobb.md` and run `npm run build`.
+Expected: build FAILS with `playUrl is required when playable is not none`. Restore: `git checkout src/content/games/smobb.md`.
+
+Temporarily add `cover: ../../assets/x.png` to `src/content/work/tanami.md` and run `npm run build`.
+Expected: build FAILS (a missing image or `coverAlt` error). Restore: `git checkout src/content/work/tanami.md`.
+
+Run `npm run build` once more; expected: passes and `git status --short` shows no changes.
 
 ---
 
@@ -2136,7 +2149,7 @@ and change the link to `<a class="back" href="/work/">All work</a>`.
 ```bash
 npm run verify
 ```
-Expected: passes, 4 pages built (`/`, `/contact/`, `/work/`, `/work/tanami/`, `/work/cuspio/` = 5 pages). `check-dist` confirms no media on `work/tanami/`.
+Expected: passes, 5 pages built (`/`, `/contact/`, `/work/`, `/work/tanami/`, `/work/cuspio/`). `check-dist` confirms no media on `work/tanami/`.
 
 Manual: `/work/` shows two cards; `/work/tanami/` shows the dashed "confidential" notice and no image.
 
@@ -2769,7 +2782,7 @@ import { defineConfig, devices } from '@playwright/test';
 export default defineConfig({
   testDir: 'e2e',
   webServer: {
-    command: 'npm run build && npm run preview -- --host 127.0.0.1 --port 4321',
+    command: 'npm run build && npm run preview -- --host 127.0.0.1 --port 4321 --ignore-lock',
     url: 'http://127.0.0.1:4321',
     reuseExistingServer: true,
     timeout: 180_000,
@@ -2781,6 +2794,8 @@ export default defineConfig({
   ],
 });
 ```
+
+Note: `--ignore-lock` keeps `astro preview` in the foreground. Without it, Astro 7 can detect that it was started by an automated agent, detach into the background and exit, which makes Playwright report that the web server exited early.
 
 - [ ] **Step 3: Write the layout spec**
 

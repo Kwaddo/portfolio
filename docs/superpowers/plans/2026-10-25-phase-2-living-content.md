@@ -1551,7 +1551,7 @@ import { chromium } from '@playwright/test';
 
 const port = 4322;
 const base = `http://127.0.0.1:${port}`;
-const server = spawn('npx', ['astro', 'preview', '--host', '127.0.0.1', '--port', String(port)], { stdio: 'ignore' });
+const server = spawn('npx', ['astro', 'preview', '--host', '127.0.0.1', '--port', String(port), '--ignore-lock'], { stdio: 'ignore' });
 
 async function waitForServer() {
   for (let i = 0; i < 60; i += 1) {
