@@ -1,0 +1,10 @@
+---
+import { formatDay } from '../lib/dates';
+
+interface Props {
+  date: Date;
+  as?: 'h1' | 'h2' | 'p';
+}
+const { date, as: Tag = 'p' } = Astro.props;
+---
+<Tag class="stamp"><time datetime={date.toISOString().slice(0, 10)}>{formatDay(date)}</time></Tag>

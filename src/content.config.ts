@@ -83,4 +83,14 @@ const journeys = defineCollection({
   }),
 });
 
-export const collections = { work, games, lab, about, journeys };
+const journal = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/journal' }),
+  schema: z.object({
+    date: z.coerce.date(),
+    tags: z.array(z.string()).default([]),
+    project: z.string().optional(),
+    draft: z.boolean().default(false),
+  }),
+});
+
+export const collections = { work, games, lab, about, journeys, journal };

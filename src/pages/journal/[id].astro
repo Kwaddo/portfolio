@@ -1,0 +1,48 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import DateStamp from '../../components/DateStamp.astro';
+import { firstSentence, neighbors, newestFirst, tagSlug } from '../../lib/journal';
+import { formatDay } from '../../lib/dates';
+import { published } from '../../lib/content';
+
+export async function getStaticPaths() {
+  const entries = newestFirst(published(await getCollection('journal')));
+  return entries.map((entry) => ({ params: { id: entry.id }, props: { entry, entries } }));
+}
+
+const { entry, entries } = Astro.props;
+const { Content } = await render(entry);
+const { newer, older } = neighbors(entries, entry.id);
+
+const [games, lab] = await Promise.all([getCollection('games'), getCollection('lab')]);
+const project = entry.data.project;
+const projectHref = !project
+  ? undefined
+  : games.some((g) => g.id === project)
+    ? `/personal/games/${project}/`
+    : lab.some((l) => l.id === project)
+      ? `/personal/lab/${project}/`
+      : undefined;
+---
+<Base title={`${formatDay(entry.data.date)} | Journal`} description={firstSentence(entry.body ?? '')}>
+  <article class="wrap stack">
+    <p><a class="back" href="/journal/">Journal</a></p>
+    <DateStamp date={entry.data.date} as="h1" />
+    {
+      entry.data.tags.length > 0 && (
+        <ul class="tags">
+          {entry.data.tags.map((t) => (
+            <li><a href={`/journal/tag/${tagSlug(t)}/`}>{t}</a></li>
+          ))}
+        </ul>
+      )
+    }
+    <div class="prose"><Content /></div>
+    {projectHref && <p><a href={projectHref}>About {project}</a></p>}
+    <nav class="pager" aria-label="More entries">
+      {older ? <a class="btn" href={`/journal/${older.id}/`}>Older: {formatDay(older.data.date)}</a> : <span />}
+      {newer ? <a class="btn" href={`/journal/${newer.id}/`}>Newer: {formatDay(newer.data.date)}</a> : <span />}
+    </nav>
+  </article>
+</Base>
