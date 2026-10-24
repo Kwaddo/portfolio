@@ -1,14 +1,16 @@
 ---
 import { render, type CollectionEntry } from 'astro:content';
 import Base from '../layouts/Base.astro';
+import type { DevlogItem } from '../lib/journal';
 
 interface Props {
   title: string;
   chapters: CollectionEntry<'journeys'>[];
   backHref: string;
   next?: { title: string; href: string };
+  devlog?: DevlogItem[];
 }
-const { title, chapters, backHref, next } = Astro.props;
+const { title, chapters, backHref, next, devlog = [] } = Astro.props;
 const rendered = await Promise.all(
   chapters.map(async (chapter) => ({ chapter, Content: (await render(chapter)).Content })),
 );
