@@ -12,5 +12,7 @@ export default defineConfig({
   projects: [
     { name: 'phone', use: { ...devices['Pixel 7'], viewport: { width: 360, height: 740 } } },
     { name: 'desktop', use: { ...devices['Desktop Chrome'] } },
+    { name: 'firefox', use: { ...devices['Desktop Firefox'] }, testMatch: /layout\.spec\.ts/ },
+    { name: 'webkit-phone', use: { ...devices['iPhone 14'] }, testMatch: /layout\.spec\.ts/ },
   ],
 });
