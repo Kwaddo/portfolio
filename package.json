@@ -13,6 +13,7 @@
     "astro": "astro",
     "check": "astro check",
     "test": "vitest run",
+    "new": "node scripts/new-post.mjs",
     "check:dist": "node scripts/check-dist.mjs",
     "e2e": "playwright test",
     "verify": "npm run check && npm run test && npm run build && npm run check:dist"
