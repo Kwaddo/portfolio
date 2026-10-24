@@ -20,6 +20,12 @@ describe('fontUrls', () => {
     const css = '@font-face{src:url(/_astro/inter-latin-wght-normal.abc.woff2) format("woff2")}@font-face{src:url(/_astro/x.woff) format("woff")}';
     expect(fontUrls(css)).toEqual(['/_astro/inter-latin-wght-normal.abc.woff2']);
   });
+
+  test('tolerates quotes and query strings', () => {
+    expect(fontUrls('@font-face{src:url("/_astro/a.woff2") format("woff2")}')).toEqual(['/_astro/a.woff2']);
+    expect(fontUrls("@font-face{src:url('/_astro/a.woff2')}")).toEqual(['/_astro/a.woff2']);
+    expect(fontUrls('@font-face{src:url(/_astro/a.woff2?v=1)}')).toEqual(['/_astro/a.woff2']);
+  });
 });
 
 describe('isLatinFont', () => {

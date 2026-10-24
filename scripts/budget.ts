@@ -13,7 +13,7 @@ export function assetPaths(html: string): { css: string[]; js: string[] } {
 }
 
 export function fontUrls(css: string): string[] {
-  return [...css.matchAll(/url\(([^)]+\.woff2)\)/g)].map((m) => m[1].replace(/["']/g, ''));
+  return [...css.matchAll(/url\(\s*["']?([^"')\s]+?\.woff2)(?:\?[^"')\s]*)?["']?\s*\)/g)].map((m) => m[1]);
 }
 
 export const isLatinFont = (url: string): boolean => /-latin-(?:wght|\d+)-normal/.test(url);

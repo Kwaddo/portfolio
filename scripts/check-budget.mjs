@@ -17,11 +17,17 @@ if (css.length === 0) {
 let total = gz(htmlBuf);
 const parts = [['html', total]];
 const fonts = new Set();
+let cssText = '';
 for (const path of css) {
   const buf = read(path);
   total += gz(buf);
   parts.push([path, gz(buf)]);
+  cssText += buf.toString('utf8');
   for (const url of fontUrls(buf.toString('utf8'))) if (isLatinFont(url)) fonts.add(url);
+}
+if (fonts.size === 0 && cssText.includes('.woff2')) {
+  console.error('Stylesheet references .woff2 but no Latin font was counted; the budget would be undercounted.');
+  process.exit(1);
 }
 for (const path of js) {
   const size = gz(read(path));
