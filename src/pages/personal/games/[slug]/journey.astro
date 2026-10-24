@@ -5,7 +5,7 @@ import { journeyPaths } from '../../../../lib/journey-paths';
 export function getStaticPaths() {
   return journeyPaths('games');
 }
-const { title, chapters, next } = Astro.props;
+const { title, chapters, next, devlog } = Astro.props;
 const { slug } = Astro.params;
 ---
-<JourneyView title={title} chapters={chapters} backHref={`/personal/games/${slug}/`} next={next} />
+<JourneyView title={title} chapters={chapters} backHref={`/personal/games/${slug}/`} next={next} devlog={devlog} />
