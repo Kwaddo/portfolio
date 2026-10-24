@@ -1,6 +1,6 @@
 # Capture plan
 
-Screenshots and GIFs go to `public/media/<slug>/`. Capture one project at a time, review each file before committing. Rules:
+Screenshots and GIFs go to `src/assets/media/<slug>/`. Capture one project at a time, review each file before committing. Rules:
 
 - No AI-assistant UIs, terminals, logs or file names visible in any shot.
 - No real personal data (patients, emails, tokens). Demo data only.
@@ -35,4 +35,4 @@ Before capturing, skim `PatientSeeder` and `storage/app/{private,public}` to con
 2. Run, confirm it works.
 3. Capture the listed shots.
 4. Owner reviews each file; reject anything with private data or tool references.
-5. Save to `public/media/<slug>/`, write alt text in the entry's frontmatter, commit.
+5. Save to `src/assets/media/<slug>/`, write alt text in the entry's frontmatter, commit.

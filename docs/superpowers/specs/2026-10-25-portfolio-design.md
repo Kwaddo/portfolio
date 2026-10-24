@@ -145,7 +145,8 @@ Static builds under `public/play/<slug>/`, embedded in an iframe. Godot web expo
 
 ```
 src/pages  src/content  src/components  src/styles
-public/ (media, fonts, play/)
+src/assets/media/<slug>/ (screenshots, processed by Astro)
+public/ (favicon, robots.txt, resume PDF)
 docs/superpowers/specs/
 ```
 
@@ -173,7 +174,7 @@ docs/superpowers/specs/
 
   Notes: employers get the CV-level description only, with no client or product detail beyond what is listed (Tanami: role line only). Repo milestones (S.M.O.B.B. 2023, skoobl, hackathons) are added as `project` entries between these. Sources: LinkedIn (titles for Tanami, dates for Croozz) and the pre-Tanami CV (Babel Pastries and the descriptions). Where they differ, LinkedIn wins (confirmed by the owner): Croozz is Feb 2025 - Jan 2026 there but Jan - Dec 2025 on the CV; Tech Bay title is "Software Developer" on LinkedIn but "Junior Software Engineer" on the CV (CV title used). Entries are not linked to specific projects unless the owner says so (CuspIO's employer is unconfirmed).
 - **Credentials rule:** only two are shown: Reboot Coding Institute (graduated, DevOps) and University of Bahrain (graduated, Bachelor's in Software Engineering). No other certifications. High school is omitted.
-- **Contact:** the Gmail address from the CV is the public contact email (owner's choice), shown on `/contact`, the resume and the nav CTA (`mailto:`). To limit scraping, the address is assembled client-side from split parts, with a plain-text fallback inside `<noscript>`. The phone number is not published anywhere. GitHub and LinkedIn links are also listed.
+- **Contact:** the Gmail address from the CV is the public contact email (owner's choice), shown on `/contact`, the resume and the nav CTA (`mailto:`). To limit scraping, the address is assembled client-side from split parts, with a spelled-out fallback inside `<noscript>` (`name [at] gmail [dot] com`). The phone number is not published anywhere. GitHub and LinkedIn links are also listed.
 - **Stack list** (About and resume): Go, JavaScript, TypeScript, NestJS, React, Next.js, Vue, React Native, PHP Laravel, C#/ASP.NET, Rust. Languages: English, Arabic.
 - Journey facts seed the About facts strip and chapters; the owner edits the final text.
 
@@ -184,7 +185,7 @@ docs/superpowers/specs/
 
 ## Copy-email button
 
-On `/contact`, the resume and the Work with me block, next to the address: a "Copy email" button that writes the address to the clipboard (`navigator.clipboard`, falling back to selecting the text), then shows "Copied" for 2 seconds in an `aria-live="polite"` region. It works without a mailto handler. The address is still assembled client-side from split parts; with JavaScript off, the `<noscript>` plain-text fallback is shown and the button is hidden. Keyboard focusable, with a visible focus state. Phase 1.
+On `/contact`, the resume and the Work with me block, next to the address: a "Copy email" button that writes the address to the clipboard (`navigator.clipboard`, falling back to selecting the text), then shows "Copied" for 2 seconds in an `aria-live="polite"` region. It works without a mailto handler. The address is still assembled client-side from split parts; with JavaScript off, the `<noscript>` spelled-out fallback is shown and the button is hidden. Keyboard focusable, with a visible focus state. Phase 1.
 
 ## Dependency upkeep
 
@@ -219,7 +220,7 @@ Copy is drafted in Phase 1 and edited by the owner. No rates are published.
 
 - Design at 360px first; no horizontal scroll at any width.
 - Game iframes are click-to-load (poster + Play button); nothing from `public/play/` loads until clicked.
-- Images: Astro image pipeline (AVIF/WebP, `srcset`, explicit width/height), `loading="lazy"` below the fold. GIFs converted to muted looping video.
+- Images: Astro image pipeline (WebP output, `srcset`, explicit width/height), `loading="lazy"` below the fold. GIFs converted to muted looping video.
 - Fonts: at most two families, self-hosted, `font-display: swap`, subset.
 - Halftone, speed lines and panel-reveal are CSS only. Heavy effects disabled under `prefers-reduced-motion` and on small screens where costly.
 - Budget: landing under 200 KB transferred excluding images, Lighthouse performance and accessibility at or above 95 on mobile.
@@ -248,7 +249,19 @@ Copy is drafted in Phase 1 and edited by the owner. No rates are published.
 
 ## Capture pass
 
-Screenshots and GIFs are captured per project from local copies, one at a time, into `public/media/<slug>/`, each reviewed before commit. Details and run commands live in `docs/capture-plan.md`.
+Screenshots and GIFs are captured per project from local copies, one at a time, into `src/assets/media/<slug>/` (the Astro image pipeline only processes `src/`, not `public/`), each reviewed before commit. Details and run commands live in `docs/capture-plan.md`.
+
+## Launch gates
+
+All must be true before the site is announced (checked in the last task of Phase 3):
+
+- Confidentiality: Tanami wording and all employer descriptions checked against the owner's contracts and any public-mention rules; collaborator naming confirmed (done: owner confirmed).
+- Real-device pass: iOS Safari, Android Chrome, desktop Firefox and keyboard-only navigation; halftone never reduces text contrast below 4.5:1.
+- Lighthouse mobile at or above 95 for performance and accessibility on landing, a work page, a game page and the journal index.
+- Link check clean; no forbidden strings in `dist/` (AI tooling names, phone number, plain email address).
+- Decisions recorded: custom domain or `kwaddo.github.io`; analytics yes or no (default: none).
+- GitHub profile name and bio updated to Ali Khalaf and linked to the site; LinkedIn updated with the site link.
+- Soft share to a few people for a 5-second landing test before wider sharing.
 
 ## Out of scope (now)
 
