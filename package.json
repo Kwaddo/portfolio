@@ -18,8 +18,9 @@
     "og": "node scripts/make-og.mjs",
     "check:dist": "node scripts/check-dist.mjs",
     "check:links": "node scripts/check-links.mjs",
+    "check:budget": "node scripts/check-budget.mjs",
     "e2e": "playwright test",
-    "verify": "npm run check && npm run test && npm run build && npm run check:dist && npm run check:links"
+    "verify": "npm run check && npm run test && npm run build && npm run check:dist && npm run check:links && npm run check:budget"
   },
   "dependencies": {
     "@astrojs/rss": "4.0.19",
