@@ -1,4 +1,4 @@
-import { readdirSync, readFileSync, statSync } from 'node:fs';
+import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { join, relative } from 'node:path';
 import { findViolations } from './dist-rules.ts';
 
@@ -17,6 +17,11 @@ let pages = 0;
 for (const file of walk(root)) {
   pages += 1;
   violations.push(...findViolations(relative(root, file), readFileSync(file, 'utf8')));
+}
+
+const required = ['rss.xml', 'sitemap-index.xml', 'robots.txt'];
+for (const file of required) {
+  if (!existsSync(join(root, file))) violations.push(`${file}: missing from dist`);
 }
 
 if (violations.length > 0) {
