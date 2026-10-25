@@ -35,6 +35,7 @@
   .spread--feature-start > :not(.spread__label):not(.sfx):first-of-type {
     grid-column: span 8;
     grid-row: span 2;
+    align-self: stretch;
   }
   .spread--feature-end > :not(.spread__label):not(.sfx) {
     grid-column: span 4;
@@ -42,6 +43,7 @@
   .spread--feature-end > :not(.spread__label):not(.sfx):first-of-type {
     grid-column: 5 / -1;
     grid-row: span 2;
+    align-self: stretch;
   }
   .spread--stack > :not(.spread__label):not(.sfx) {
     grid-column: span 12;
@@ -63,6 +65,13 @@
     padding-inline-end: 0.75rem;
     border-inline-end: var(--rule);
   }
+}
+.spread > .sfx {
+  inset-block-start: -0.55em;
+  block-size: 1.1em;
+}
+.spread:has(> .sfx) {
+  padding-block-start: clamp(2.5rem, 6vw, 5.5rem);
 }
 .spread--slant {
   --slant: 5deg;
@@ -326,3 +335,17 @@ a.panel:focus-visible .panel__media img {
   }
 }
 
+
+/* reveal rules (motion.css) outrank the plain hover rules; restore the lift under html.js */
+html.js a.panel.is-in {
+  transition:
+    opacity var(--t-slow) var(--ease-out),
+    translate var(--t-fast),
+    box-shadow var(--t-fast),
+    background var(--t-fast),
+    color var(--t-fast);
+}
+html.js a.panel.is-in:hover,
+html.js a.panel.is-in:focus-visible {
+  translate: 0 -2px;
+}

@@ -24,7 +24,7 @@ const { href, title, summary, status, cover, coverAlt, meta, level = 3, w, tall 
 const Tag = level === 2 ? 'h2' : 'h3';
 const letter = title.trim().charAt(0).toUpperCase();
 ---
-<Panel href={href} w={w} tall={tall} tilt={tilt} index={index} tone={confidential ? 'hatch' : undefined} shadow>
+<Panel href={href} w={w} tall={tall} tilt={tilt} index={index} shadow>
   {
     cover ? (
       <div class="panel__media">
@@ -32,7 +32,7 @@ const letter = title.trim().charAt(0).toUpperCase();
       </div>
     ) : (
       <div class="panel__media panel__initial" aria-hidden="true">
-        <span class="tone-coarse"></span>
+        <span class={confidential ? 'hatch' : 'tone-coarse'} aria-hidden="true"></span>
         <span class="panel__letter">{letter}</span>
       </div>
     )
