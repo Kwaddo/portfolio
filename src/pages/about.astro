@@ -16,7 +16,8 @@ import { jsonLdScript, personLd } from '../lib/jsonld';
 const timeline = published(await getCollection('timeline'));
 const chapters = byOrder(published(await getCollection('about')));
 const rendered = await Promise.all(chapters.map(async (c) => ({ c, Content: (await render(c)).Content })));
-const splats = ['splat-a', 'splat-b', 'splat-c'] as const;
+// between chapters: brush, diagonal ink bar, tone strip, in turn
+const rules = ['strip', 'bar', 'splat-c'] as const;
 // An optional portrait: drop a file at src/assets/portrait.(png|jpg|jpeg|webp) and it appears beside chapter one.
 const portraits = import.meta.glob<{ default: ImageMetadata }>('../assets/portrait.{png,jpg,jpeg,webp}', { eager: true });
 const portrait = Object.values(portraits)[0]?.default;
@@ -45,7 +46,7 @@ const portrait = Object.values(portraits)[0]?.default;
     {
       rendered.map(({ c, Content }, i) => (
         <>
-          {i > 0 && <InkRule variant={splats[i % 3]} />}
+          {i > 0 && <InkRule variant={rules[i % 3]} />}
           <article class:list={['chapter', i % 2 === 1 && 'chapter--alt']} data-reveal>
             {i === 0 && portrait ? (
               <div class="chapter__portrait">

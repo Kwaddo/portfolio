@@ -21,7 +21,8 @@ const rendered = await Promise.all(
   chapters.map(async (chapter) => ({ chapter, Content: (await render(chapter)).Content })),
 );
 const month = (d: Date) => d.toLocaleDateString('en-US', { month: 'long', year: 'numeric', timeZone: 'UTC' });
-const splats = ['splat-a', 'splat-b', 'splat-c'] as const;
+// between chapters: brush, diagonal ink bar, tone strip, in turn
+const rules = ['strip', 'bar', 'splat-c'] as const;
 ---
 <Base title={`${title}: the journey`} description={`The story behind ${title}, told in chapters.`}>
   <div class="wrap stack">
@@ -33,7 +34,7 @@ const splats = ['splat-a', 'splat-b', 'splat-c'] as const;
     {
       rendered.map(({ chapter, Content }, i) => (
         <>
-          {i > 0 && <InkRule variant={splats[i % 3]} />}
+          {i > 0 && <InkRule variant={rules[i % 3]} />}
           <article class:list={['chapter', i % 2 === 1 && 'chapter--alt']} data-reveal>
             <div class="chapter__side">
               <span class={i % 2 === 0 ? 'tone-mid' : 'tone-fine'} aria-hidden="true"></span>

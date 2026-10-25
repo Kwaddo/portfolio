@@ -1,6 +1,6 @@
 ---
 interface Props {
-  variant?: 'splat-a' | 'splat-b' | 'splat-c' | 'draw';
+  variant?: 'splat-a' | 'splat-b' | 'splat-c' | 'draw' | 'bar' | 'strip';
 }
 const { variant = 'splat-a' } = Astro.props;
 // Brush strokes: filled paths that taper to a point at both ends, a wavy top edge and a dry-brush break near each tip.
@@ -16,7 +16,11 @@ const drops = {
 } as const;
 ---
 {
-  variant === 'draw' ? (
+  variant === 'bar' ? (
+    <div class="ink-bar" aria-hidden="true"></div>
+  ) : variant === 'strip' ? (
+    <div class="tone-strip" aria-hidden="true"></div>
+  ) : variant === 'draw' ? (
     <svg class="ink-draw" viewBox="0 0 400 12" preserveAspectRatio="none" aria-hidden="true" data-reveal>
       <path d="M6 7C70 1 130 9 200 3S330 1 388 5C330 10 210 12 130 11S60 11 6 7Z M391 6C394 3.5 398 4 400 6.5C398 8.5 394 8.5 391 6Z" fill="currentColor" />
     </svg>
