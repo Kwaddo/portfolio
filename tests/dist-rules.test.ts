@@ -41,6 +41,13 @@ describe('findViolations', () => {
     expect(findViolations('work/tanami/index.html', '<img src="/x.png">')).toHaveLength(1);
     expect(findViolations('work/cuspio/index.html', '<img src="/x.png">')).toEqual([]);
   });
+  test('allows only the aria-hidden KWADDO sfx word as handle text', () => {
+    const sfx = '<span class="sfx sfx--paper" aria-hidden="true" style="--sfx-rotate: -8deg"><span>KWADDO</span></span>';
+    expect(findViolations('index.html', `<div>${sfx}</div>`)).toEqual([]);
+    expect(findViolations('index.html', `<div>${sfx}<p>by Kwaddo</p></div>`)).toHaveLength(1);
+    expect(findViolations('index.html', '<span class="sfx"><span>KWADDO</span></span>')).toHaveLength(1);
+  });
+
   test('flags the Kwaddo handle as visible text but not in attributes', () => {
     expect(findViolations('a/index.html', '<p>by Kwaddo</p>')).toHaveLength(1);
     expect(findViolations('a/index.html', '<a href="https://kwaddo.github.io/">x</a>')).toEqual([]);
