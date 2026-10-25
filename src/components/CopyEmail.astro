@@ -25,7 +25,9 @@ import { toSpelledOut } from '../lib/email';
     }
   }
 
-  document.querySelectorAll<HTMLElement>('[data-email]').forEach((root) => {
+  // Binds once per element; re-run after every client-side navigation (the module itself loads once).
+  const bind = () => document.querySelectorAll<HTMLElement>('[data-email]:not([data-bound])').forEach((root) => {
+    root.dataset.bound = '1';
     const address = toAddress({ user: root.dataset.user!, domain: root.dataset.domain! });
     const link = root.querySelector<HTMLAnchorElement>('[data-email-link]')!;
     const button = root.querySelector<HTMLButtonElement>('[data-email-copy]')!;
@@ -46,4 +48,6 @@ import { toSpelledOut } from '../lib/email';
       }, 2000);
     });
   });
+  bind();
+  document.addEventListener('astro:page-load', bind);
 </script>

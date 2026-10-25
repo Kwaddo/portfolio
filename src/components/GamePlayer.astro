@@ -25,7 +25,9 @@ const ratio = frameWidth && frameHeight ? `${frameWidth} / ${frameHeight}` : '16
 </div>
 
 <script>
-  document.querySelectorAll<HTMLElement>('[data-player]').forEach((root) => {
+  // Binds once per element; re-run after every client-side navigation (the module itself loads once).
+  const bind = () => document.querySelectorAll<HTMLElement>('[data-player]:not([data-bound])').forEach((root) => {
+    root.dataset.bound = '1';
     const stage = root.querySelector<HTMLElement>('[data-stage]')!;
     const start = root.querySelector<HTMLButtonElement>('[data-start]')!;
     const fullscreen = root.querySelector<HTMLButtonElement>('[data-fullscreen]')!;
@@ -68,4 +70,6 @@ const ratio = frameWidth && frameHeight ? `${frameWidth} / ${frameHeight}` : '16
       stage.requestFullscreen().catch(() => {});
     });
   });
+  bind();
+  document.addEventListener('astro:page-load', bind);
 </script>
