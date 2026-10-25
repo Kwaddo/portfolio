@@ -69,6 +69,10 @@
 .timeline__period {
   justify-self: start;
 }
+p.timeline__period {
+  color: var(--tone);
+  font-size: 0.9rem;
+}
 .timeline__title {
   font-weight: 700;
 }
@@ -80,7 +84,7 @@
 }
 @media (min-width: 40rem) {
   .timeline:not(.timeline--alt) .timeline__item {
-    grid-template-columns: 11rem 1fr;
+    grid-template-columns: max-content 1fr;
   }
 }
 /* alternating layout: spine down the middle, entries either side of it */
@@ -94,6 +98,8 @@
     inset-inline-start: calc(50% - 1.5px);
   }
   .timeline--alt .timeline__item {
+    /* each entry spans two rows and starts one row after the previous: neighbours overlap by half a row, a tight zigzag */
+    grid-row: calc(var(--i) + 1) / span 2;
     grid-template-columns: 1fr;
     padding: 1rem;
     border: var(--rule);

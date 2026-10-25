@@ -46,10 +46,8 @@ const work = defineCollection({
           .default([]),
       })
       .refine(needsCoverAlt, { message: 'coverAlt is required when cover is set', path: ['coverAlt'] })
-      .refine((d) => !(d.confidential && (d.cover || d.gallery.length > 0)), {
-        message: 'confidential entries must not have a cover or gallery',
-        path: ['cover'],
-      }),
+      .refine((d) => !(d.confidential && d.cover), { message: 'confidential entries must not have a cover', path: ['cover'] })
+      .refine((d) => !(d.confidential && d.gallery.length > 0), { message: 'confidential entries must not have a gallery', path: ['gallery'] }),
 });
 
 const games = defineCollection({
