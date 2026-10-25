@@ -25,10 +25,11 @@ const { href, title, summary, status, cover, coverAlt, meta, level = 3, w, tall 
 const Tag = level === 2 ? 'h2' : 'h3';
 const letter = title.trim().charAt(0).toUpperCase();
 ---
-<Panel href={href} w={w} tall={tall} tilt={tilt} index={index} fill={fill} shadow>
+<Panel href={href} w={w} tall={tall} tilt={tilt} index={index} fill={fill} burst={false} shadow>
   {
     cover ? (
       <div class="panel__media">
+        <span class="speed" aria-hidden="true"></span>
         <Image src={cover} alt={coverAlt ?? ''} widths={[400, 800]} sizes="(min-width: 48rem) 33vw, 100vw" />
       </div>
     ) : (

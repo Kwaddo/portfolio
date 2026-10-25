@@ -120,6 +120,10 @@
   text-decoration: none;
   isolation: isolate;
 }
+/* a link panel clips its burst (the shadow is outside overflow and survives) */
+a.panel {
+  overflow: clip;
+}
 .panel--weight-4 {
   border: var(--rule-4);
 }
@@ -176,9 +180,12 @@
   color: transparent;
   -webkit-text-stroke: 4px var(--ink);
 }
+/* the burst of a card is centred on its media, not the whole card */
+.panel__media > .speed {
+  inset: -30%;
+}
 /* the fallback reads as a drawn panel: a burst behind the letter, always on */
 .panel__initial > .speed {
-  inset: -30%;
   opacity: 0.4;
   background: repeating-conic-gradient(from 0deg at 50% 50%, currentColor 0deg 1deg, transparent 1deg 7deg);
   mask-image: radial-gradient(circle at 50% 50%, transparent 18%, #000 70%);
@@ -279,6 +286,10 @@ a.panel:focus-visible {
 a.panel:hover .speed,
 a.panel:focus-visible .speed {
   opacity: 0.18;
+}
+a.panel:hover .panel__initial > .speed,
+a.panel:focus-visible .panel__initial > .speed {
+  opacity: 0.45;
 }
 a.panel:hover .panel__meta,
 a.panel:hover .panel__text,
