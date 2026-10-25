@@ -83,17 +83,23 @@ h3 {
   }
 }
 
-/* ---------- drop caps: a small inked panel spanning three lines of body text (3 x 1.6rem = 4.8rem) ---------- */
+/* ---------- drop caps: a small inked panel two body lines tall (2 x 1.6rem = 3.2rem, border included), the glyph filling it ---------- */
+.dropcap > p:first-of-type {
+  min-block-size: 3.2rem; /* a one-line opener still clears the box */
+}
+.dropcap > p:first-of-type ~ * {
+  clear: both; /* only the opening paragraph wraps around the letter */
+}
 .dropcap > p:first-of-type::first-letter {
   float: inline-start;
-  margin-block-start: 0.15rem;
-  margin-inline-end: 0.55rem;
-  padding: 0.08em 0.2em 0;
+  margin-block: 0.2rem -0.3rem; /* the float's margin box stays under two lines, so the third line clears it */
+  margin-inline-end: 0.5rem;
+  padding: 0.06em 0.16em 0;
   border: 3px solid var(--ink);
   background: var(--paper);
   color: var(--ink);
   box-shadow: 4px 4px 0 var(--ink);
-  font: 400 3.9rem/1.05 var(--font-display);
+  font: 400 3.3rem/0.78 var(--font-display);
 }
 [dir='rtl'] .dropcap > p:first-of-type::first-letter {
   box-shadow: -4px 4px 0 var(--ink);
