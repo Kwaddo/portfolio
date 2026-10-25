@@ -258,20 +258,6 @@ a.panel {
   [dir='rtl'] .panel--tilt {
     rotate: 1.2deg;
   }
-  /* hand-inked edge on feature panels: a displaced copy of the border */
-  .panel--inked {
-    border-color: transparent;
-  }
-  .panel--inked::before {
-    content: '';
-    position: absolute;
-    inset: -1px;
-    z-index: 2;
-    border: inherit;
-    border-color: var(--ink);
-    filter: url(#ink);
-    pointer-events: none;
-  }
 }
 
 /* speed lines: radial burst shown on hover/focus of a link panel */

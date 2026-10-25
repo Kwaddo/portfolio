@@ -1,0 +1,44 @@
+/* Manga page grammar: inked frames, slanted cuts, tone fields, lettering, page frame, section devices.
+   Loaded last so it can refine the base rules. */
+
+/* ---------- inked frames: a hand-drawn stroke drawn as a border image at desktop ----------
+   One 60 x 60 stroke (band centred on the border, 1 border-width thick, bowing +-0.3 of it, tapered overshoots at two corners),
+   sliced at 15 so the edges stretch and the corners keep their shape; scaled by the border width (3/4/5 px). */
+:root {
+  --frame-ink: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60' viewBox='0 0 60 60'%3E%3Cpath fill='%230a0a0a' d='M1 5.5L55.5 4.8 55.5 10Q30 11.6 5 10L1 7.6Z M50 5L55.5 4.8Q56.6 30 55.2 59L52.4 59.4 50 55Q51.2 30 50 5Z M5 50Q30 48.4 55 50.2 55 55 5 55.2Z M5 5L10 5Q11.4 30 10 55L5 55.2Z'/%3E%3C/svg%3E");
+  --frame-paper: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60' viewBox='0 0 60 60'%3E%3Cpath fill='%23fafafa' d='M1 5.5L55.5 4.8 55.5 10Q30 11.6 5 10L1 7.6Z M50 5L55.5 4.8Q56.6 30 55.2 59L52.4 59.4 50 55Q51.2 30 50 5Z M5 50Q30 48.4 55 50.2 55 55 5 55.2Z M5 5L10 5Q11.4 30 10 55L5 55.2Z'/%3E%3C/svg%3E");
+}
+@media (min-width: 48rem) and (forced-colors: none) {
+  .panel,
+  .frame,
+  .notice,
+  .chapter__text,
+  .chapter__side,
+  .entry__link,
+  .timeline--alt .timeline__item {
+    border-image: var(--frame-ink) 15 / 3 / 1 stretch; /* the band is three border widths: one outside, one on, one inside */
+  }
+  .spread--ink .frame,
+  a.panel:hover,
+  a.panel:focus-visible,
+  .entry__link:hover,
+  .entry__link:focus-visible {
+    border-image-source: var(--frame-paper);
+  }
+  /* an ink panel on paper keeps its ink frame invisible, as before */
+  .wwm__ink,
+  .hero__end,
+  .player {
+    border-image: none;
+  }
+}
+
+/* ---------- card media: a tall shot is cropped from its top at every width; a wide one in a tall slot is framed over the field (panels.css) ---------- */
+.panel__media--tall img {
+  object-position: 50% 0;
+}
+/* a portrait cover in the project hero stays a phone-sized frame at the end of its column instead of a full-height tower */
+.hero-spread__media > .frame--portrait {
+  max-inline-size: min(100%, 15rem);
+  margin-inline-start: auto;
+}
