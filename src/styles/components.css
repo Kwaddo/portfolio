@@ -191,7 +191,6 @@ a.bubble--ink:focus-visible {
   display: block;
   inline-size: 100%;
   block-size: 1.25rem;
-  margin-block: 1.5rem;
   color: var(--ink);
 }
 .ink-draw {
@@ -243,7 +242,7 @@ a.bubble--ink:focus-visible {
   position: relative;
   display: grid;
   grid-template-columns: repeat(12, minmax(0, 1fr));
-  gap: var(--gutter);
+  gap: var(--gutter-panel);
   align-items: stretch;
 }
 /* no .has-tone here: its child rule would outrank .chapter__num and pull the numeral into the flow */
@@ -292,7 +291,7 @@ a.bubble--ink:focus-visible {
   box-shadow: var(--shadow-ink);
 }
 [dir='rtl'] .chapter__text {
-  box-shadow: -6px 6px 0 var(--ink);
+  box-shadow: var(--shadow-ink-rtl);
 }
 .chapter__date {
   color: var(--tone);

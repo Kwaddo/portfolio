@@ -37,6 +37,11 @@ h3 {
 .sfx--paper > span {
   -webkit-text-stroke-color: var(--paper);
 }
+@media (max-width: 47.99rem) {
+  .sfx {
+    font-size: clamp(3.5rem, 15vw, 6rem);
+  }
+}
 
 /* ---------- vertical labels ---------- */
 .vlabel {

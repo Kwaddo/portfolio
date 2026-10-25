@@ -7,7 +7,7 @@
   box-shadow: var(--shadow-ink);
 }
 [dir='rtl'] .frame {
-  box-shadow: -6px 6px 0 var(--ink);
+  box-shadow: var(--shadow-ink-rtl);
 }
 @media (min-width: 48rem) {
   .frame--tilt {

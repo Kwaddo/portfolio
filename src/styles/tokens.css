@@ -8,8 +8,11 @@
   --rule: 3px solid var(--ink);
   --rule-4: 4px solid var(--ink);
   --rule-5: 5px solid var(--ink);
-  --shadow-ink: 6px 6px 0 var(--ink);
-  --gutter: clamp(0.75rem, 3vw, 1.75rem);
+  --shadow-x: 6px;
+  --shadow-ink: var(--shadow-x) var(--shadow-x) 0 var(--ink);
+  --shadow-ink-rtl: calc(-1 * var(--shadow-x)) var(--shadow-x) 0 var(--ink);
+  --gutter: clamp(0.75rem, 3vw, 1.75rem); /* page padding */
+  --gutter-panel: clamp(0.5rem, 1.2vw, 0.875rem); /* between panels: manga gutters are thin */
   --measure: 68ch;
   --wrap: 72rem;
   --nav-h: 3.5rem;
@@ -21,4 +24,9 @@
   --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
   --ease-snap: cubic-bezier(0.3, 1.4, 0.4, 1);
   color-scheme: light;
+}
+@media (min-width: 48rem) {
+  :root {
+    --shadow-x: 8px;
+  }
 }
