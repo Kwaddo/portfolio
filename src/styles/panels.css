@@ -398,7 +398,7 @@ a.panel:focus-visible .panel__media img {
   --shadow-ink: var(--shadow-x) var(--shadow-x) 0 var(--paper);
   --shadow-ink-rtl: calc(-1 * var(--shadow-x)) var(--shadow-x) 0 var(--paper);
   margin-inline: calc(-1 * var(--bleed));
-  padding: clamp(1.5rem, 4vw, 3rem) var(--bleed);
+  padding: clamp(1.5rem, 4vw, 3rem) var(--bleed); /* art.css re-states this through --ink-pad */
   background: var(--ink);
   color: var(--paper);
 }
