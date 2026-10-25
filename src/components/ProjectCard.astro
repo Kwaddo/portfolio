@@ -14,21 +14,22 @@ interface Props {
   coverAlt?: string;
   meta?: string;
   level?: 2 | 3;
-  w?: 1 | 2 | 3;
-  tall?: boolean;
   tilt?: boolean;
   index?: number;
   confidential?: boolean;
   fill?: boolean;
 }
-const { href, title, summary, status, cover, coverAlt, meta, level = 3, w, tall = false, tilt = false, index, confidential = false, fill = true } = Astro.props;
+const { href, title, summary, status, cover, coverAlt, meta, level = 3, tilt = false, index, confidential = false, fill = true } = Astro.props;
 const Tag = level === 2 ? 'h2' : 'h3';
 const letter = title.trim().charAt(0).toUpperCase();
+// wide covers (ratio above 1.4) are framed with contain when they land in a tall slot; see panels.css
+const wide = cover ? cover.width / cover.height > 1.4 : false;
 ---
-<Panel href={href} w={w} tall={tall} tilt={tilt} index={index} fill={fill} burst={false} shadow>
+<Panel href={href} tilt={tilt} index={index} fill={fill} burst={false} shadow>
   {
     cover ? (
-      <div class="panel__media">
+      <div class:list={['panel__media', wide && 'panel__media--wide']}>
+        <span class="tone-coarse" aria-hidden="true"></span>
         <span class="speed" aria-hidden="true"></span>
         <Image src={cover} alt={coverAlt ?? ''} widths={[400, 800]} sizes="(min-width: 48rem) 33vw, 100vw" />
       </div>

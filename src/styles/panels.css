@@ -92,10 +92,13 @@
 .page-head:has(> .sfx) {
   padding-block-start: clamp(1.25rem, 3vw, 2.25rem);
 }
-/* after a heading row the word rises into it (headings are start-aligned, the word is end-aligned) */
+/* after a heading row the word rises into it (headings are start-aligned, the word is end-aligned), so at least half of it shows above the panels */
 .stack > h2 + .spread > .sfx {
-  inset-block-start: -0.45em;
+  inset-block-start: -0.55em;
   padding-block-start: 0.15em;
+}
+.stack > h2 + .spread:has(> .sfx) {
+  padding-block-start: clamp(1.5rem, 3.5vw, 2.5rem);
 }
 @media (min-width: 64rem) {
   .spread--feature-quad > :not(.spread__label):not(.sfx) {
@@ -232,6 +235,15 @@ a.panel {
   .panel--fill > .panel__media {
     flex: 1 1 auto; /* grows into a stretched box, never below its ratio */
   }
+  /* a wide shot in the quad's tall feature slot is framed over a drawn field instead of cropped to black */
+  .spread--feature-quad > .panel--fill:first-of-type > .panel__media--wide {
+    background: var(--paper);
+  }
+  .spread--feature-quad > .panel--fill:first-of-type > .panel__media--wide img {
+    position: relative;
+    z-index: 1;
+    object-fit: contain;
+  }
   /* the feature never drives its rows: the panels beside it do */
   :is(.spread--feature-start, .spread--feature-end, .spread--feature-quad) > .panel--fill:first-of-type > .panel__media {
     flex-basis: 0;
@@ -352,10 +364,10 @@ a.panel:focus-visible .panel__media img {
   }
   a.panel:hover {
     translate: 0 -4px;
-    box-shadow: 12px 12px 0 var(--ink);
+    box-shadow: calc(var(--shadow-x) + 4px) calc(var(--shadow-x) + 4px) 0 var(--ink);
   }
   [dir='rtl'] a.panel:hover {
-    box-shadow: -12px 12px 0 var(--ink);
+    box-shadow: calc(-1 * (var(--shadow-x) + 4px)) calc(var(--shadow-x) + 4px) 0 var(--ink);
   }
 }
 /* the parts that invert follow the card over the same beat; the image un-greys and grows a touch inside its box */
@@ -410,10 +422,6 @@ a.panel:focus-visible .panel__media img {
   background: var(--ink);
   color: var(--paper);
 }
-/* the word stays inside the black page instead of rising onto the paper above */
-.stack > h2 + .spread--ink > .sfx {
-  inset-block-start: -0.15em;
-}
 .spread--ink .spread__label .vlabel {
   background: var(--paper);
   color: var(--ink);
@@ -421,11 +429,11 @@ a.panel:focus-visible .panel__media img {
 .spread--ink a.panel:hover,
 .spread--ink a.panel:focus-visible {
   border-color: var(--paper);
-  box-shadow: 12px 12px 0 var(--paper);
+  box-shadow: calc(var(--shadow-x) + 4px) calc(var(--shadow-x) + 4px) 0 var(--paper);
 }
 [dir='rtl'] .spread--ink a.panel:hover,
 [dir='rtl'] .spread--ink a.panel:focus-visible {
-  box-shadow: -12px 12px 0 var(--paper);
+  box-shadow: calc(-1 * (var(--shadow-x) + 4px)) calc(var(--shadow-x) + 4px) 0 var(--paper);
 }
 @media (min-width: 48rem) {
   .spread--ink.spread--labelled {

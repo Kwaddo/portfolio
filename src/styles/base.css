@@ -132,6 +132,14 @@ main {
   border-style: dashed;
   background: var(--tone-fill);
 }
+/* the sentence sits on a paper inset; the hatch stays around it, never under the text */
+.notice > span:last-child {
+  position: relative;
+  padding: 0.2rem 0.5rem;
+  background: var(--paper);
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
 
 @media (prefers-reduced-motion: reduce) {
   *,

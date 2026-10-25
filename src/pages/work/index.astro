@@ -16,7 +16,7 @@ const work = byOrder(published(await getCollection('work')));
       <h1>Work</h1>
       <p class="lede">Roles and the systems behind them. Some of it is confidential, so those pages say little on purpose.</p>
     </header>
-    <Spread layout="feature-start" label="Roles" sfx="WORK">
+    <Spread layout="feature-start" label="Roles">
       {
         work.map((entry, i) => (
           <ProjectCard
@@ -36,7 +36,7 @@ const work = byOrder(published(await getCollection('work')));
     <InkRule variant="splat-a" />
     <section class="stack" aria-labelledby="timeline-title">
       <h2 id="timeline-title">Timeline<InkRule variant="draw" /></h2>
-      <Spread layout="stack" as="div" ink>
+      <Spread layout="stack" as="div" ink sfx="WORK">
         <Timeline entries={timeline} alternate />
       </Spread>
     </section>

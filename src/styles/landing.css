@@ -189,7 +189,9 @@
   justify-self: start;
   color: var(--ink);
 }
-/* speed lines along the cut: stripes parallel to the slant, fading away from it */
+/* speed lines along the cut: stripes parallel to the slant, fading away from it.
+   Gradient masks only take physical directions, so these are the one place with `to right`/`to left`,
+   mirrored by the [dir='rtl'] rules below (switch to `to inline-end` once supported). */
 .split__lines {
   inset: 0;
   opacity: 0.2;
@@ -296,11 +298,18 @@
   }
 }
 
-/* mid widths: the doors are too narrow for text and word side by side, so the word takes the empty top band and the slant cuts it */
-@media (min-width: 48rem) and (max-width: 71.99rem) {
+/* below 80rem the doors are too narrow for text and word side by side, so the word takes the empty top band and the slant cuts it */
+@media (min-width: 48rem) and (max-width: 79.99rem) {
+  .split__door {
+    min-block-size: clamp(19rem, 38vh, 22rem);
+  }
+  .split__door h2 {
+    font-size: clamp(3rem, 7vw, 6rem);
+  }
   .split__door .sfx {
-    inset-block: 0.25rem auto;
+    inset-block: 0 auto;
     inset-inline: 0;
+    font-size: clamp(3.5rem, 8vw, 7rem);
   }
 }
 
@@ -308,20 +317,22 @@
 .wwm {
   padding-block: 0;
 }
-/* the word peeks above the first panel on the start side, under the heading row */
-.wwm__spread:has(> .sfx) {
-  padding-block-start: 3.25rem;
-}
-.wwm__spread > .sfx {
-  inset-block-start: -0.2em;
-  padding-inline-start: 1.5rem;
-  font-size: clamp(4rem, 10vw, 8rem);
-  text-align: start;
-}
+/* the inked panel carries HUH? below its copy (never behind it), in the room the stretched row leaves */
 .wwm__ink {
+  --huh: clamp(4rem, 7vw, 6rem);
+  padding-block-end: calc(var(--huh) + 0.5rem);
   border-color: var(--ink);
   background: var(--ink);
   color: var(--paper);
+}
+.wwm__ink > .sfx {
+  inset: auto 0 0.25rem;
+  display: grid;
+  place-items: center;
+  block-size: calc(var(--huh) * 1.2);
+  overflow: visible;
+  font-size: var(--huh);
+  text-align: center;
 }
 .wwm__ink .btn {
   border-color: var(--paper);

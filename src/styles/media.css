@@ -216,16 +216,21 @@
   overflow: hidden;
 }
 .next-panel .panel__body {
-  padding: 1.5rem;
+  margin: 0.75rem;
+  padding: 1rem 1.25rem;
+  max-inline-size: fit-content;
+  border: 2px solid var(--ink);
+  background: var(--paper);
 }
 .next-panel .panel__meta {
   color: var(--ink);
 }
-/* the NEXT word sits centred behind the panel's text, clipped by the panel */
+/* the NEXT word sits on the end side of the panel, clipped by the panel's drawn edge, never behind the text */
 .next-panel > .sfx {
   inset-block-start: 50%;
   translate: 0 -50%;
   padding-block: 0.15em;
+  padding-inline-end: 0.3em;
   block-size: 1.3em;
   font-size: clamp(4rem, 12vw, 9rem);
 }
