@@ -429,6 +429,7 @@ a.panel:focus-visible .badge--archived {
 /* ---------- screenshots ---------- */
 .shot {
   position: relative;
+  align-self: start;
   margin: 0;
   border: var(--rule);
   background: var(--ink);
