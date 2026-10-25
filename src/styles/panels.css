@@ -67,7 +67,7 @@
   }
 }
 .spread > .sfx {
-  inset-block-start: -0.55em;
+  inset-block-start: 0;
   block-size: 1.1em;
 }
 .spread:has(> .sfx) {
@@ -336,16 +336,18 @@ a.panel:focus-visible .panel__media img {
 }
 
 
-/* reveal rules (motion.css) outrank the plain hover rules; restore the lift under html.js */
-html.js a.panel.is-in {
-  transition:
-    opacity var(--t-slow) var(--ease-out),
-    translate var(--t-fast),
-    box-shadow var(--t-fast),
-    background var(--t-fast),
-    color var(--t-fast);
-}
-html.js a.panel.is-in:hover,
-html.js a.panel.is-in:focus-visible {
-  translate: 0 -2px;
+/* reveal rules (motion.css) outrank the plain hover rules; restore the lift under html.js, motion allowed only */
+@media (prefers-reduced-motion: no-preference) {
+  html.js a.panel.is-in {
+    transition:
+      opacity var(--t-slow) var(--ease-out),
+      translate var(--t-fast),
+      box-shadow var(--t-fast),
+      background var(--t-fast),
+      color var(--t-fast);
+  }
+  html.js a.panel.is-in:hover,
+  html.js a.panel.is-in:focus-visible {
+    translate: 0 -2px;
+  }
 }
