@@ -36,3 +36,20 @@ Before capturing, skim `PatientSeeder` and `storage/app/{private,public}` to con
 3. Capture the listed shots.
 4. Owner reviews each file; reject anything with private data or tool references.
 5. Save to `src/assets/media/<slug>/`, write alt text in the entry's frontmatter, commit.
+
+## Status 2026-10-25 22:25 and the next capture round
+
+Captured and wired (shots per project): skoobl 5, smoke-break 4, dopher-alpha 4, smobb 3, nocturne-network 3, cuspio 3, lps 2, 01-displayer 1. Covers still missing: smart-road, gridlock, go-byte, overworld (Tanami never gets media). More shots wanted for 01-displayer and lps.
+
+Native windows (Smart Road, Gridlock, go-byte, Dopher) were blocked earlier because the terminal lacked macOS Screen Recording permission. A window-only capture test on 2026-10-25 22:23 returned real pixels, so the permission is now granted to the terminal app this session ran in. Helper for the next round:
+
+- `docs/capture/winid.swift` lists on-screen windows (id, owner, size, title); build once with `swiftc -O winid.swift -o winid`.
+- `docs/capture/capture-window.sh <owner-substring> <out.png>` captures ONE window by id with `screencapture -x -o -l`, so no desktop, dock or other windows ever enter the frame. Crop/resize with sharp afterwards; keep under 600 KB.
+
+Per project, next round (follow `/private/tmp/claude-501/capture/rules.md` for naming, alt text, review and the single media commit; after the category swap Gridlock lives in `games`, Smart Road in `lab`):
+1. smart-road (`~/Documents/smart-road`, `cargo run --release`): intersection with traffic in several lanes, the busiest moment, the stats/end screen. Capture the SDL window by owner name (binary name `smart-road`).
+2. gridlock (clone `Kwaddo/gridlock-multiplayer-game`; server then client; fake player names): lobby, first-person play with weapon and crosshair, weapon roster.
+3. go-byte (clone `Kwaddo/go-byte`; needs a freely licensed CHIP-8 ROM such as the public-domain test ROMs): a ROM running plus the debug terminal view.
+4. overworld (clone `Kwaddo/overworld`, Expo): the mapping screen and the mappings list; use the Expo web target or an iOS simulator window if the feature allows, otherwise BLOCKED.
+5. dopher-alpha: the native build panicked ("Invalid window ID") last time; retry after `go mod tidy`; fall back to the existing GIF frames already used.
+6. 01-displayer (live URL, public sign-in page only) and lps (private repo; crops without username or hostname): one or two more shots each.
