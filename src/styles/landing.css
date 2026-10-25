@@ -98,7 +98,8 @@
 .split__door .sfx {
   inset-block-start: auto;
   inset-block-end: 0.25rem;
-  inset-inline-start: calc(clamp(1.25rem, 4vw, 2.5rem) + 14rem);
+  padding-block: 0.15em; /* headroom for the rotated glyph corners and the shadow */
+  block-size: 1.3em;
   font-size: clamp(4rem, 9vw, 8rem);
 }
 .split__count {
@@ -191,7 +192,9 @@
     padding-inline-end: calc(var(--cut) + 2rem);
     clip-path: polygon(0 0, 100% 0, calc(100% - var(--cut)) 100%, 0 100%);
   }
+  /* the clip box starts past the text column so the word is never under copy */
   .split__door--work .sfx {
+    inset-inline-start: calc(clamp(1.25rem, 4vw, 2.5rem) + 14rem);
     inset-inline-end: var(--cut);
   }
   .split__door--personal .sfx {

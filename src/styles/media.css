@@ -224,7 +224,8 @@
 .next-panel > .sfx {
   inset-block-start: 50%;
   translate: 0 -50%;
-  block-size: 1.1em;
+  padding-block: 0.15em;
+  block-size: 1.3em;
   font-size: clamp(4rem, 12vw, 9rem);
 }
 a.next-panel:hover > .sfx,
