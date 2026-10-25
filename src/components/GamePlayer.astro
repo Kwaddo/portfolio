@@ -7,11 +7,14 @@ interface Props {
   title: string;
   poster?: ImageMetadata;
   posterAlt?: string;
+  frameWidth?: number;
+  frameHeight?: number;
 }
-const { src, title, poster, posterAlt } = Astro.props;
+const { src, title, poster, posterAlt, frameWidth, frameHeight } = Astro.props;
+const ratio = frameWidth && frameHeight ? `${frameWidth} / ${frameHeight}` : '16 / 9';
 ---
-<div class="player" data-player data-src={src} data-title={title}>
-  <div class="player__stage" data-stage>
+<div class="player" data-player data-src={src} data-title={title} data-width={frameWidth} data-height={frameHeight}>
+  <div class="player__stage" data-stage style={`aspect-ratio: ${ratio}`}>
     {poster && <Image class="player__poster" src={poster} alt={posterAlt ?? ''} widths={[800, 1280]} sizes="100vw" />}
     <button class="btn btn--solid player__start" type="button" data-start>Play {title}</button>
   </div>
@@ -37,6 +40,25 @@ const { src, title, poster, posterAlt } = Astro.props;
       stage.replaceChildren(frame);
       frame.focus();
       fullscreen.hidden = false;
+      // Games that declare a native size are scaled to fit the stage instead of being clipped.
+      const w = Number(root.dataset.width);
+      const h = Number(root.dataset.height);
+      if (w && h) {
+        frame.classList.add('player__frame--fixed');
+        frame.style.width = `${w}px`;
+        frame.style.height = `${h}px`;
+        const fit = () => {
+          if (document.fullscreenElement === frame) {
+            frame.style.transform = '';
+            return;
+          }
+          const s = Math.min(stage.clientWidth / w, stage.clientHeight / h);
+          frame.style.transform = `scale(${s})`;
+        };
+        fit();
+        new ResizeObserver(fit).observe(stage);
+        document.addEventListener('fullscreenchange', fit);
+      }
     });
     fullscreen.addEventListener('click', () => {
       stage.querySelector('iframe')?.requestFullscreen().catch(() => {});

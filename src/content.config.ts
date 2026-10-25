@@ -54,6 +54,8 @@ const games = defineCollection({
         playable: z.enum(['embed', 'external', 'none']).default('none'),
         playUrl: z.url().optional(),
         downloadUrl: z.url().optional(),
+        frameWidth: z.number().int().positive().optional(),
+        frameHeight: z.number().int().positive().optional(),
       })
       .refine((d) => d.playable === 'none' || Boolean(d.playUrl), { message: 'playUrl is required when playable is not none', path: ['playUrl'] })
       .refine(needsCoverAlt, { message: 'coverAlt is required when cover is set', path: ['coverAlt'] }),

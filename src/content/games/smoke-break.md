@@ -10,6 +10,8 @@ collaborators:
     url: https://github.com/SilentYsf
 playable: embed
 playUrl: https://smoke-break.vercel.app/
+frameWidth: 1440
+frameHeight: 810
 journey: false
 order: 3
 cover: ../../assets/media/smoke-break/cover.png

@@ -495,8 +495,26 @@ a.panel:focus-visible .badge--archived {
   position: relative;
   display: grid;
   place-items: center;
-  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  aspect-ratio: 16 / 9;
   background: var(--ink);
+}
+/* play page: the stage is sized to the viewport so the whole game is visible without scrolling */
+.play {
+  max-inline-size: none;
+}
+.play__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.5rem 1.5rem;
+}
+.play__head h1 {
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+}
+.play .player {
+  margin-inline: auto;
+  inline-size: min(100%, calc((100svh - 13rem) * var(--play-ratio, 1.7778)));
 }
 .player__poster {
   position: absolute;
@@ -517,6 +535,14 @@ a.panel:focus-visible .badge--archived {
   block-size: 100%;
   border: 0;
   background: #000;
+}
+.player__frame.player__frame--fixed {
+  inset: 50% auto auto 50%;
+  inline-size: auto;
+  block-size: auto;
+  max-inline-size: none;
+  translate: -50% -50%;
+  transform-origin: center;
 }
 .player__bar {
   display: flex;

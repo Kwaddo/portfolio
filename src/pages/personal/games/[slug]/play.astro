@@ -13,9 +13,11 @@ const { entry } = Astro.props;
 const { data } = entry;
 ---
 <Base title={`Play ${data.title}`} description={`Play ${data.title} in your browser.`}>
-  <div class="wrap stack">
-    <p><a class="back" href={`/personal/games/${entry.id}/`}>About {data.title}</a></p>
-    <h1>{data.title}</h1>
-    <GamePlayer src={data.playUrl!} title={data.title} poster={data.cover} posterAlt={data.coverAlt} />
+  <div class="wrap stack play" style={`--play-ratio: ${data.frameWidth && data.frameHeight ? data.frameWidth / data.frameHeight : 16 / 9}`}>
+    <div class="play__head">
+      <h1>{data.title}</h1>
+      <a class="back" href={`/personal/games/${entry.id}/`}>About {data.title}</a>
+    </div>
+    <GamePlayer src={data.playUrl!} title={data.title} poster={data.cover} posterAlt={data.coverAlt} frameWidth={data.frameWidth} frameHeight={data.frameHeight} />
   </div>
 </Base>
