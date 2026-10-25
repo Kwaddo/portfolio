@@ -277,3 +277,11 @@ Comments, analytics, a web-based CMS (see Publishing workflow), search, translat
 - Unverified: live game URLs have not been opened, and smart-road controls and gridlock package names are guesses (checked during the capture pass).
 - Screenshots and GIFs for skoobl, smoke-break, smart-road, dopher-alpha, CuspIO to be provided or captured.
 - Create the GitHub repo and configure Pages when ready to deploy.
+
+## Addendum: hosting moves to Dilmune (2026-10-25)
+
+The owner no longer wants GitHub Pages. The site is to be hosted on Dilmune as an App (the serverless "Apps" product, free tier; Dilmune also offers server-backed "Sites" with `project_type: "astro"`, but that needs a server). Consequences, to be settled once the Dilmune MCP is connected in a session and the app URL scheme is known:
+- The public URL (and therefore `site` in `astro.config`, canonical links, sitemap, RSS, OG images, JSON-LD) changes from `https://kwaddo.github.io` to the Dilmune app URL or a custom domain.
+- The launch task (Phase 3 plan, Task 8) is replaced: no `Kwaddo.github.io` repository, no Pages workflow; instead a fresh public repository `Kwaddo/portfolio` (still ONE fresh commit of the final tree without `docs/`, authored Ali Khalaf) and a Dilmune app deployed from git (auto-deploy on push) or via `framework-deploy` of the `dist/` build.
+- `.github/workflows/deploy.yml` (Pages) is removed; CI keeps verify + e2e.
+- `/play/*` game embeds and the copy-email script must still work under the new origin; `check:dist` keeps the content rules.
