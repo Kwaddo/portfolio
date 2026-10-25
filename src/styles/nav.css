@@ -1,0 +1,70 @@
+/* ---------- nav and footer ---------- */
+.nav {
+  position: sticky;
+  inset-block-start: 0;
+  z-index: 50;
+  background: var(--paper);
+  border-block-end: var(--rule);
+}
+.nav__inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem 1.25rem;
+  padding-block: 0.6rem;
+}
+.nav__brand {
+  font: 400 1.5rem/1 var(--font-display);
+  letter-spacing: 0.02em;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+.nav__list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1.1rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-weight: 600;
+}
+.nav__list a {
+  text-decoration: none;
+}
+.nav__list a[aria-current='page'] {
+  text-decoration: underline;
+  text-decoration-thickness: 3px;
+}
+.nav__cta {
+  margin-inline-start: auto;
+}
+@media (max-width: 40rem) {
+  .nav__brand {
+    flex: 1 0 100%;
+  }
+  .nav__contact {
+    display: none;
+  }
+}
+
+.footer {
+  margin-block-start: 3rem;
+  padding-block: 2rem;
+  background: var(--ink);
+  color: var(--paper);
+}
+.footer__inner {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem 2rem;
+  align-items: center;
+  justify-content: space-between;
+}
+.footer ul {
+  display: flex;
+  gap: 1.25rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+

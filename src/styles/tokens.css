@@ -6,9 +6,19 @@
   --font-display: 'Anton', 'Arial Narrow', Impact, sans-serif;
   --font-body: 'Inter Variable', system-ui, -apple-system, 'Segoe UI', 'Geeza Pro', 'Noto Sans Arabic', sans-serif;
   --rule: 3px solid var(--ink);
+  --rule-4: 4px solid var(--ink);
+  --rule-5: 5px solid var(--ink);
+  --shadow-ink: 6px 6px 0 var(--ink);
   --gutter: clamp(0.75rem, 3vw, 1.75rem);
   --measure: 68ch;
   --wrap: 72rem;
   --nav-h: 3.5rem;
+  /* distance from the wrap's content edge to the viewport edge; 100cqi is main's width, so no scrollbar error */
+  --bleed: calc(max(0px, (100cqi - var(--wrap)) / 2) + var(--gutter));
+  --t-fast: 160ms;
+  --t-base: 280ms;
+  --t-slow: 520ms;
+  --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --ease-snap: cubic-bezier(0.3, 1.4, 0.4, 1);
   color-scheme: light;
 }

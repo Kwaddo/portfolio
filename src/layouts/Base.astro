@@ -3,7 +3,13 @@ import '@fontsource/anton/latin-400.css';
 import '@fontsource-variable/inter/wght.css';
 import '../styles/tokens.css';
 import '../styles/base.css';
-import '../styles/manga.css';
+import '../styles/motion.css';
+import '../styles/components.css';
+import '../styles/nav.css';
+import '../styles/panels.css';
+import '../styles/media.css';
+import '../styles/journal.css';
+import { ClientRouter } from 'astro:transitions';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
 import { canonical, pageTitle } from '../lib/seo';
@@ -49,12 +55,63 @@ const image = canonical(ogImageFor(Astro.url.pathname));
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:image" content={image} />
     {noindex && <meta name="robots" content="noindex" />}
+    <script is:inline>
+      // Marks JS as available (reveal styles apply only then) and remembers whether the landing sequence already played.
+      (function () {
+        var h = document.documentElement;
+        h.classList.add('js');
+        try {
+          if (sessionStorage.getItem('hero')) h.classList.add('seen');
+          else sessionStorage.setItem('hero', '1');
+        } catch (e) {}
+      })();
+    </script>
+    <ClientRouter />
     <slot name="head" />
   </head>
   <body>
+    <svg width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute">
+      <filter id="ink" x="-2%" y="-2%" width="104%" height="104%">
+        <feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="7" result="noise" />
+        <feDisplacementMap in="SourceGraphic" in2="noise" scale="1.6" xChannelSelector="R" yChannelSelector="G" />
+      </filter>
+    </svg>
     <a class="skip" href="#main">Skip to content</a>
     <Nav pathname={Astro.url.pathname} />
     <main id="main"><slot /></main>
     <Footer />
+    <script>
+      // Reveal once per element; re-run after every client-side navigation.
+      const reveal = () => {
+        const els = document.querySelectorAll<HTMLElement>('[data-reveal]:not(.is-in)');
+        if (!('IntersectionObserver' in window)) {
+          els.forEach((el) => el.classList.add('is-in'));
+          return;
+        }
+        const io = new IntersectionObserver(
+          (entries) => {
+            for (const en of entries) {
+              if (en.isIntersecting) {
+                en.target.classList.add('is-in');
+                io.unobserve(en.target);
+              }
+            }
+          },
+          { rootMargin: '0px 0px -10% 0px' },
+        );
+        els.forEach((el) => io.observe(el));
+      };
+      reveal();
+      document.addEventListener('astro:page-load', reveal);
+      document.addEventListener('astro:after-swap', () => {
+        // The router replaces <html> attributes; restore our flags before paint, then move focus to the new page.
+        document.documentElement.classList.add('js', 'seen');
+        const main = document.getElementById('main');
+        if (main) {
+          main.setAttribute('tabindex', '-1');
+          main.focus({ preventScroll: true });
+        }
+      });
+    </script>
   </body>
 </html>

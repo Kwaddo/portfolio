@@ -68,6 +68,9 @@ main {
   display: block;
   flex: 1 0 auto;
   padding-block: clamp(1.5rem, 4vw, 3rem);
+  container-type: inline-size;
+  overflow-x: clip;
+  overflow-clip-margin: 0;
 }
 .wrap {
   max-inline-size: var(--wrap);

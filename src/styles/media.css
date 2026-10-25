@@ -1,0 +1,128 @@
+/* ---------- screenshots ---------- */
+.shot {
+  position: relative;
+  align-self: start;
+  margin: 0;
+  border: var(--rule);
+  background: var(--ink);
+}
+.shot button {
+  all: unset;
+  display: block;
+  inline-size: 100%;
+  cursor: pointer;
+}
+.shot button:focus-visible {
+  outline: 3px solid var(--paper);
+  outline-offset: -6px;
+}
+.shot img {
+  display: block;
+  inline-size: 100%;
+  filter: grayscale(1) contrast(1.05);
+  transition: filter 0.2s;
+}
+.shot::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  mix-blend-mode: multiply;
+  opacity: 0.25;
+  background-image: radial-gradient(circle at center, var(--ink) 0.9px, transparent 1.3px);
+  background-size: 5px 5px;
+}
+.shot[data-color='true'] img {
+  filter: none;
+}
+.shot[data-color='true']::after {
+  opacity: 0;
+}
+.shot figcaption {
+  padding: 0.5rem 0.75rem;
+  border-block-start: var(--rule);
+  background: var(--paper);
+  color: var(--tone);
+  font-size: 0.85rem;
+}
+.shots {
+  display: grid;
+  gap: var(--gutter);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr));
+}
+
+/* ---------- game player ---------- */
+.player {
+  border: var(--rule);
+  background: var(--ink);
+  color: var(--paper);
+}
+.player :focus-visible {
+  outline-color: var(--paper);
+}
+.player__bar :focus-visible {
+  outline-color: var(--ink);
+}
+.player__stage {
+  position: relative;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  aspect-ratio: 16 / 9;
+  background: var(--ink);
+}
+/* play page: the stage is sized to the viewport so the whole game is visible without scrolling */
+.play {
+  max-inline-size: none;
+}
+.play__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.5rem 1.5rem;
+}
+.play__head h1 {
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+}
+.play .player {
+  margin-inline: auto;
+  inline-size: min(100%, calc((100svh - 13rem) * var(--play-ratio, 1.7778)));
+}
+.player__poster {
+  position: absolute;
+  inset: 0;
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+  opacity: 0.45;
+  filter: grayscale(1);
+}
+.player__start {
+  position: relative;
+}
+.player__frame {
+  position: absolute;
+  inset: 0;
+  inline-size: 100%;
+  block-size: 100%;
+  border: 0;
+  background: #000;
+}
+.player__frame.player__frame--fixed {
+  inset: 50% auto auto 50%;
+  inline-size: auto;
+  block-size: auto;
+  max-inline-size: none;
+  translate: -50% -50%;
+  transform-origin: center;
+}
+.player__bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  border-block-start: var(--rule);
+  background: var(--paper);
+  color: var(--ink);
+}
+

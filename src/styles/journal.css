@@ -1,0 +1,76 @@
+/* ---------- journal ---------- */
+.stamp {
+  margin: 0;
+  font: 400 clamp(2rem, 7vw, 3.25rem) / 1 var(--font-display);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+.entries {
+  display: grid;
+  gap: var(--gutter);
+  margin-block-end: 0;
+  margin-inline: 0;
+  padding: 0;
+  list-style: none;
+}
+.entry__link {
+  display: grid;
+  gap: 0.5rem;
+  padding: 1rem;
+  border: var(--rule);
+  background: var(--paper);
+  color: var(--ink);
+  text-decoration: none;
+}
+.entry__link p:not(.stamp) {
+  color: var(--tone);
+}
+.entry__link:hover,
+.entry__link:focus-visible {
+  background: var(--ink);
+  color: var(--paper);
+}
+.entry__link:hover p:not(.stamp),
+.entry__link:focus-visible p:not(.stamp) {
+  color: var(--paper);
+}
+.pager {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  justify-content: space-between;
+}
+
+/* ---------- timeline ---------- */
+.timeline {
+  display: grid;
+  gap: 1rem;
+  margin-block-end: 0;
+  margin-inline: 0;
+  padding: 0;
+  padding-inline-start: 1rem;
+  border-inline-start: var(--rule);
+  list-style: none;
+}
+.timeline__item {
+  display: grid;
+  gap: 0.25rem 1.5rem;
+}
+@media (min-width: 40rem) {
+  .timeline__item {
+    grid-template-columns: 11rem 1fr;
+  }
+}
+.timeline__period {
+  color: var(--tone);
+  font-size: 0.9rem;
+}
+.timeline__title {
+  font-weight: 700;
+}
+.timeline__org {
+  font-weight: 400;
+}
+.timeline__summary {
+  color: var(--tone);
+}
