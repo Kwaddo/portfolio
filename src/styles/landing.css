@@ -1,6 +1,7 @@
 /* ---------- hero: a two-panel spread, shout bubble beside an inked HELLO panel ---------- */
 .hero {
   align-items: stretch;
+  padding-block-start: 2rem; /* headroom for the figure's head above its panel, clear of the nav */
   /* room under the panels for the caption overhang and the shadow before the doors */
   padding-block-end: 1rem;
   /* clip the HELLO panel's burst but leave room for the shout bubble's outline, which overhangs its box */
@@ -63,8 +64,8 @@
 }
 @media (min-width: 48rem) {
   .hero__figure img {
-    /* the head breaks the top border by a touch less than main's top padding, so it is never under the nav */
-    block-size: calc(100% + clamp(1rem, 2.5vw, 1.75rem) - 0.25rem);
+    /* the head and shoulders break the top border, within the hero's headroom plus main's padding, so never under the nav */
+    block-size: min(120%, calc(100% + 2rem + clamp(1rem, 2.5vw, 1.75rem) - 0.25rem));
     filter: drop-shadow(6px 6px 0 var(--paper));
   }
   [dir='rtl'] .hero__figure img {
@@ -78,8 +79,13 @@
   inset: -40%;
   opacity: 0.32;
   color: var(--paper);
-  background: repeating-conic-gradient(from 0deg at 50% 50%, currentColor 0deg 1deg, transparent 1deg 6deg);
-  mask-image: radial-gradient(circle at 50% 50%, transparent 8%, #000 60%);
+  /* the burst converges on the figure, which stands on the end side */
+  background: repeating-conic-gradient(from 0deg at 72% 58%, currentColor 0deg 1deg, transparent 1deg 6deg);
+  mask-image: radial-gradient(circle at 72% 58%, transparent 6%, #000 55%);
+}
+[dir='rtl'] .hero__speed {
+  background: repeating-conic-gradient(from 0deg at 28% 58%, currentColor 0deg 1deg, transparent 1deg 6deg);
+  mask-image: radial-gradient(circle at 28% 58%, transparent 6%, #000 55%);
 }
 .hero__end > .sfx {
   inset: 0;
@@ -360,6 +366,7 @@
   }
   .split__door--personal .sfx {
     inset-inline-end: var(--bleed);
+    padding-inline-end: 0.1em; /* keeps the word's lean clear of the title's end at 64rem */
   }
 }
 
