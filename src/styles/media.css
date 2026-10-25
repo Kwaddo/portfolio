@@ -217,6 +217,16 @@
 .next-panel .panel__meta {
   color: var(--ink);
 }
+/* on hover the inner paper box inverts with the panel: ink fill, paper rule, paper text */
+a.next-panel:hover .panel__body,
+a.next-panel:focus-visible .panel__body {
+  border-color: var(--paper);
+  background: var(--ink);
+}
+a.next-panel:hover .panel__meta,
+a.next-panel:focus-visible .panel__meta {
+  color: var(--paper);
+}
 /* the NEXT word sits on the end side of the panel, clipped by the panel's drawn edge, never behind the text */
 .next-panel > .sfx {
   inset-block-start: 50%;
