@@ -2,7 +2,7 @@
 .hero {
   align-items: stretch;
   /* room under the panels for the caption overhang and the shadow before the doors */
-  padding-block-end: 1.25rem;
+  padding-block-end: 1rem;
   /* clip the HELLO panel's burst but leave room for the shout bubble's outline, which overhangs its box */
   overflow: clip;
   overflow-clip-margin: 2rem;
@@ -220,7 +220,7 @@
 
 /* ---------- work with me: three panels ---------- */
 .wwm {
-  padding-block: 0 0.5rem;
+  padding-block: 0;
 }
 /* the word peeks above the first panel on the start side, under the heading row */
 .wwm__spread:has(> .sfx) {
