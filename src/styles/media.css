@@ -163,9 +163,10 @@
   block-size: 1.1em;
   font-size: clamp(4rem, 12vw, 9rem);
 }
-a.next-panel:hover > .sfx > span,
-a.next-panel:focus-visible > .sfx > span {
-  -webkit-text-stroke-color: var(--paper);
+a.next-panel:hover > .sfx,
+a.next-panel:focus-visible > .sfx {
+  --sfx-stroke: var(--paper);
+  --sfx-fill: var(--ink);
 }
 
 /* ---------- game player ---------- */

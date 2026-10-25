@@ -26,16 +26,30 @@ h3 {
   pointer-events: none;
   user-select: none;
 }
+.sfx {
+  --sfx-stroke: var(--ink);
+  --sfx-fill: var(--paper);
+}
+.sfx--paper {
+  --sfx-stroke: var(--paper);
+  --sfx-fill: var(--ink);
+}
+/* stroked lettering with a hard drop shadow: paint-order keeps the stroke outside the fill */
 .sfx > span {
   display: inline-block;
-  color: transparent;
-  -webkit-text-stroke: 2px var(--ink);
-  opacity: 0.8;
+  color: var(--sfx-fill);
+  -webkit-text-stroke: 4px var(--sfx-stroke);
+  paint-order: stroke fill;
   rotate: var(--sfx-rotate, -6deg);
   translate: 0.08em 0;
 }
-.sfx--paper > span {
-  -webkit-text-stroke-color: var(--paper);
+@media (min-width: 48rem) {
+  .sfx > span {
+    filter: drop-shadow(0.04em 0.04em 0 var(--sfx-stroke));
+  }
+  [dir='rtl'] .sfx > span {
+    filter: drop-shadow(-0.04em 0.04em 0 var(--sfx-stroke));
+  }
 }
 @media (max-width: 47.99rem) {
   .sfx {
@@ -50,6 +64,20 @@ h3 {
   text-transform: uppercase;
   color: var(--tone);
   writing-mode: vertical-rl;
+}
+/* spread labels are inked tabs; a horizontal strip on phones, a hanging tab beside the spread above 48rem */
+.spread__label .vlabel {
+  display: inline-block;
+  padding: 0.6rem 0.3rem;
+  background: var(--ink);
+  color: var(--paper);
+  letter-spacing: 0.3em;
+}
+@media (max-width: 47.99rem) {
+  .spread__label .vlabel {
+    padding: 0.3rem 0.6rem 0.3rem 0.8rem;
+    writing-mode: horizontal-tb;
+  }
 }
 
 /* ---------- drop caps ---------- */

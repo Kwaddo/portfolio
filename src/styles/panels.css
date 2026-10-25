@@ -70,7 +70,7 @@
   }
   .spread__label {
     position: absolute;
-    inset-inline-start: 0;
+    inset-inline-start: calc(-1 * var(--gutter)); /* hangs off the page edge like a tab */
     inset-block: 0;
     grid-column: auto;
     padding-inline-end: 0.75rem;
@@ -125,6 +125,15 @@
 }
 .panel--weight-5 {
   border: var(--rule-5);
+}
+@media (min-width: 48rem) {
+  .panel {
+    border-width: 4px;
+  }
+  .panel--weight-5,
+  :is(.spread--feature-start, .spread--feature-end, .spread--feature-quad) > .panel:first-of-type {
+    border-width: 5px;
+  }
 }
 .panel--shadow {
   box-shadow: var(--shadow-ink);

@@ -73,6 +73,11 @@ p.timeline__period {
   color: var(--tone);
   font-size: 0.9rem;
 }
+/* the current entry is stamped in ink */
+.timeline__item:first-child .timeline__period {
+  background: var(--ink);
+  color: var(--paper);
+}
 .timeline__title {
   font-weight: 700;
 }
