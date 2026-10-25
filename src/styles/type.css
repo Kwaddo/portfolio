@@ -83,14 +83,20 @@ h3 {
   }
 }
 
-/* ---------- drop caps ---------- */
+/* ---------- drop caps: a small inked panel spanning three lines of body text (3 x 1.6rem = 4.8rem) ---------- */
 .dropcap > p:first-of-type::first-letter {
   float: inline-start;
-  margin-inline-end: 0.12em;
-  padding: 0.08em 0.18em 0 0.1em;
-  background: var(--ink);
-  color: var(--paper);
-  font: 400 3.4em/0.9 var(--font-display);
+  margin-block-start: 0.15rem;
+  margin-inline-end: 0.55rem;
+  padding: 0.08em 0.2em 0;
+  border: 3px solid var(--ink);
+  background: var(--paper);
+  color: var(--ink);
+  box-shadow: 4px 4px 0 var(--ink);
+  font: 400 3.9rem/1.05 var(--font-display);
+}
+[dir='rtl'] .dropcap > p:first-of-type::first-letter {
+  box-shadow: -4px 4px 0 var(--ink);
 }
 
 /* ---------- chips (stack tags etc.) ---------- */
