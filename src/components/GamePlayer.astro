@@ -16,7 +16,12 @@ const ratio = frameWidth && frameHeight ? `${frameWidth} / ${frameHeight}` : '16
 <div class="player" data-player data-src={src} data-title={title} data-width={frameWidth} data-height={frameHeight}>
   <div class="player__stage" data-stage style={`aspect-ratio: ${ratio}`}>
     {poster && <Image class="player__poster" src={poster} alt={posterAlt ?? ''} widths={[800, 1280]} sizes="100vw" />}
-    <button class="btn btn--solid player__start" type="button" data-start>Play {title}</button>
+    <button class="player__start" type="button" data-start>
+      <svg class="player__burst" viewBox="0 0 100 60" preserveAspectRatio="none" aria-hidden="true">
+        <polygon points="4,30 12,20 2,10 16,12 14,2 26,10 36,0 42,10 54,2 60,12 72,4 76,14 90,8 86,20 98,22 90,32 100,42 86,44 92,56 78,50 70,60 62,52 50,60 44,50 32,58 28,48 14,54 18,42 4,46 10,36" vector-effect="non-scaling-stroke" />
+      </svg>
+      <span>Play {title}</span>
+    </button>
   </div>
   <div class="player__bar">
     <button class="btn" type="button" data-fullscreen hidden>Fullscreen</button>

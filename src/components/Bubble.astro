@@ -4,11 +4,13 @@ interface Props {
   tail?: 'start' | 'center' | 'end';
   as?: 'div' | 'p' | 'span' | 'a';
   href?: string;
+  target?: string;
+  rel?: string;
   class?: string;
 }
-const { shape = 'round', tail = 'start', as: Tag = 'div', href, class: cls } = Astro.props;
+const { shape = 'round', tail = 'start', as: Tag = 'div', href, target, rel, class: cls } = Astro.props;
 ---
-<Tag class:list={['bubble', `bubble--${shape}`, `bubble--tail-${tail}`, cls]} href={href}>
+<Tag class:list={['bubble', `bubble--${shape}`, `bubble--tail-${tail}`, cls]} href={href} target={target} rel={rel}>
   {
     shape === 'shout' && (
       <svg class="bubble__bg" viewBox="0 0 100 60" preserveAspectRatio="none" aria-hidden="true">

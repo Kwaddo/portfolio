@@ -2,11 +2,15 @@
 import { getCollection, render, type CollectionEntry } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import StatusBadge from './StatusBadge.astro';
-import Shot from './Shot.astro';
-import { formatMonth } from '../lib/dates';
+import Frame from './Frame.astro';
+import Bubble from './Bubble.astro';
+import Panel from './Panel.astro';
+import Sfx from './Sfx.astro';
+import InkRule from './InkRule.astro';
 import Devlog from './Devlog.astro';
+import { formatMonth } from '../lib/dates';
 import { forProject, newestFirst, toDevlog } from '../lib/journal';
-import { published } from '../lib/content';
+import { byOrder, nextProject, published, type JourneyRef } from '../lib/content';
 
 interface Props {
   kind: 'games' | 'lab';
@@ -15,7 +19,13 @@ interface Props {
 const { kind, entry } = Astro.props;
 const { data } = entry;
 const { Content } = await render(entry);
-const devlog = toDevlog(forProject(newestFirst(published(await getCollection('journal'))), entry.id));
+const [journal, games, lab] = await Promise.all([getCollection('journal'), getCollection('games'), getCollection('lab')]);
+const devlog = toDevlog(forProject(newestFirst(published(journal)), entry.id));
+const refs: JourneyRef[] = [
+  ...byOrder(published(games)).map((e) => ({ kind: 'games' as const, id: e.id, title: e.data.title, journey: e.data.journey })),
+  ...byOrder(published(lab)).map((e) => ({ kind: 'lab' as const, id: e.id, title: e.data.title, journey: e.data.journey })),
+];
+const next = nextProject(refs, kind, entry.id);
 
 const base = `/personal/${kind}/${entry.id}/`;
 const playable = 'playable' in data ? data.playable : 'none';
@@ -23,36 +33,56 @@ const playUrl = 'playUrl' in data ? data.playUrl : undefined;
 const downloadUrl = 'downloadUrl' in data ? data.downloadUrl : undefined;
 const liveUrl = 'liveUrl' in data ? data.liveUrl : undefined;
 const external = { target: '_blank', rel: 'noopener noreferrer' } as const;
+const letter = data.title.trim().charAt(0).toUpperCase();
 ---
 <Base title={data.title} description={data.summary}>
   <article class="wrap stack">
     <p><a class="back" href="/personal/">All personal projects</a></p>
-    <h1>{data.title}</h1>
-    <p class="lede">{data.summary}</p>
-    <p>
-      <StatusBadge status={data.status} /> Last worked on {formatMonth(data.lastWorked)}
-    </p>
-    {data.stack.length > 0 && <ul class="chips">{data.stack.map((s) => <li>{s}</li>)}</ul>}
 
-    {data.cover && <Shot src={data.cover} alt={data.coverAlt!} eager />}
+    <header class="spread hero-spread has-tone">
+      <Sfx word={kind === 'games' ? 'PLAY' : 'LAB'} rotate="-5deg" />
+      <div class="hero-spread__text">
+        <h1>{data.title}</h1>
+        <p class="lede">{data.summary}</p>
+        <div class="panel__caps">
+          <StatusBadge status={data.status} />
+          <Bubble shape="caption" as="span">Last worked {formatMonth(data.lastWorked)}</Bubble>
+        </div>
+        {data.stack.length > 0 && <ul class="chips" aria-label="Stack">{data.stack.map((s) => <li>{s}</li>)}</ul>}
+      </div>
+      <div class="hero-spread__media">
+        {
+          data.cover ? (
+            <Frame src={data.cover} alt={data.coverAlt!} eager sizes="(min-width: 48rem) 42vw, 100vw" />
+          ) : (
+            <Panel weight={4} shadow>
+              <div class="panel__media panel__initial" aria-hidden="true">
+                <span class="tone-coarse"></span>
+                <span class="panel__letter">{letter}</span>
+              </div>
+            </Panel>
+          )
+        }
+      </div>
+    </header>
 
-    <div class="prose"><Content /></div>
+    <div class="prose dropcap"><Content /></div>
 
-    <p class="email">
-      {playable === 'embed' && <a class="btn btn--solid" href={`${base}play/`}>Play</a>}
-      {playable === 'external' && playUrl && <a class="btn btn--solid" href={playUrl} {...external}>Play</a>}
+    <div class="cta-row">
+      {playable === 'embed' && <Bubble shape="shout" as="a" href={`${base}play/`} class="bubble--ink">Play</Bubble>}
+      {playable === 'external' && playUrl && <Bubble shape="shout" as="a" href={playUrl} class="bubble--ink" {...external}>Play</Bubble>}
       {liveUrl && <a class="btn btn--solid" href={liveUrl} {...external}>Open live site</a>}
       {downloadUrl && <a class="btn" href={downloadUrl} {...external}>Download</a>}
       {data.repoUrl && <a class="btn" href={data.repoUrl} {...external}>Source</a>}
       {data.journey && <a class="btn" href={`${base}journey/`}>Read the journey</a>}
-    </p>
+    </div>
 
     {
       data.gallery.length > 0 && (
-        <section aria-labelledby="gallery">
-          <h2 id="gallery">Gallery</h2>
-          <div class="shots">
-            {data.gallery.map((g) => <Shot src={g.src} alt={g.alt} caption={g.caption} />)}
+        <section aria-labelledby="gallery" class="stack">
+          <h2 id="gallery">Gallery<InkRule variant="draw" /></h2>
+          <div class="gallery">
+            {data.gallery.map((g, i) => <Frame src={g.src} alt={g.alt} caption={g.caption} tilt={i % 3 === 1} />)}
           </div>
         </section>
       )
@@ -60,7 +90,7 @@ const external = { target: '_blank', rel: 'noopener noreferrer' } as const;
 
     {
       data.collaborators.length > 0 && (
-        <p>
+        <p class="credits">
           Built with{' '}
           {data.collaborators.map((c, i) => (
             <>
@@ -73,5 +103,18 @@ const external = { target: '_blank', rel: 'noopener noreferrer' } as const;
       )
     }
     <Devlog items={devlog} />
+
+    {
+      next && (
+        <Panel href={`/personal/${next.kind}/${next.id}/`} bleed="end" weight={4} tone="fine" class="next-panel has-tone">
+          <Sfx word="NEXT" rotate="-3deg" />
+          <div class="panel__body">
+            <p class="panel__meta">Next {next.kind === 'games' ? 'game' : 'experiment'}</p>
+            <p class="panel__title">{next.title}</p>
+            <span class="panel__more" aria-hidden="true">Read more</span>
+          </div>
+        </Panel>
+      )
+    }
   </article>
 </Base>

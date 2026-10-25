@@ -1,0 +1,42 @@
+---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import { isDark } from '../lib/luminance';
+
+interface Props {
+  src: ImageMetadata;
+  alt: string;
+  caption?: string;
+  tilt?: boolean;
+  eager?: boolean;
+  sizes?: string;
+  class?: string;
+}
+const { src, alt, caption, tilt = false, eager = false, sizes = '(min-width: 48rem) 60vw, 100vw', class: cls } = Astro.props;
+const ratio = src.width / src.height;
+const orient = ratio > 1.2 ? 'landscape' : ratio < 0.85 ? 'portrait' : 'square';
+const dark = await isDark(src);
+---
+<figure class:list={['frame', `frame--${orient}`, tilt && 'frame--tilt', cls]} data-frame data-dark={dark ? 'true' : 'false'} data-color="false">
+  <button type="button" aria-pressed="false" data-frame-toggle>
+    <Image src={src} alt={alt} widths={[480, 960, 1440]} sizes={sizes} loading={eager ? 'eager' : 'lazy'} />
+    <span class="visually-hidden">, toggle colour</span>
+  </button>
+  {caption && <figcaption class="frame__cap">{caption}</figcaption>}
+</figure>
+
+<script>
+  const bind = () => {
+    document.querySelectorAll<HTMLElement>('[data-frame]:not([data-bound])').forEach((figure) => {
+      figure.dataset.bound = '1';
+      const button = figure.querySelector<HTMLButtonElement>('[data-frame-toggle]')!;
+      button.addEventListener('click', () => {
+        const on = figure.dataset.color !== 'true';
+        figure.dataset.color = String(on);
+        button.setAttribute('aria-pressed', String(on));
+      });
+    });
+  };
+  bind();
+  document.addEventListener('astro:page-load', bind);
+</script>
