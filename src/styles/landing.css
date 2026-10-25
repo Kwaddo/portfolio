@@ -50,9 +50,8 @@
   inset: 0;
   z-index: 2;
   display: flex;
-  justify-content: flex-end;
+  justify-content: flex-end; /* anchored to the end edge; the word reads on the start side */
   align-items: flex-end;
-  padding-inline-end: 4%;
   pointer-events: none;
 }
 .hero__figure img {
@@ -62,10 +61,19 @@
   object-fit: contain;
   object-position: bottom;
 }
+/* the seated figure is wider: a slightly smaller word and figure keep five letters readable */
+@media (min-width: 64rem) {
+  .hero__end-cell:has(img[data-figure='b']:not([hidden])) > .hero__end > .sfx {
+    font-size: clamp(3rem, 6.5vw, 5.25rem);
+  }
+  .hero__end-cell:has(img[data-figure='b']:not([hidden])) .hero__figure img {
+    block-size: min(105%, calc(100% + 2rem + clamp(1rem, 2.5vw, 1.75rem) - 0.25rem));
+  }
+}
 @media (min-width: 48rem) {
   .hero__figure img {
     /* the head and shoulders break the top border, within the hero's headroom plus main's padding, so never under the nav */
-    block-size: min(120%, calc(100% + 2rem + clamp(1rem, 2.5vw, 1.75rem) - 0.25rem));
+    block-size: min(110%, calc(100% + 2rem + clamp(1rem, 2.5vw, 1.75rem) - 0.25rem));
     filter: drop-shadow(6px 6px 0 var(--paper));
   }
   [dir='rtl'] .hero__figure img {
@@ -80,20 +88,21 @@
   opacity: 0.32;
   color: var(--paper);
   /* the burst converges on the figure, which stands on the end side */
-  background: repeating-conic-gradient(from 0deg at 72% 58%, currentColor 0deg 1deg, transparent 1deg 6deg);
-  mask-image: radial-gradient(circle at 72% 58%, transparent 6%, #000 55%);
+  background: repeating-conic-gradient(from 0deg at 76% 56%, currentColor 0deg 1deg, transparent 1deg 6deg);
+  mask-image: radial-gradient(circle at 76% 56%, transparent 6%, #000 55%);
 }
 [dir='rtl'] .hero__speed {
-  background: repeating-conic-gradient(from 0deg at 28% 58%, currentColor 0deg 1deg, transparent 1deg 6deg);
-  mask-image: radial-gradient(circle at 28% 58%, transparent 6%, #000 55%);
+  background: repeating-conic-gradient(from 0deg at 24% 56%, currentColor 0deg 1deg, transparent 1deg 6deg);
+  mask-image: radial-gradient(circle at 24% 56%, transparent 6%, #000 55%);
 }
 .hero__end > .sfx {
   inset: 0;
   display: grid;
-  place-items: center start;
-  padding-inline-start: 5%;
+  place-items: end start;
+  padding-inline-start: 4%;
+  padding-block-end: 7%;
   overflow: visible;
-  font-size: clamp(3.5rem, 10vw, 8rem); /* HELLO is 2.5em wide: sits on the start side, the figure covers its tail */
+  font-size: clamp(3.25rem, 7.5vw, 6rem); /* KWADDO sits low on the start side; only its last letters go behind the figure */
   text-align: start;
 }
 @media (min-width: 48rem) {
@@ -115,8 +124,14 @@
   .hero__bubble {
     padding-inline: 2rem 2.25rem;
   }
+  /* the narrow four-column panel: a small word at the very top start (only the head is up there), figure at 105% on the end */
   .hero__end > .sfx {
-    font-size: clamp(3rem, 9vw, 7rem);
+    place-items: start start;
+    padding-block-start: 3%;
+    font-size: clamp(2.5rem, 5vw, 4rem);
+  }
+  .hero__figure img {
+    block-size: min(105%, calc(100% + 2rem + clamp(1rem, 2.5vw, 1.75rem) - 0.25rem));
   }
 }
 
