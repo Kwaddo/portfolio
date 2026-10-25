@@ -67,12 +67,14 @@
   }
 }
 /* the clip edge sits 0.15em above the spread so the rotated glyph tops survive; the word itself stays put */
-.spread > .sfx {
+.spread > .sfx,
+.page-head > .sfx {
   inset-block-start: -0.15em;
   padding-block-start: 0.15em;
   block-size: 1.3em;
 }
-.spread:has(> .sfx) {
+.spread:has(> .sfx),
+.page-head:has(> .sfx) {
   padding-block-start: clamp(2.5rem, 6vw, 5.5rem);
 }
 .spread--slant {

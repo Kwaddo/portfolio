@@ -1,9 +1,11 @@
 ---
-import InkRule from './InkRule.astro';
 import { render, type CollectionEntry } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import type { DevlogItem } from '../lib/journal';
 import Devlog from './Devlog.astro';
+import InkRule from './InkRule.astro';
+import Panel from './Panel.astro';
+import Sfx from './Sfx.astro';
 
 interface Props {
   title: string;
@@ -17,21 +19,29 @@ const rendered = await Promise.all(
   chapters.map(async (chapter) => ({ chapter, Content: (await render(chapter)).Content })),
 );
 const month = (d: Date) => d.toLocaleDateString('en-US', { month: 'long', year: 'numeric', timeZone: 'UTC' });
+const splats = ['splat-a', 'splat-b', 'splat-c'] as const;
 ---
 <Base title={`${title}: the journey`} description={`The story behind ${title}, told in chapters.`}>
   <div class="wrap stack">
     <p><a class="back" href={backHref}>About {title}</a></p>
-    <h1>{title}: the journey</h1>
+    <header class="page-head has-tone">
+      <Sfx word="LOG" rotate="-5deg" />
+      <h1>{title}: the journey</h1>
+    </header>
     {
       rendered.map(({ chapter, Content }, i) => (
         <>
-          {i > 0 && <InkRule variant={(['splat-a', 'splat-b', 'splat-c'] as const)[i % 3]} />}
-          <article class="chapter">
-            <p class="chapter__no">Chapter {i + 1}</p>
-            <div class="prose">
+          {i > 0 && <InkRule variant={splats[i % 3]} />}
+          <article class:list={['chapter', i % 2 === 1 && 'chapter--alt']} data-reveal>
+            <div class="chapter__side">
+              <span class={i % 2 === 0 ? 'tone-mid' : 'tone-fine'} aria-hidden="true"></span>
+              <p class="chapter__no">Chapter {i + 1}</p>
+              <span class="chapter__num" aria-hidden="true">{i + 1}</span>
+            </div>
+            <div class="chapter__text">
               <h2>{chapter.data.title}</h2>
               {chapter.data.date && <p class="chapter__date">{month(chapter.data.date)}</p>}
-              <Content />
+              <div class="prose dropcap"><Content /></div>
             </div>
           </article>
         </>
@@ -40,9 +50,14 @@ const month = (d: Date) => d.toLocaleDateString('en-US', { month: 'long', year: 
     <Devlog items={devlog} />
     {
       next && (
-        <p>
-          <a class="btn btn--solid" href={next.href}>Next journey: {next.title}</a>
-        </p>
+        <Panel href={next.href} bleed="end" weight={4} tone="fine" class="next-panel has-tone">
+          <Sfx word="NEXT" rotate="-3deg" />
+          <div class="panel__body">
+            <p class="panel__meta">Next journey</p>
+            <p class="panel__title">{next.title}</p>
+            <span class="panel__more" aria-hidden="true">Read on</span>
+          </div>
+        </Panel>
       )
     }
   </div>

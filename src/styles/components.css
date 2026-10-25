@@ -208,18 +208,28 @@ a.bubble--ink:focus-visible {
   align-items: center;
   font-weight: 600;
 }
+/* ---------- facts strip: a row of caption boxes ---------- */
 .facts {
-  display: grid;
-  gap: 1rem 2rem;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr));
-  margin-block-end: 0;
-  margin-inline: 0;
-  padding: 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin: 0;
+}
+.facts > div {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.35rem 0.75rem;
   border: var(--rule);
+  background: var(--paper);
+  box-shadow: 4px 4px 0 var(--ink);
+}
+[dir='rtl'] .facts > div {
+  box-shadow: -4px 4px 0 var(--ink);
 }
 .facts dt {
   color: var(--tone);
-  font-size: 0.8rem;
+  font: 700 0.7rem/1.4 var(--font-body);
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
@@ -227,28 +237,91 @@ a.bubble--ink:focus-visible {
   margin: 0;
   font-weight: 600;
 }
+
+/* ---------- chapters: text panel + side panel, alternating ---------- */
 .chapter {
+  position: relative;
   display: grid;
-  grid-template-columns: auto 1fr;
-  gap: 1.25rem;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: var(--gutter);
+  align-items: stretch;
+}
+/* no .has-tone here: its child rule would outrank .chapter__num and pull the numeral into the flow */
+.chapter__side {
+  --num: clamp(7rem, 16vw, 13rem);
+  position: relative;
+  grid-column: span 12;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  gap: 0.5rem;
+  /* room for the numeral's cap height above the bottom edge, so a short chapter never beheads it */
+  min-block-size: calc(var(--num) * 0.9 + 1rem);
+  padding: 1rem;
+  border: var(--rule);
+  overflow: hidden;
+  isolation: isolate;
 }
 .chapter__no {
-  padding-block-start: 1rem;
-  border-block-start: var(--rule);
-  font: 400 1.25rem/1 var(--font-display);
-  letter-spacing: 0.2em;
+  position: relative;
+  z-index: 1;
+  font: 400 1rem/1 var(--font-display);
+  letter-spacing: 0.25em;
   text-transform: uppercase;
-  writing-mode: vertical-rl;
+  color: var(--tone);
 }
-[dir='rtl'] .chapter__no {
-  padding-block-start: 0;
-  padding-block-end: 1rem;
-  border-block-start: 0;
-  border-block-end: var(--rule);
+.chapter__num {
+  position: absolute;
+  inset-inline-end: -0.05em;
+  inset-block-end: -0.2em;
+  z-index: 0;
+  font: 400 var(--num) / 1 var(--font-display);
+  color: transparent;
+  -webkit-text-stroke: 3px var(--ink);
+  opacity: 0.9;
+  pointer-events: none;
+  user-select: none;
+}
+.chapter__text {
+  grid-column: span 12;
+  display: grid;
+  align-content: start;
+  gap: 1rem;
+  padding: clamp(1rem, 3vw, 2rem);
+  border: var(--rule);
+  background: var(--paper);
+  box-shadow: var(--shadow-ink);
+}
+[dir='rtl'] .chapter__text {
+  box-shadow: -6px 6px 0 var(--ink);
 }
 .chapter__date {
   color: var(--tone);
   font-size: 0.9rem;
+}
+.chapter__portrait {
+  grid-column: span 12;
+}
+@media (min-width: 48rem) {
+  .chapter__side {
+    grid-column: 1 / span 4;
+  }
+  .chapter__text {
+    grid-column: 5 / -1;
+  }
+  .chapter--alt .chapter__side,
+  .chapter__portrait {
+    grid-column: 9 / -1;
+  }
+  .chapter--alt .chapter__text,
+  .chapter:has(.chapter__portrait) .chapter__text {
+    grid-column: 1 / span 8;
+    grid-row: 1;
+  }
+  /* label on the start edge, numeral on the end edge: they never collide */
+  .chapter__no {
+    justify-self: start;
+    writing-mode: vertical-rl;
+  }
 }
 
 .back::before {
