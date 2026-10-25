@@ -70,7 +70,7 @@
   }
   .spread__label {
     position: absolute;
-    inset-inline-start: calc(-1 * var(--gutter)); /* hangs off the page edge like a tab */
+    inset-inline-start: 0; /* a tab inside the wrap, at the spread's start column */
     inset-block: 0;
     grid-column: auto;
     padding-inline-end: 0.75rem;
@@ -78,15 +78,15 @@
   }
 }
 /* the clip edge sits 0.15em above the spread so the rotated glyph tops survive; the word itself stays put.
-   On the end side the box runs to the viewport edge (the real page edge, clipped by main) so the word is
-   never cut by a line in open paper; the padding keeps the glyphs at the wrap edge */
+   The box is the wrap's width and the word is sized to fit inside it with its rotation and shadow
+   (the longest word is 2.5em wide, so 34cqi always fits): nothing crosses the wrap's edges */
 .spread > .sfx,
 .page-head > .sfx {
-  inset-inline-end: calc(-1 * var(--bleed));
   inset-block-start: -0.15em;
-  padding-inline-end: var(--bleed);
+  padding-inline-end: 0.2em;
   padding-block-start: 0.15em;
   block-size: 1.3em;
+  font-size: min(clamp(5rem, 20vw, 15rem), 34cqi);
 }
 .spread:has(> .sfx),
 .page-head:has(> .sfx) {
@@ -251,16 +251,7 @@ a.panel {
     min-block-size: 12rem;
   }
 }
-/* bleed: the panel runs to the viewport edge and loses that border */
 @media (min-width: 48rem) {
-  .panel--bleed-end {
-    margin-inline-end: calc(-1 * var(--bleed));
-    border-inline-end: 0;
-  }
-  .panel--bleed-start {
-    margin-inline-start: calc(-1 * var(--bleed));
-    border-inline-start: 0;
-  }
   .panel--tilt {
     rotate: -1.2deg;
   }
@@ -413,7 +404,10 @@ a.panel:focus-visible .panel__media img {
   }
 }
 
-/* ---------- black page: a full-bleed ink spread with paper panels and paper shadows ---------- */
+/* ---------- black page: a full-bleed ink background; panels, tab and word stay on the wrap's columns ---------- */
+.spread--ink > .sfx {
+  inset-inline: var(--bleed);
+}
 .spread--ink {
   --shadow-ink: var(--shadow-x) var(--shadow-x) 0 var(--paper);
   --shadow-ink-rtl: calc(-1 * var(--shadow-x)) var(--shadow-x) 0 var(--paper);
@@ -440,7 +434,7 @@ a.panel:focus-visible .panel__media img {
     padding-inline-start: calc(var(--bleed) + 2.5rem);
   }
   .spread--ink .spread__label {
-    inset-inline-start: calc(var(--bleed) - var(--gutter));
+    inset-inline-start: var(--bleed);
     border-color: var(--paper);
   }
 }

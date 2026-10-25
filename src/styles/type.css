@@ -43,6 +43,9 @@ h3 {
   rotate: var(--sfx-rotate, -6deg);
   translate: 0.08em 0;
 }
+[dir='rtl'] .sfx > span {
+  translate: -0.08em 0;
+}
 @media (min-width: 48rem) {
   .sfx > span {
     filter: drop-shadow(0.04em 0.04em 0 var(--sfx-stroke));

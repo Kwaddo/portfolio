@@ -25,7 +25,7 @@
   letter-spacing: 0.08em;
   color: var(--ink);
 }
-/* availability as a caption pinned over the panel's bottom-start corner */
+/* availability as a caption over the panel's bottom edge (vertical overhang only; it stays inside the columns) */
 .hero__avail {
   position: absolute;
   inset-block-end: -0.9rem;
@@ -54,7 +54,7 @@
   display: grid;
   place-items: center;
   overflow: visible;
-  font-size: clamp(4rem, 14vw, 11rem);
+  font-size: clamp(4rem, 12vw, 10rem); /* HELLO is 2.5em wide: fits the five-column panel with its rotation */
   text-align: center;
 }
 @media (min-width: 48rem) {
@@ -76,6 +76,9 @@
   .hero__bubble {
     padding-inline: 2rem 2.25rem;
   }
+  .hero__end > .sfx {
+    font-size: clamp(3rem, 9vw, 7rem);
+  }
 }
 
 /* ---------- doors ---------- */
@@ -91,7 +94,8 @@
   gap: 0.75rem;
   min-block-size: clamp(16rem, 38vh, 22rem);
   overflow: hidden;
-  padding: clamp(1.25rem, 4vw, 2.5rem);
+  /* the background bleeds; the content sits on the wrap's columns */
+  padding: clamp(1.25rem, 4vw, 2.5rem) var(--bleed);
   text-decoration: none;
   isolation: isolate;
 }
@@ -134,7 +138,7 @@
 }
 [dir='rtl'] .split__door:hover .sfx > span,
 [dir='rtl'] .split__door:focus-visible .sfx > span {
-  translate: -0.22em 0;
+  translate: 0.02em 0;
 }
 .split__door:hover h2,
 .split__door:focus-visible h2 {
@@ -181,7 +185,9 @@
 .split__door .sfx {
   inset-block-start: auto;
   inset-block-end: 0.25rem;
+  inset-inline-end: var(--bleed);
   padding-block: 0.15em; /* headroom for the rotated glyph corners and the shadow */
+  padding-inline-end: 0.2em;
   block-size: 1.3em;
   font-size: clamp(4rem, 9vw, 8rem);
 }
@@ -215,6 +221,9 @@
 }
 .split__door .sfx > span {
   translate: -0.12em 0;
+}
+[dir='rtl'] .split__door .sfx > span {
+  translate: 0.12em 0;
 }
 .split__door--work {
   background: var(--paper);
@@ -279,11 +288,12 @@
   }
   /* the clip box starts past the text column so the word is never under copy */
   .split__door--work .sfx {
-    inset-inline-start: calc(clamp(1.25rem, 4vw, 2.5rem) + 14rem);
+    inset-inline-start: calc(var(--bleed) + 14rem);
     inset-inline-end: var(--cut);
   }
   .split__door--personal .sfx {
     inset-inline-start: calc(var(--cut) + 2rem + 14rem);
+    inset-inline-end: var(--bleed);
   }
   .split__door--personal {
     margin-inline-start: calc(var(--cut) * -1);
@@ -310,6 +320,9 @@
     inset-block: 0 auto;
     inset-inline: 0;
     font-size: clamp(3.5rem, 8vw, 7rem);
+  }
+  .split__door--personal .sfx {
+    inset-inline-end: var(--bleed);
   }
 }
 

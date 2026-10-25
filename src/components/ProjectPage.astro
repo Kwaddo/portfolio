@@ -132,7 +132,7 @@ const solo = data.gallery.length === 1 && data.gallery[0].caption && data.galler
 
     {
       next && (
-        <Panel href={`/personal/${next.kind}/${next.id}/`} bleed="end" weight={4} tone="fine" class="next-panel has-tone">
+        <Panel href={`/personal/${next.kind}/${next.id}/`} weight={4} tone="fine" class="next-panel has-tone">
           <Sfx word="NEXT" rotate="-3deg" />
           <div class="panel__body">
             <p class="panel__meta">Next {next.kind === 'games' ? 'game' : 'experiment'}</p>

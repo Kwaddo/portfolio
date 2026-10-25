@@ -157,14 +157,6 @@
   }
   .hero-spread__media {
     grid-column: 8 / -1;
-    margin-inline-end: calc(-1 * var(--bleed));
-  }
-  .hero-spread__media .frame {
-    border-inline-end: 0;
-    box-shadow: var(--shadow-ink-rtl);
-  }
-  [dir='rtl'] .hero-spread__media .frame {
-    box-shadow: var(--shadow-ink);
   }
 }
 
@@ -261,9 +253,6 @@ a.next-panel:focus-visible > .sfx {
   background: var(--ink);
 }
 /* play page: the stage is sized to the viewport so the whole game is visible without scrolling */
-.play {
-  max-inline-size: none;
-}
 .play__head {
   display: flex;
   flex-wrap: wrap;
