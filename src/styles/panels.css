@@ -297,9 +297,25 @@ a.panel:focus-visible .panel__meta,
 a.panel:focus-visible .panel__text {
   color: var(--paper);
 }
-a.panel:hover .badge--archived,
-a.panel:focus-visible .badge--archived {
-  color: var(--paper);
+/* badges invert with the card */
+a.panel:hover .badge,
+a.panel:focus-visible .badge {
+  border-color: var(--paper);
+  background: var(--paper);
+  color: var(--ink);
+}
+/* the fallback media inverts as one unit with the body: ink field, paper dots, paper letter, paper burst */
+a.panel:hover .panel__initial,
+a.panel:focus-visible .panel__initial {
+  background: var(--ink);
+}
+a.panel:hover .panel__initial > .tone-coarse,
+a.panel:focus-visible .panel__initial > .tone-coarse {
+  background-image: radial-gradient(circle at center, var(--paper) 1.6px, transparent 2.1px);
+}
+a.panel:hover .panel__initial > .hatch,
+a.panel:focus-visible .panel__initial > .hatch {
+  background-image: repeating-linear-gradient(45deg, var(--paper) 0 1px, transparent 1px 6px);
 }
 a.panel:hover .panel__letter,
 a.panel:focus-visible .panel__letter {
@@ -308,6 +324,7 @@ a.panel:focus-visible .panel__letter {
 a.panel:hover .panel__media img,
 a.panel:focus-visible .panel__media img {
   filter: none;
+  scale: 1.03;
 }
 @media (hover: hover) {
   .panel__more {
@@ -324,17 +341,41 @@ a.panel:focus-visible .panel__media img {
   }
   a.panel {
     transition:
-      translate var(--t-fast),
-      box-shadow var(--t-fast),
-      background var(--t-fast),
-      color var(--t-fast);
+      translate var(--t-base) var(--ease-out),
+      box-shadow var(--t-base) var(--ease-out),
+      background var(--t-base),
+      color var(--t-base);
   }
   a.panel:hover {
-    translate: 0 -2px;
-    box-shadow: 10px 10px 0 var(--ink);
+    translate: 0 -4px;
+    box-shadow: 12px 12px 0 var(--ink);
   }
   [dir='rtl'] a.panel:hover {
-    box-shadow: -10px 10px 0 var(--ink);
+    box-shadow: -12px 12px 0 var(--ink);
+  }
+}
+/* the parts that invert follow the card over the same beat; the image un-greys and grows a touch inside its box */
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  a.panel .panel__meta,
+  a.panel .panel__text,
+  a.panel .panel__initial {
+    transition:
+      color var(--t-base),
+      background var(--t-base);
+  }
+  a.panel .badge {
+    transition:
+      background var(--t-base),
+      color var(--t-base),
+      border-color var(--t-base);
+  }
+  a.panel .panel__letter {
+    transition: -webkit-text-stroke-color var(--t-base);
+  }
+  a.panel .panel__media img {
+    transition:
+      filter var(--t-base),
+      scale var(--t-base) var(--ease-out);
   }
 }
 
@@ -345,14 +386,14 @@ a.panel:focus-visible .panel__media img {
   html.js a.panel.is-in {
     transition:
       opacity var(--t-slow) var(--ease-out),
-      translate var(--t-fast),
-      box-shadow var(--t-fast),
-      background var(--t-fast),
-      color var(--t-fast);
+      translate var(--t-base) var(--ease-out),
+      box-shadow var(--t-base) var(--ease-out),
+      background var(--t-base),
+      color var(--t-base);
   }
   html.js a.panel.is-in:hover,
   html.js a.panel.is-in:focus-visible {
-    translate: 0 -2px;
+    translate: 0 -4px;
   }
 }
 
@@ -376,11 +417,11 @@ a.panel:focus-visible .panel__media img {
 .spread--ink a.panel:hover,
 .spread--ink a.panel:focus-visible {
   border-color: var(--paper);
-  box-shadow: 10px 10px 0 var(--paper);
+  box-shadow: 12px 12px 0 var(--paper);
 }
 [dir='rtl'] .spread--ink a.panel:hover,
 [dir='rtl'] .spread--ink a.panel:focus-visible {
-  box-shadow: -10px 10px 0 var(--paper);
+  box-shadow: -12px 12px 0 var(--paper);
 }
 @media (min-width: 48rem) {
   .spread--ink.spread--labelled {

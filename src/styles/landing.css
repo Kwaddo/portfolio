@@ -95,16 +95,87 @@
   text-decoration: none;
   isolation: isolate;
 }
-.split__door > :not(.tone-mid):not(.sfx):not(.speed):not(.split__lines) {
+.split__door > :not(.tone-mid):not(.tone-coarse):not(.sfx):not(.speed):not(.split__lines) {
   position: relative;
   z-index: 1;
 }
 .split__door > .tone-mid,
+.split__door > .tone-coarse,
 .split__door > .sfx,
 .split__door > .speed,
 .split__door > .split__lines {
   position: absolute;
   z-index: 0;
+}
+/* hover: the tone crossfades to a coarser one, the lines brighten and drift, the word slides out, the title gets a shadow */
+.split__door > .tone-coarse {
+  opacity: 0;
+}
+.split__door:hover > .tone-mid,
+.split__door:focus-visible > .tone-mid {
+  opacity: 0;
+}
+.split__door:hover > .tone-coarse,
+.split__door:focus-visible > .tone-coarse {
+  opacity: 0.28;
+}
+.split__door:hover > .split__lines,
+.split__door:focus-visible > .split__lines {
+  opacity: 0.4;
+  translate: 12px 2px;
+}
+[dir='rtl'] .split__door:hover > .split__lines,
+[dir='rtl'] .split__door:focus-visible > .split__lines {
+  translate: -12px 2px;
+}
+.split__door:hover .sfx > span,
+.split__door:focus-visible .sfx > span {
+  translate: -0.02em 0;
+}
+[dir='rtl'] .split__door:hover .sfx > span,
+[dir='rtl'] .split__door:focus-visible .sfx > span {
+  translate: -0.22em 0;
+}
+.split__door:hover h2,
+.split__door:focus-visible h2 {
+  text-shadow: 6px 6px 0 var(--tone);
+}
+[dir='rtl'] .split__door:hover h2,
+[dir='rtl'] .split__door:focus-visible h2 {
+  text-shadow: -6px 6px 0 var(--tone);
+}
+.split__door:hover .split__count,
+.split__door:focus-visible .split__count {
+  translate: 0 -2px;
+}
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .split__door {
+    transition:
+      background var(--t-base),
+      color var(--t-base);
+  }
+  .split__door > .tone-mid,
+  .split__door > .tone-coarse {
+    transition: opacity var(--t-base);
+  }
+  .split__door > .split__lines {
+    transition:
+      opacity var(--t-base),
+      translate var(--t-base) var(--ease-out);
+  }
+  .split__door .sfx > span {
+    transition:
+      translate var(--t-base) var(--ease-out),
+      color var(--t-base),
+      -webkit-text-stroke-color var(--t-base),
+      filter var(--t-base);
+  }
+  .split__door h2 {
+    transition: text-shadow var(--t-base) var(--ease-out);
+  }
+  .split__door .split__count {
+    transition: translate var(--t-fast);
+  }
 }
 /* the word sits inside the door above its bottom edge; its clip box starts past the text column so it is never under copy */
 .split__door .sfx {
