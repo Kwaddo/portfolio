@@ -6,7 +6,7 @@ lastWorked: 2025-08-09
 stack: [Go, SDL2]
 playable: none
 journey: false
-order: 4
+order: 5
 cover: ../../assets/media/dopher-alpha/cover.png
 coverAlt: First-person view down a dark corridor in the Dopher raycasting engine, with a red and white checkered wall on the right, grey checkered walls ahead, and a brown gradient floor
 gallery:

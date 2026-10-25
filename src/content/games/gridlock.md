@@ -10,8 +10,9 @@ collaborators:
     url: https://github.com/aburxwais
   - name: SilentYsf
     url: https://github.com/SilentYsf
+playable: none
 journey: false
-order: 2
+order: 4
 ---
 Gridlock is a multiplayer first-person shooter written in Rust. The client renders with macroquad and talks to a headless authoritative server over a custom UDP-style protocol.
 
