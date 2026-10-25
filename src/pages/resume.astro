@@ -76,7 +76,7 @@ const education = entries.filter((e) => e.data.kind === 'education');
 
     <section class="stack" aria-labelledby="r-skills">
       <h2 id="r-skills">Skills</h2>
-      <ul class="tags">{skills.stack.map((s) => <li>{s}</li>)}</ul>
+      <ul class="chips">{skills.stack.map((s) => <li>{s}</li>)}</ul>
       <p>Languages: {skills.languages.join(', ')}</p>
     </section>
   </article>

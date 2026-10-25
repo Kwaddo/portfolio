@@ -1,0 +1,49 @@
+---
+interface Props {
+  shape?: 'round' | 'shout' | 'thought' | 'caption';
+  tail?: 'start' | 'center' | 'end';
+  as?: 'div' | 'p' | 'span' | 'a';
+  href?: string;
+  class?: string;
+}
+const { shape = 'round', tail = 'start', as: Tag = 'div', href, class: cls } = Astro.props;
+---
+<Tag class:list={['bubble', `bubble--${shape}`, `bubble--tail-${tail}`, cls]} href={href}>
+  {
+    shape === 'shout' && (
+      <svg class="bubble__bg" viewBox="0 0 100 60" preserveAspectRatio="none" aria-hidden="true">
+        <polygon
+          points="4,30 12,20 2,10 16,12 14,2 26,10 36,0 42,10 54,2 60,12 72,4 76,14 90,8 86,20 98,22 90,32 100,42 86,44 92,56 78,50 70,60 62,52 50,60 44,50 32,58 28,48 14,54 18,42 4,46 10,36"
+          vector-effect="non-scaling-stroke"
+        />
+      </svg>
+    )
+  }
+  {
+    shape === 'thought' && (
+      <svg class="bubble__bg" viewBox="0 0 100 60" preserveAspectRatio="none" aria-hidden="true">
+        <path
+          d="M20 12 Q10 0 26 4 Q36 -4 46 4 Q58 -4 66 6 Q82 0 82 14 Q98 16 92 30 Q100 44 84 46 Q80 58 64 52 Q54 62 44 54 Q30 62 24 50 Q6 52 10 38 Q0 26 12 22 Q8 12 20 12 Z"
+          vector-effect="non-scaling-stroke"
+        />
+      </svg>
+    )
+  }
+  {
+    shape === 'round' && (
+      <svg class="bubble__tail" viewBox="0 0 40 30" aria-hidden="true">
+        <path class="bubble__tail-fill" d="M0 0 H34 L8 30 Q10 14 0 0 Z" />
+        <path class="bubble__tail-line" d="M34 0 L8 30 Q10 14 0 0" fill="none" vector-effect="non-scaling-stroke" />
+      </svg>
+    )
+  }
+  {
+    shape === 'thought' && (
+      <span class="bubble__dots" aria-hidden="true">
+        <i></i>
+        <i></i>
+      </span>
+    )
+  }
+  <div class="bubble__body"><slot /></div>
+</Tag>

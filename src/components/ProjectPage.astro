@@ -32,7 +32,7 @@ const external = { target: '_blank', rel: 'noopener noreferrer' } as const;
     <p>
       <StatusBadge status={data.status} /> Last worked on {formatMonth(data.lastWorked)}
     </p>
-    {data.stack.length > 0 && <ul class="tags">{data.stack.map((s) => <li>{s}</li>)}</ul>}
+    {data.stack.length > 0 && <ul class="chips">{data.stack.map((s) => <li>{s}</li>)}</ul>}
 
     {data.cover && <Shot src={data.cover} alt={data.coverAlt!} eager />}
 

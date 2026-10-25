@@ -120,20 +120,6 @@ main {
   inset-block-start: 0.5rem;
 }
 
-.tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-block-end: 0;
-  margin-inline: 0;
-  padding: 0;
-  list-style: none;
-}
-.tags li {
-  padding: 0.1rem 0.6rem;
-  border: 2px solid var(--ink);
-  font-size: 0.85rem;
-}
 .notice {
   padding: 1rem;
   border: var(--rule);

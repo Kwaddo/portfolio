@@ -32,7 +32,7 @@ const projectHref = !project
     <DateStamp date={entry.data.date} as="h1" />
     {
       entry.data.tags.length > 0 && (
-        <ul class="tags">
+        <ul class="chips">
           {entry.data.tags.map((t) => (
             <li><a href={`/journal/tag/${tagSlug(t)}/`}>{t}</a></li>
           ))}

@@ -1,10 +1,10 @@
 ---
 import Base from '../layouts/Base.astro';
-import SpeechBubble from '../components/SpeechBubble.astro';
+import Bubble from '../components/Bubble.astro';
 ---
 <Base title="Page not found" description="That page does not exist." noindex>
   <div class="wrap stack">
-    <SpeechBubble><h1>Page not found</h1><p>This panel is blank. The page you wanted is not here.</p></SpeechBubble>
+    <Bubble shape="thought" class="pop"><h1>Page not found</h1><p>This panel is blank. The page you wanted is not here.</p></Bubble>
     <p class="email">
       <a class="btn btn--solid" href="/">Home</a>
       <a class="btn" href="/work/">Work</a>

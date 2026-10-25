@@ -12,6 +12,11 @@ html.js [data-reveal].is-in {
   translate: 0 0;
 }
 
+html.js .ink-draw[data-reveal] {
+  opacity: 1;
+  translate: none;
+}
+
 /* ---------- pop (bubbles on first paint) ---------- */
 @keyframes pop {
   from {

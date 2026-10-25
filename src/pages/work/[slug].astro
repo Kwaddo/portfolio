@@ -18,7 +18,7 @@ const { Content } = await render(entry);
     <p><a class="back" href="/work/">All work</a></p>
     <h1>{data.title}</h1>
     <p class="lede">{data.role} · {data.period}</p>
-    {data.stack.length > 0 && <ul class="tags">{data.stack.map((s) => <li>{s}</li>)}</ul>}
+    {data.stack.length > 0 && <ul class="chips">{data.stack.map((s) => <li>{s}</li>)}</ul>}
     {data.confidential && <p class="notice">This work is confidential. This page lists only my role and dates.</p>}
     {data.cover && <Image loading="eager" src={data.cover} alt={data.coverAlt!} widths={[480, 960, 1440]} sizes="(min-width: 72rem) 68rem, 100vw" />}
     <div class="prose"><Content /></div>

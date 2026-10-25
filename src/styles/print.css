@@ -12,7 +12,12 @@
   .skip,
   .btn,
   .no-print,
-  .tone {
+  .tone-fine,
+  .tone-mid,
+  .tone-coarse,
+  .tone-grad,
+  .hatch,
+  .sfx {
     display: none !important;
   }
   main {

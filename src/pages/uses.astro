@@ -10,7 +10,7 @@ import { uses } from '../data/uses';
       uses.map((g, n) => (
         <section class="stack" aria-labelledby={`uses-${n}`}>
           <h2 id={`uses-${n}`}>{g.group}</h2>
-          <ul class="tags">{g.items.map((item) => <li>{item}</li>)}</ul>
+          <ul class="chips">{g.items.map((item) => <li>{item}</li>)}</ul>
         </section>
       ))
     }

@@ -1,0 +1,25 @@
+---
+interface Props {
+  variant?: 'splat-a' | 'splat-b' | 'splat-c' | 'draw';
+}
+const { variant = 'splat-a' } = Astro.props;
+const splats = {
+  'splat-a': 'M0 26 C30 10 60 34 95 18 S170 6 210 24 S300 38 340 16 S390 20 400 24 L400 40 L0 40 Z',
+  'splat-b': 'M0 20 C40 30 70 6 110 22 S190 36 230 14 S310 8 350 26 S385 16 400 20 L400 40 L0 40 Z',
+  'splat-c': 'M0 28 C50 8 80 30 130 16 S200 32 250 10 S320 34 370 20 L400 28 L400 40 L0 40 Z',
+} as const;
+---
+{
+  variant === 'draw' ? (
+    <svg class="ink-draw" viewBox="0 0 400 12" preserveAspectRatio="none" aria-hidden="true" data-reveal>
+      <path d="M2 8 C60 2 120 11 200 6 S340 3 398 7" pathLength="1" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" vector-effect="non-scaling-stroke" />
+    </svg>
+  ) : (
+    <svg class="splat" viewBox="0 0 400 40" preserveAspectRatio="none" aria-hidden="true">
+      <path d={splats[variant]} fill="currentColor" />
+      <circle cx="60" cy="12" r="4" fill="currentColor" />
+      <circle cx="300" cy="9" r="3" fill="currentColor" />
+      <circle cx="372" cy="14" r="2" fill="currentColor" />
+    </svg>
+  )
+}
