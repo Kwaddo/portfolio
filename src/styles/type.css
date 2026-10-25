@@ -11,7 +11,7 @@ h3 {
   font-size: clamp(1.5rem, 2.4vw, 2.1rem);
 }
 
-/* ---------- SFX word: decorative, outlined, clipped to its own box so it can never overflow the page ---------- */
+/* ---------- SFX word: decorative, stroked, clipped to its own box so it can never overflow the page ---------- */
 .sfx {
   position: absolute;
   inset-inline: 0;

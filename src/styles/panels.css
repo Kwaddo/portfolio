@@ -77,10 +77,14 @@
     border-inline-end: var(--rule);
   }
 }
-/* the clip edge sits 0.15em above the spread so the rotated glyph tops survive; the word itself stays put */
+/* the clip edge sits 0.15em above the spread so the rotated glyph tops survive; the word itself stays put.
+   On the end side the box runs to the viewport edge (the real page edge, clipped by main) so the word is
+   never cut by a line in open paper; the padding keeps the glyphs at the wrap edge */
 .spread > .sfx,
 .page-head > .sfx {
+  inset-inline-end: calc(-1 * var(--bleed));
   inset-block-start: -0.15em;
+  padding-inline-end: var(--bleed);
   padding-block-start: 0.15em;
   block-size: 1.3em;
 }

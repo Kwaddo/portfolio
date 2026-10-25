@@ -133,10 +133,15 @@
   align-items: center;
   row-gap: 1.5rem;
 }
-/* the word is clipped to the hero box, so a short hero (no media) never lets it reach the text below */
+/* the hero word sits whole above the cover with full headroom, rising only into the back-link row on the end side */
 .hero-spread > .sfx {
-  inset-block-end: 0;
-  block-size: auto;
+  inset-block-start: -0.7em;
+  padding-block-start: 0.35em;
+  block-size: 1.5em;
+  font-size: clamp(4rem, 12vw, 9rem);
+}
+.hero-spread:has(> .sfx) {
+  padding-block-start: clamp(2.5rem, 6vw, 5rem);
 }
 .hero-spread__text {
   grid-column: span 12;
