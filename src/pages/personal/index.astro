@@ -39,7 +39,7 @@ const lab = byOrder(published(await getCollection('lab')));
     <InkRule variant="splat-c" />
 
     <h2 id="lab">Lab<InkRule variant="draw" /></h2>
-    <Spread layout="3up" label="Lab" sfx="LAB" ariaLabelledby="lab">
+    <Spread layout="3up" label="Lab" sfx="LAB" ink ariaLabelledby="lab">
       {
         lab.map((l, i) => (
           <ProjectCard

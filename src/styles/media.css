@@ -9,6 +9,13 @@
 [dir='rtl'] .frame {
   box-shadow: var(--shadow-ink-rtl);
 }
+/* on a black page the frame keeps its ink field but rules and shadow turn to paper */
+.spread--ink .frame {
+  border-color: var(--paper);
+}
+.spread--ink .frame button:focus-visible {
+  outline-color: var(--paper);
+}
 @media (min-width: 48rem) {
   .frame--tilt {
     rotate: -1.5deg;

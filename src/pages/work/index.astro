@@ -36,7 +36,9 @@ const work = byOrder(published(await getCollection('work')));
     <InkRule variant="splat-a" />
     <section class="stack" aria-labelledby="timeline-title">
       <h2 id="timeline-title">Timeline<InkRule variant="draw" /></h2>
-      <Timeline entries={timeline} alternate />
+      <Spread layout="stack" as="div" ink>
+        <Timeline entries={timeline} alternate />
+      </Spread>
     </section>
   </div>
 </Base>

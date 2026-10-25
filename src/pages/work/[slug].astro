@@ -4,6 +4,7 @@ import Base from '../../layouts/Base.astro';
 import Frame from '../../components/Frame.astro';
 import Bubble from '../../components/Bubble.astro';
 import Sfx from '../../components/Sfx.astro';
+import Spread from '../../components/Spread.astro';
 import InkRule from '../../components/InkRule.astro';
 import { published } from '../../lib/content';
 
@@ -50,9 +51,11 @@ const { Content } = await render(entry);
       data.gallery.length > 0 && (
         <section aria-labelledby="gallery" class="stack">
           <h2 id="gallery">Screenshots<InkRule variant="draw" /></h2>
-          <div class="gallery">
-            {data.gallery.map((g, i) => <Frame src={g.src} alt={g.alt} caption={g.caption} tilt={i % 3 === 1} />)}
-          </div>
+          <Spread layout="stack" as="div" ink>
+            <div class="gallery">
+              {data.gallery.map((g, i) => <Frame src={g.src} alt={g.alt} caption={g.caption} tilt={i % 3 === 1} />)}
+            </div>
+          </Spread>
         </section>
       )
     }

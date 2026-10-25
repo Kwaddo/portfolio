@@ -135,3 +135,16 @@ p.timeline__period {
     transition: none;
   }
 }
+/* timeline on a black page: paper spine, paper entry boxes at every width */
+.spread--ink .timeline::before {
+  background: var(--paper);
+}
+.spread--ink .timeline__item {
+  padding: 1rem;
+  background: var(--paper);
+  color: var(--ink);
+  box-shadow: var(--shadow-ink);
+}
+[dir='rtl'] .spread--ink .timeline__item {
+  box-shadow: var(--shadow-ink-rtl);
+}

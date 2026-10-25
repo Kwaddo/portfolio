@@ -344,3 +344,39 @@ a.panel:focus-visible .panel__media img {
     translate: 0 -2px;
   }
 }
+
+/* ---------- black page: a full-bleed ink spread with paper panels and paper shadows ---------- */
+.spread--ink {
+  --shadow-ink: var(--shadow-x) var(--shadow-x) 0 var(--paper);
+  --shadow-ink-rtl: calc(-1 * var(--shadow-x)) var(--shadow-x) 0 var(--paper);
+  margin-inline: calc(-1 * var(--bleed));
+  padding: clamp(1.5rem, 4vw, 3rem) var(--bleed);
+  background: var(--ink);
+  color: var(--paper);
+}
+/* the word stays inside the black page instead of rising onto the paper above */
+.stack > h2 + .spread--ink > .sfx {
+  inset-block-start: -0.15em;
+}
+.spread--ink .spread__label .vlabel {
+  background: var(--paper);
+  color: var(--ink);
+}
+.spread--ink a.panel:hover,
+.spread--ink a.panel:focus-visible {
+  border-color: var(--paper);
+  box-shadow: 10px 10px 0 var(--paper);
+}
+[dir='rtl'] .spread--ink a.panel:hover,
+[dir='rtl'] .spread--ink a.panel:focus-visible {
+  box-shadow: -10px 10px 0 var(--paper);
+}
+@media (min-width: 48rem) {
+  .spread--ink.spread--labelled {
+    padding-inline-start: calc(var(--bleed) + 2.5rem);
+  }
+  .spread--ink .spread__label {
+    inset-inline-start: calc(var(--bleed) - var(--gutter));
+    border-color: var(--paper);
+  }
+}
