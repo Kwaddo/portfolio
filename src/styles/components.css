@@ -247,13 +247,13 @@ a.bubble--ink:focus-visible {
 .splat {
   display: block;
   inline-size: 100%;
-  block-size: 1.25rem;
+  block-size: 1.5rem;
   color: var(--ink);
 }
 .ink-draw {
   display: block;
   inline-size: min(100%, 14rem);
-  block-size: 0.6rem;
+  block-size: 0.7rem;
   margin-block-start: 0.35rem;
   color: var(--ink);
 }

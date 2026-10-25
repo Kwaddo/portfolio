@@ -35,16 +35,18 @@ html.js .pop {
   animation: pop var(--t-base) var(--ease-snap) both;
 }
 
-/* ---------- ink draw (heading underline, timeline spine) ---------- */
-.ink-draw path {
-  stroke-dasharray: 1;
-  stroke-dashoffset: 1;
-  transition: stroke-dashoffset 400ms var(--ease-out) 120ms;
+/* ---------- ink draw (heading underline): the brush stroke wipes in from the start edge ---------- */
+.ink-draw {
+  clip-path: inset(-20% 100% -20% 0);
+  transition: clip-path 400ms var(--ease-out) 120ms;
 }
-html:not(.js) .ink-draw path,
-.is-in .ink-draw path,
-.ink-draw.is-in path {
-  stroke-dashoffset: 0;
+[dir='rtl'] .ink-draw {
+  clip-path: inset(-20% 0 -20% 100%);
+}
+html:not(.js) .ink-draw,
+.is-in .ink-draw,
+.ink-draw.is-in {
+  clip-path: inset(-20% 0);
 }
 
 /* ---------- page wipe between routes (Astro ClientRouter view transitions) ---------- */
@@ -95,8 +97,9 @@ html:not(.js) .ink-draw path,
   html.js .pop {
     animation: none;
   }
-  .ink-draw path {
-    stroke-dashoffset: 0;
+  html .ink-draw,
+  [dir='rtl'] .ink-draw {
+    clip-path: none;
     transition: none;
   }
   :root::view-transition-old(root),
