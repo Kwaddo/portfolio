@@ -35,3 +35,25 @@ test('the player keeps the keys until the visitor clicks outside it', async ({ p
   await page.waitForTimeout(300);
   expect(await page.evaluate(() => window.scrollY)).toBeGreaterThan(0);
 });
+
+test('Tab stays in the game; Shift+Tab and a click outside leave it', async ({ page }) => {
+  await page.route('https://kwaddo.github.io/**', (route) => route.fulfill({ status: 200, contentType: 'text/html', body: '<title>game</title><p>game</p>' }));
+  await page.goto('/personal/games/smobb/play/');
+  await expect(page.getByText('Shift+Tab leaves the game')).toBeHidden();
+  await page.getByRole('button', { name: /^Play/ }).click();
+  const frame = page.locator('iframe');
+  await expect(frame).toBeFocused();
+  await expect(page.getByText('Shift+Tab leaves the game')).toBeVisible();
+  await page.keyboard.press('Tab');
+  await page.waitForTimeout(100);
+  await expect(frame).toBeFocused();
+  await expect(page.locator('html')).toHaveClass(/is-playing/);
+  await page.keyboard.press('Shift+Tab');
+  await page.waitForTimeout(100);
+  await expect(frame).not.toBeFocused();
+  await frame.focus();
+  await expect(frame).toBeFocused();
+  await page.locator('h1').click();
+  await expect(frame).not.toBeFocused();
+  await expect(page.locator('html')).not.toHaveClass(/is-playing/);
+});

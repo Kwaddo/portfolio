@@ -21,6 +21,7 @@ const ratio = frameWidth && frameHeight ? `${frameWidth} / ${frameHeight}` : '16
   <div class="player__bar">
     <button class="btn" type="button" data-fullscreen hidden>Fullscreen</button>
     <a class="btn" href={src} target="_blank" rel="noopener noreferrer">Open in a new tab</a>
+    <p class="player__hint" data-hint hidden>Shift+Tab leaves the game</p>
   </div>
 </div>
 
@@ -31,6 +32,9 @@ const ratio = frameWidth && frameHeight ? `${frameWidth} / ${frameHeight}` : '16
     const stage = root.querySelector<HTMLElement>('[data-stage]')!;
     const start = root.querySelector<HTMLButtonElement>('[data-start]')!;
     const fullscreen = root.querySelector<HTMLButtonElement>('[data-fullscreen]')!;
+    const hint = root.querySelector<HTMLElement>('[data-hint]')!;
+    let pointerAt = 0;
+    document.addEventListener('pointerdown', () => { pointerAt = Date.now(); }, true);
     start.addEventListener('click', () => {
       const frame = document.createElement('iframe');
       frame.className = 'player__frame';
@@ -44,12 +48,23 @@ const ratio = frameWidth && frameHeight ? `${frameWidth} / ${frameHeight}` : '16
       // While it holds focus the page does not scroll, so keys the game lets through cannot move the page.
       const lock = (on: boolean) => document.documentElement.classList.toggle('is-playing', on);
       frame.addEventListener('focus', () => lock(true));
-      frame.addEventListener('blur', () => lock(false));
+      frame.addEventListener('blur', () => {
+        lock(false);
+        // The game is cross-origin, so a Tab it does not consume walks out of the frame to the next control (or to the document).
+        // Send focus back when it left forwards and no pointer was involved; Shift+Tab (backwards) and clicks keep their exit.
+        setTimeout(() => {
+          const active = document.activeElement;
+          if (!document.hasFocus() || Date.now() - pointerAt < 300 || active === frame) return;
+          const forward = !active || active === document.body || Boolean(frame.compareDocumentPosition(active) & Node.DOCUMENT_POSITION_FOLLOWING);
+          if (forward) frame.focus();
+        });
+      });
       frame.addEventListener('load', () => frame.focus());
       stage.addEventListener('pointerdown', () => frame.focus());
       stage.replaceChildren(frame);
       frame.focus();
       fullscreen.hidden = !document.fullscreenEnabled;
+      hint.hidden = false;
       // Games that declare a native size are scaled to fit the stage instead of being clipped.
       const w = Number(root.dataset.width);
       const h = Number(root.dataset.height);
