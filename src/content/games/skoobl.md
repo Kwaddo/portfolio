@@ -11,6 +11,21 @@ collaborators:
 playable: none
 journey: false
 order: 2
+cover: ../../assets/media/skoobl/cover.png
+coverAlt: The skoobl host screen in the lobby, showing the room code and join QR code, four players (Mina, Omar, Layla, Sami) and the game settings with Whose Doodle mode selected
+gallery:
+  - src: ../../assets/media/skoobl/01-phone-draw-arabic.png
+    alt: A phone screen with an Arabic prompt at the top and a neon-green line drawing of a house on a dark canvas, with colour, brush, undo and Lock in controls below
+    caption: Drawing on a phone, here with an Arabic word pack prompt that reads right to left.
+  - src: ../../assets/media/skoobl/02-phone-guess.png
+    alt: A phone screen asking "Which doodle is Layla's?" with four doodles to choose from, a smiley, a fish, a star and a house
+    caption: Whose Doodle mode, where everyone picks which anonymous doodle belongs to a player.
+  - src: ../../assets/media/skoobl/03-tv-reveal.png
+    alt: The shared screen revealing a large smiley doodle drawn by Layla, with the leaderboard showing points and a strip of all four drawings underneath
+    caption: The reveal on the shared screen, with points and the leaderboard.
+  - src: ../../assets/media/skoobl/04-final-scores.png
+    alt: The shared screen showing Game over with Omar as winner, a final scores list of four players and a Play again button
+    caption: The final scoreboard crowns the winner.
 ---
 skoobl is a free, real-time party game: everyone draws, then everyone guesses who drew what.
 
