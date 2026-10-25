@@ -33,11 +33,43 @@
   z-index: 2;
   max-inline-size: calc(100% - 2rem);
 }
+/* the end cell: the clipped HELLO panel plus a figure layer that may break the panel's top edge */
+.hero__end-cell {
+  position: relative;
+  display: grid;
+}
 .hero__end {
-  min-block-size: 9rem;
+  min-block-size: 17rem;
   overflow: hidden;
   background: var(--ink);
   color: var(--paper);
+}
+.hero__figure {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+  padding-inline-end: 4%;
+  pointer-events: none;
+}
+.hero__figure img {
+  block-size: 100%; /* stacked under the bubble on phones: no break-out */
+  inline-size: auto;
+  max-inline-size: 70%;
+  object-fit: contain;
+  object-position: bottom;
+}
+@media (min-width: 48rem) {
+  .hero__figure img {
+    /* the head breaks the top border by a touch less than main's top padding, so it is never under the nav */
+    block-size: calc(100% + clamp(1rem, 2.5vw, 1.75rem) - 0.25rem);
+    filter: drop-shadow(6px 6px 0 var(--paper));
+  }
+  [dir='rtl'] .hero__figure img {
+    filter: drop-shadow(-6px 6px 0 var(--paper));
+  }
 }
 .hero__end > .tone-coarse {
   background-image: radial-gradient(circle at center, var(--paper) 1.6px, transparent 2.1px);
@@ -52,16 +84,17 @@
 .hero__end > .sfx {
   inset: 0;
   display: grid;
-  place-items: center;
+  place-items: center start;
+  padding-inline-start: 5%;
   overflow: visible;
-  font-size: clamp(4rem, 12vw, 10rem); /* HELLO is 2.5em wide: fits the five-column panel with its rotation */
-  text-align: center;
+  font-size: clamp(3.5rem, 10vw, 8rem); /* HELLO is 2.5em wide: sits on the start side, the figure covers its tail */
+  text-align: start;
 }
 @media (min-width: 48rem) {
   .spread.hero > .hero__start {
     grid-column: span 7;
   }
-  .spread.hero > .hero__end {
+  .spread.hero > .hero__end-cell {
     grid-column: span 5;
   }
 }
@@ -70,7 +103,7 @@
   .spread.hero > .hero__start {
     grid-column: span 8;
   }
-  .spread.hero > .hero__end {
+  .spread.hero > .hero__end-cell {
     grid-column: span 4;
   }
   .hero__bubble {
@@ -405,8 +438,17 @@
     clip-path: inset(0);
   }
 }
+@keyframes rise {
+  from {
+    translate: 0 10%;
+    opacity: 0;
+  }
+}
 html.js:not(.seen) .hero__end {
   animation: wipe-in 350ms var(--ease-out) 250ms both;
+}
+html.js:not(.seen) .hero__figure img {
+  animation: rise 450ms var(--ease-out) 380ms both;
 }
 html[dir='rtl'].js:not(.seen) .hero__end {
   animation-name: wipe-in-rtl;
@@ -434,6 +476,7 @@ html.js:not(.seen) .wwm {
 }
 @media (prefers-reduced-motion: reduce) {
   html.js:not(.seen) .hero__end,
+  html.js:not(.seen) .hero__figure img,
   html.js:not(.seen) .hero__bubble,
   html.js:not(.seen) .hero__avail,
   html.js:not(.seen) .split__door--work,
