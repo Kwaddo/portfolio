@@ -7,6 +7,9 @@
 html {
   -webkit-text-size-adjust: 100%;
   scroll-padding-block-start: calc(var(--nav-h) + 1rem);
+  /* nothing scrolls sideways and nothing rubber-bands past the page */
+  overflow-x: clip;
+  overscroll-behavior: none;
   /* the canvas behind rubber-band overscroll: paper above the page, ink below the ink footer */
   background: linear-gradient(to bottom, var(--paper) 50%, var(--ink) 50%) fixed;
 }
@@ -16,6 +19,7 @@ body {
   flex-direction: column;
   min-block-size: 100svh;
   margin: 0;
+  overflow-x: clip;
   background: var(--paper);
   color: var(--ink);
   font: 400 1rem/1.6 var(--font-body);
@@ -69,7 +73,7 @@ a {
 main {
   display: block;
   flex: 1 0 auto;
-  padding-block: clamp(1rem, 2.5vw, 1.75rem);
+  padding-block: clamp(1rem, 2.5vw, 1.75rem) var(--gutter); /* one deliberate gutter of paper before the footer */
   container-type: inline-size;
   overflow-x: clip;
   overflow-clip-margin: 0;

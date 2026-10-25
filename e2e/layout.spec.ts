@@ -30,6 +30,13 @@ for (const dir of ['ltr', 'rtl'] as const) {
         () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
       );
       expect(overflow).toBeLessThanOrEqual(0);
+      // nothing scrolls past the footer
+      await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
+      const past = await page.evaluate(() => {
+        const footer = document.querySelector('.footer')!.getBoundingClientRect();
+        return document.documentElement.scrollHeight - (footer.bottom + window.scrollY);
+      });
+      expect(past).toBeLessThanOrEqual(1);
     });
   }
 }
