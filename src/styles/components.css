@@ -30,6 +30,50 @@
 .btn[hidden] {
   display: none;
 }
+/* primary play action: a wide inked button with a drawn triangle, pressed into its shadow on hover */
+.btn--play {
+  display: flex;
+  justify-content: center;
+  gap: 0.6rem;
+  inline-size: 100%;
+  min-block-size: 3.5rem;
+  border-width: 4px;
+  background: var(--ink);
+  color: var(--paper);
+  box-shadow: 6px 6px 0 var(--tone);
+  font: 400 1.6rem/1 var(--font-display);
+  letter-spacing: 0.04em;
+  transition:
+    translate var(--t-fast),
+    box-shadow var(--t-fast),
+    background var(--t-fast),
+    color var(--t-fast);
+}
+.btn--play::before {
+  content: '';
+  inline-size: 0.8em;
+  block-size: 0.9em;
+  background: currentColor;
+  clip-path: polygon(0 0, 100% 50%, 0 100%);
+}
+[dir='rtl'] .btn--play::before {
+  clip-path: polygon(100% 0, 0 50%, 100% 100%);
+}
+[dir='rtl'] .btn--play {
+  box-shadow: -6px 6px 0 var(--tone);
+}
+.btn--play:hover,
+.btn--play:focus-visible {
+  translate: 2px 2px;
+  background: var(--paper);
+  color: var(--ink);
+  box-shadow: 2px 2px 0 var(--ink);
+}
+[dir='rtl'] .btn--play:hover,
+[dir='rtl'] .btn--play:focus-visible {
+  translate: -2px 2px;
+  box-shadow: -2px 2px 0 var(--ink);
+}
 
 /* ---------- badges ---------- */
 .badge {
@@ -116,7 +160,20 @@
   stroke-linejoin: round;
 }
 .bubble--shout {
-  padding: 1.5rem 2.75rem;
+  padding: 1.5rem 2.75rem 1.75rem;
+}
+/* balloon: a 4px rule with a hard offset shadow; the hand-inked edge at desktop. scaleX mirrors tail and shadow together in RTL */
+.bubble--shout .bubble__bg {
+  stroke-width: 4px;
+  filter: drop-shadow(var(--shadow-x) var(--shadow-x) 0 var(--ink));
+}
+[dir='rtl'] .bubble--shout .bubble__bg {
+  transform: scaleX(-1);
+}
+@media (min-width: 48rem) {
+  .bubble--shout .bubble__bg {
+    filter: url(#ink) drop-shadow(var(--shadow-x) var(--shadow-x) 0 var(--ink));
+  }
 }
 .bubble--shout .bubble__body {
   font-family: var(--font-display);

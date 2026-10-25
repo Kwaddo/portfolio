@@ -14,7 +14,7 @@
 .hero__bubble {
   align-self: start;
   max-inline-size: 100%;
-  padding: 2.5rem 3.75rem 2.75rem;
+  padding: 2rem 3.25rem 2.25rem 3rem;
 }
 .hero__bubble h1 {
   font-size: clamp(2.5rem, 8vw, 5.5rem);
@@ -63,6 +63,18 @@
   }
   .spread.hero > .hero__end {
     grid-column: span 5;
+  }
+}
+/* mid widths: the name needs the room, the HELLO panel narrows */
+@media (min-width: 48rem) and (max-width: 63.99rem) {
+  .spread.hero > .hero__start {
+    grid-column: span 8;
+  }
+  .spread.hero > .hero__end {
+    grid-column: span 4;
+  }
+  .hero__bubble {
+    padding-inline: 2rem 2.25rem;
   }
 }
 

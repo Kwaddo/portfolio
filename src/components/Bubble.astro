@@ -1,4 +1,6 @@
 ---
+import { BALLOON } from '../lib/balloon';
+
 interface Props {
   shape?: 'round' | 'shout' | 'thought' | 'caption';
   tail?: 'start' | 'center' | 'end';
@@ -16,10 +18,7 @@ const Body = Tag === 'span' || Tag === 'a' ? 'span' : 'div';
   {
     shape === 'shout' && (
       <svg class="bubble__bg" viewBox="0 0 100 60" preserveAspectRatio="none" aria-hidden="true">
-        <polygon
-          points="4,30 12,20 2,10 16,12 14,2 26,10 36,0 42,10 54,2 60,12 72,4 76,14 90,8 86,20 98,22 90,32 100,42 86,44 92,56 78,50 70,60 62,52 50,60 44,50 32,58 28,48 14,54 18,42 4,46 10,36"
-          vector-effect="non-scaling-stroke"
-        />
+        <path d={BALLOON} vector-effect="non-scaling-stroke" />
       </svg>
     )
   }

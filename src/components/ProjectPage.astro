@@ -88,14 +88,18 @@ const solo = data.gallery.length === 1 && data.gallery[0].caption && data.galler
                 </p>
               )
             }
-            <div class="cta-row">
-              {playable === 'embed' && <Bubble shape="shout" as="a" href={`${base}play/`} class="bubble--ink">Play</Bubble>}
-              {playable === 'external' && playUrl && <Bubble shape="shout" as="a" href={playUrl} class="bubble--ink" {...external}>Play</Bubble>}
-              {liveUrl && <a class="btn btn--solid" href={liveUrl} {...external}>Open live site</a>}
-              {downloadUrl && <a class="btn" href={downloadUrl} {...external}>Download</a>}
-              {data.repoUrl && <a class="btn" href={data.repoUrl} {...external}>Source</a>}
-              {data.journey && <a class="btn" href={`${base}journey/`}>Read the journey</a>}
-            </div>
+            {playable === 'embed' && <a class="btn btn--play" href={`${base}play/`}>Play</a>}
+            {playable === 'external' && playUrl && <a class="btn btn--play" href={playUrl} {...external}>Play</a>}
+            {
+              (liveUrl || downloadUrl || data.repoUrl || data.journey) && (
+                <div class="cta-row">
+                  {liveUrl && <a class="btn btn--solid" href={liveUrl} {...external}>Open live site</a>}
+                  {downloadUrl && <a class="btn" href={downloadUrl} {...external}>Download</a>}
+                  {data.repoUrl && <a class="btn" href={data.repoUrl} {...external}>Source</a>}
+                  {data.journey && <a class="btn" href={`${base}journey/`}>Read the journey</a>}
+                </div>
+              )
+            }
           </div>
         </Panel>
       </aside>
