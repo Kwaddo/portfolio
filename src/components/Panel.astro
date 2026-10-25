@@ -8,12 +8,13 @@ interface Props {
   tone?: 'fine' | 'mid' | 'coarse' | 'grad' | 'hatch';
   shadow?: boolean;
   inked?: boolean;
+  fill?: boolean;
   href?: string;
   index?: number;
   class?: string;
   as?: 'div' | 'article' | 'li' | 'section';
 }
-const { w, tall = false, bleed, tilt = false, weight = 3, tone, shadow = false, inked = false, href, index, class: cls, as = 'div' } = Astro.props;
+const { w, tall = false, bleed, tilt = false, weight = 3, tone, shadow = false, inked = false, fill = false, href, index, class: cls, as = 'div' } = Astro.props;
 const Tag = href ? 'a' : as;
 const toneClass = tone === 'hatch' ? 'hatch' : tone ? `tone-${tone}` : undefined;
 ---
@@ -27,6 +28,7 @@ const toneClass = tone === 'hatch' ? 'hatch' : tone ? `tone-${tone}` : undefined
     weight !== 3 && `panel--weight-${weight}`,
     shadow && 'panel--shadow',
     inked && 'panel--inked',
+    fill && 'panel--fill',
     cls,
   ]}
   href={href}

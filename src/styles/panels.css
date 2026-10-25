@@ -10,6 +10,10 @@
 .spread > * {
   grid-column: span 12;
 }
+/* panels in a row share a height; frames keep sizing to their image */
+.spread > .panel {
+  align-self: stretch;
+}
 .spread__label {
   grid-column: span 12;
 }
@@ -44,6 +48,13 @@
     grid-column: 5 / -1;
     grid-row: span 2;
     align-self: stretch;
+  }
+  /* quad: one tall feature and four small panels in two rows; a strip over 2-up below 64rem */
+  .spread--feature-quad > :not(.spread__label):not(.sfx) {
+    grid-column: span 6;
+  }
+  .spread--feature-quad > :not(.spread__label):not(.sfx):first-of-type {
+    grid-column: span 12;
   }
   .spread--stack > :not(.spread__label):not(.sfx) {
     grid-column: span 12;
@@ -81,6 +92,16 @@
 .stack > h2 + .spread > .sfx {
   inset-block-start: -0.45em;
   padding-block-start: 0.15em;
+}
+@media (min-width: 64rem) {
+  .spread--feature-quad > :not(.spread__label):not(.sfx) {
+    grid-column: span 3;
+  }
+  .spread--feature-quad > :not(.spread__label):not(.sfx):first-of-type {
+    grid-column: span 6;
+    grid-row: span 2;
+    align-self: stretch;
+  }
 }
 .spread--slant {
   --slant: 5deg;
@@ -121,7 +142,7 @@
 .panel__media {
   position: relative;
   z-index: 1;
-  aspect-ratio: 16 / 10;
+  aspect-ratio: 16 / 9;
   overflow: hidden;
   border-block-end: inherit;
   border-block-end-width: 3px;
@@ -142,9 +163,16 @@
 .panel__letter {
   position: relative;
   z-index: 1;
-  font: 400 clamp(5rem, 12vw, 7rem) / 1 var(--font-display);
+  font: 400 clamp(7rem, 16vw, 11rem) / 1 var(--font-display);
   color: transparent;
-  -webkit-text-stroke: 3px var(--ink);
+  -webkit-text-stroke: 4px var(--ink);
+}
+/* the fallback reads as a drawn panel: a burst behind the letter, always on */
+.panel__initial > .speed {
+  inset: -30%;
+  opacity: 0.4;
+  background: repeating-conic-gradient(from 0deg at 50% 50%, currentColor 0deg 1deg, transparent 1deg 7deg);
+  mask-image: radial-gradient(circle at 50% 50%, transparent 18%, #000 70%);
 }
 .panel__body {
   position: relative;
@@ -179,6 +207,18 @@
   gap: 0.5rem;
 }
 
+/* fill: a stretched panel grows its media to its box instead of leaving paper under the text */
+@media (min-width: 48rem) {
+  .panel--fill > .panel__media {
+    flex: 1 1 auto; /* grows into a stretched box, never below its ratio */
+  }
+  /* the feature never drives its rows: the panels beside it do */
+  :is(.spread--feature-start, .spread--feature-end, .spread--feature-quad) > .panel--fill:first-of-type > .panel__media {
+    flex-basis: 0;
+    aspect-ratio: auto;
+    min-block-size: 12rem;
+  }
+}
 /* bleed: the panel runs to the viewport edge and loses that border */
 @media (min-width: 48rem) {
   .panel--bleed-end {

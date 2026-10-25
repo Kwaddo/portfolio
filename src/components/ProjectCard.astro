@@ -19,12 +19,13 @@ interface Props {
   tilt?: boolean;
   index?: number;
   confidential?: boolean;
+  fill?: boolean;
 }
-const { href, title, summary, status, cover, coverAlt, meta, level = 3, w, tall = false, tilt = false, index, confidential = false } = Astro.props;
+const { href, title, summary, status, cover, coverAlt, meta, level = 3, w, tall = false, tilt = false, index, confidential = false, fill = true } = Astro.props;
 const Tag = level === 2 ? 'h2' : 'h3';
 const letter = title.trim().charAt(0).toUpperCase();
 ---
-<Panel href={href} w={w} tall={tall} tilt={tilt} index={index} shadow>
+<Panel href={href} w={w} tall={tall} tilt={tilt} index={index} fill={fill} shadow>
   {
     cover ? (
       <div class="panel__media">
@@ -33,6 +34,7 @@ const letter = title.trim().charAt(0).toUpperCase();
     ) : (
       <div class="panel__media panel__initial" aria-hidden="true">
         <span class={confidential ? 'hatch' : 'tone-coarse'} aria-hidden="true"></span>
+        <span class="speed" aria-hidden="true"></span>
         <span class="panel__letter">{letter}</span>
       </div>
     )
