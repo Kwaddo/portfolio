@@ -10,6 +10,9 @@ html {
 }
 
 body {
+  display: flex;
+  flex-direction: column;
+  min-block-size: 100svh;
   margin: 0;
   background: var(--paper);
   color: var(--ink);
@@ -63,6 +66,7 @@ a {
 
 main {
   display: block;
+  flex: 1 0 auto;
   padding-block: clamp(1.5rem, 4vw, 3rem);
 }
 .wrap {
@@ -117,7 +121,8 @@ main {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
-  margin: 0;
+  margin-block-end: 0;
+  margin-inline: 0;
   padding: 0;
   list-style: none;
 }
