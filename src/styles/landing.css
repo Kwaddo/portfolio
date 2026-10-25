@@ -1,0 +1,206 @@
+/* ---------- hero ---------- */
+.hero {
+  position: relative;
+  display: grid;
+  gap: 1rem;
+  padding-block: clamp(1rem, 4vw, 3rem) 2.5rem;
+  /* clip the speed lines but leave room for the shout bubble's outline, which overhangs its box */
+  overflow: clip;
+  overflow-clip-margin: 2rem;
+}
+.hero__speed {
+  inset: -60% -30%;
+  opacity: 0.1;
+  color: var(--ink);
+  mask-image: radial-gradient(circle at 25% 50%, transparent 10%, #000 55%, transparent 80%);
+}
+.hero__bubble {
+  justify-self: start;
+  max-inline-size: 100%;
+  margin-inline-start: 0.75rem;
+}
+.hero__bubble h1 {
+  font-size: clamp(2.5rem, 8vw, 5.5rem);
+}
+.hero__bubble .hero__role {
+  margin-block-start: 0.25rem;
+  font: 400 clamp(1.1rem, 2.4vw, 1.6rem) / 1.1 var(--font-display);
+  letter-spacing: 0.08em;
+  color: var(--ink);
+}
+.hero__avail {
+  position: relative;
+  z-index: 1;
+  max-inline-size: var(--measure);
+  color: var(--tone);
+}
+
+/* ---------- doors ---------- */
+.split {
+  --cut: 4rem;
+  display: grid;
+  grid-template-columns: 1fr;
+}
+.split__door {
+  position: relative;
+  display: grid;
+  align-content: end;
+  gap: 0.75rem;
+  min-block-size: 18rem;
+  overflow: hidden;
+  padding: clamp(1.5rem, 5vw, 3rem);
+  text-decoration: none;
+  isolation: isolate;
+}
+.split__door > * {
+  position: relative;
+  z-index: 1;
+}
+.split__door > .tone-mid,
+.split__door > .sfx,
+.split__door > .speed {
+  z-index: 0;
+}
+.split__door .sfx {
+  inset-block-start: auto;
+  inset-block-end: -0.1em;
+  font-size: clamp(4.5rem, 19vw, 12rem);
+}
+.split__door .sfx > span {
+  translate: -0.12em 0;
+}
+.split__door--work {
+  background: var(--paper);
+  color: var(--ink);
+  border-block: var(--rule);
+}
+.split__door--personal {
+  background: var(--ink);
+  color: var(--paper);
+}
+.split__door h2 {
+  font-size: clamp(3rem, 12vw, 7rem);
+  line-height: 0.9;
+}
+.split__door p {
+  max-inline-size: 24ch;
+}
+.split__door .speed {
+  inset: -40%;
+  mask-image: radial-gradient(circle at 50% 70%, transparent 20%, #000 70%);
+}
+.split__door:hover .speed,
+.split__door:focus-visible .speed {
+  opacity: 0.16;
+}
+.split__door:focus-visible {
+  outline: 4px solid currentColor;
+  outline-offset: -10px;
+}
+.split__door--work:hover,
+.split__door--work:focus-visible {
+  background: var(--ink);
+  color: var(--paper);
+}
+.split__door--work:hover .sfx > span,
+.split__door--work:focus-visible .sfx > span {
+  -webkit-text-stroke-color: var(--paper);
+}
+.split__door--personal:hover,
+.split__door--personal:focus-visible {
+  background: var(--paper);
+  color: var(--ink);
+}
+.split__door--personal:hover .sfx > span,
+.split__door--personal:focus-visible .sfx > span {
+  -webkit-text-stroke-color: var(--ink);
+}
+@media (min-width: 48rem) {
+  .split {
+    grid-template-columns: 1fr 1fr;
+    min-block-size: min(32rem, 70svh);
+  }
+  .split__door--work {
+    padding-inline-end: calc(var(--cut) + 2rem);
+    clip-path: polygon(0 0, 100% 0, calc(100% - var(--cut)) 100%, 0 100%);
+  }
+  .split__door--personal {
+    margin-inline-start: calc(var(--cut) * -1);
+    padding-inline-start: calc(var(--cut) + 2rem);
+    clip-path: polygon(var(--cut) 0, 100% 0, 100% 100%, 0 100%);
+  }
+  [dir='rtl'] .split__door--work {
+    clip-path: polygon(var(--cut) 0, 100% 0, 100% 100%, 0 100%);
+  }
+  [dir='rtl'] .split__door--personal {
+    clip-path: polygon(0 0, 100% 0, calc(100% - var(--cut)) 100%, 0 100%);
+  }
+}
+
+/* ---------- work with me: three panels ---------- */
+.wwm {
+  padding-block: 3rem 1rem;
+}
+.wwm__list {
+  display: grid;
+  gap: 0.5rem;
+  margin: 0;
+  padding-inline-start: 1.25rem;
+}
+.wwm .panel__body {
+  gap: 0.75rem;
+}
+
+/* ---------- opening sequence: once per session, JS only, never under reduced motion ---------- */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes slide-start {
+  from {
+    translate: -8% 0;
+    opacity: 0;
+  }
+}
+@keyframes slide-end {
+  from {
+    translate: 8% 0;
+    opacity: 0;
+  }
+}
+html.js:not(.seen) .hero__speed {
+  animation: fade-in 200ms var(--ease-out) both;
+}
+html.js:not(.seen) .hero__bubble {
+  animation: pop 180ms var(--ease-snap) 150ms both;
+}
+html.js:not(.seen) .hero__avail {
+  animation: fade-in 150ms var(--ease-out) 300ms both;
+}
+html.js:not(.seen) .split__door--work {
+  animation: slide-start 350ms var(--ease-out) 350ms both;
+}
+html.js:not(.seen) .split__door--personal {
+  animation: slide-end 350ms var(--ease-out) 350ms both;
+}
+[dir='rtl'] html.js:not(.seen) .split__door--work,
+html[dir='rtl'].js:not(.seen) .split__door--work {
+  animation-name: slide-end;
+}
+html[dir='rtl'].js:not(.seen) .split__door--personal {
+  animation-name: slide-start;
+}
+html.js:not(.seen) .wwm {
+  animation: fade-in 200ms var(--ease-out) 700ms both;
+}
+@media (prefers-reduced-motion: reduce) {
+  html.js:not(.seen) .hero__speed,
+  html.js:not(.seen) .hero__bubble,
+  html.js:not(.seen) .hero__avail,
+  html.js:not(.seen) .split__door--work,
+  html.js:not(.seen) .split__door--personal,
+  html.js:not(.seen) .wwm {
+    animation: none;
+  }
+}

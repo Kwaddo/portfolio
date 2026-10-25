@@ -201,23 +201,6 @@ a.bubble--ink:focus-visible {
   margin-block-start: 0.35rem;
   color: var(--ink);
 }
-
-.hero {
-  padding-block-end: 1.5rem;
-}
-
-/* ---------- work with me, facts, chapters ---------- */
-.wwm {
-  display: grid;
-  gap: 1rem;
-  padding-block: 3rem 1rem;
-}
-.wwm__list {
-  display: grid;
-  gap: 0.5rem;
-  margin: 0;
-  padding-inline-start: 1.25rem;
-}
 .email {
   display: flex;
   flex-wrap: wrap;
