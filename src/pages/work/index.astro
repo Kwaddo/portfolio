@@ -1,6 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import Base from '../../layouts/Base.astro';
+import Spread from '../../components/Spread.astro';
 import ProjectCard from '../../components/ProjectCard.astro';
 import Timeline from '../../components/Timeline.astro';
 import { byOrder, published } from '../../lib/content';
@@ -10,11 +11,13 @@ const work = byOrder(published(await getCollection('work')));
 ---
 <Base title="Work" description="Roles and systems Ali Khalaf has worked on. Some of it is confidential, so those pages say little on purpose.">
   <div class="wrap stack">
-    <h1>Work</h1>
-    <p class="lede">Roles and the systems behind them. Some of it is confidential, so those pages say little on purpose.</p>
-    <div class="panel-grid">
+    <header class="page-head">
+      <h1>Work</h1>
+      <p class="lede">Roles and the systems behind them. Some of it is confidential, so those pages say little on purpose.</p>
+    </header>
+    <Spread layout="feature-start" label="Roles" sfx="WORK">
       {
-        work.map((entry) => (
+        work.map((entry, i) => (
           <ProjectCard
             level={2}
             href={`/work/${entry.id}/`}
@@ -23,10 +26,12 @@ const work = byOrder(published(await getCollection('work')));
             meta={`${entry.data.role} · ${entry.data.period}`}
             cover={entry.data.cover}
             coverAlt={entry.data.coverAlt}
+            confidential={entry.data.confidential}
+            index={i}
           />
         ))
       }
-    </div>
+    </Spread>
     <section class="stack" aria-labelledby="timeline-title">
       <h2 id="timeline-title">Timeline</h2>
       <Timeline entries={timeline} />

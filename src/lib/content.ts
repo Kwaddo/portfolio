@@ -18,3 +18,11 @@ export const nextJourney = (refs: JourneyRef[], kind: JourneyRef['kind'], id: st
   const i = list.findIndex((r) => r.kind === kind && r.id === id);
   return i === -1 ? undefined : list[i + 1];
 };
+
+export const nextProject = (refs: JourneyRef[], kind: JourneyRef['kind'], id: string): JourneyRef | undefined => {
+  const same = refs.filter((r) => r.kind === kind);
+  const i = same.findIndex((r) => r.id === id);
+  if (i === -1) return undefined;
+  if (i + 1 < same.length) return same[i + 1];
+  return refs.find((r) => r.kind !== kind);
+};

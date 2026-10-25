@@ -78,3 +78,11 @@ h3 {
 [dir='rtl'] .chips li {
   box-shadow: -3px 3px 0 var(--ink);
 }
+
+.page-head {
+  display: grid;
+  gap: 1rem;
+}
+h2 > .ink-draw {
+  margin-block-start: 0.2em;
+}

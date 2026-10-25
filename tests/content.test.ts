@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import { byOrder, journeyChapters, nextJourney, published, type JourneyRef } from '../src/lib/content';
+import { byOrder, journeyChapters, nextJourney, nextProject, published, type JourneyRef } from '../src/lib/content';
 
 const e = (id: string, data: Record<string, unknown>) => ({ id, data });
 
@@ -44,5 +44,23 @@ describe('nextJourney', () => {
   });
   test('returns undefined for an unknown id', () => {
     expect(nextJourney(refs, 'games', 'nope')).toBeUndefined();
+  });
+});
+
+describe('nextProject', () => {
+  const refs: JourneyRef[] = [
+    { kind: 'games', id: 'a', title: 'A', journey: false },
+    { kind: 'games', id: 'b', title: 'B', journey: false },
+    { kind: 'lab', id: 'c', title: 'C', journey: false },
+  ];
+  test('returns the next entry of the same kind', () => {
+    expect(nextProject(refs, 'games', 'a')?.id).toBe('b');
+  });
+  test('wraps to the first entry of the other kind at the end of a list', () => {
+    expect(nextProject(refs, 'games', 'b')?.id).toBe('c');
+    expect(nextProject(refs, 'lab', 'c')?.id).toBe('a');
+  });
+  test('returns undefined for an unknown id', () => {
+    expect(nextProject(refs, 'games', 'zzz')).toBeUndefined();
   });
 });

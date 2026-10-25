@@ -99,7 +99,8 @@ const image = canonical(ogImageFor(Astro.url.pathname));
               }
             }
           },
-          { rootMargin: '0px 0px -10% 0px' },
+          // Huge top margin: anything scrolled past (End key, anchor jump, reload mid-page) counts as seen.
+          { rootMargin: '100000px 0px -10% 0px' },
         );
         els.forEach((el) => io.observe(el));
       };

@@ -1,7 +1,9 @@
 ---
 import { Image } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
+import Panel from './Panel.astro';
 import StatusBadge from './StatusBadge.astro';
+import Bubble from './Bubble.astro';
 
 interface Props {
   href: string;
@@ -12,23 +14,37 @@ interface Props {
   coverAlt?: string;
   meta?: string;
   level?: 2 | 3;
+  w?: 1 | 2 | 3;
+  tall?: boolean;
+  tilt?: boolean;
+  index?: number;
+  confidential?: boolean;
 }
-const { href, title, summary, status, cover, coverAlt, meta, level = 3 } = Astro.props;
+const { href, title, summary, status, cover, coverAlt, meta, level = 3, w, tall = false, tilt = false, index, confidential = false } = Astro.props;
 const Tag = level === 2 ? 'h2' : 'h3';
+const letter = title.trim().charAt(0).toUpperCase();
 ---
-<a class="panel" href={href}>
+<Panel href={href} w={w} tall={tall} tilt={tilt} index={index} tone={confidential ? 'hatch' : undefined} shadow>
   {
-    cover && (
+    cover ? (
       <div class="panel__media">
         <Image src={cover} alt={coverAlt ?? ''} widths={[400, 800]} sizes="(min-width: 48rem) 33vw, 100vw" />
+      </div>
+    ) : (
+      <div class="panel__media panel__initial" aria-hidden="true">
+        <span class="tone-coarse"></span>
+        <span class="panel__letter">{letter}</span>
       </div>
     )
   }
   <div class="panel__body">
-    {status && <StatusBadge status={status} />}
+    <div class="panel__caps">
+      {status && <StatusBadge status={status} />}
+      {confidential && <Bubble shape="caption" as="span">Confidential</Bubble>}
+    </div>
     <Tag class="panel__title">{title}</Tag>
     {meta && <p class="panel__meta">{meta}</p>}
     <p class="panel__text">{summary}</p>
     <span class="panel__more" aria-hidden="true">Read more</span>
   </div>
-</a>
+</Panel>

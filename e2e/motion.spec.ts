@@ -15,8 +15,7 @@ test.describe('reduced motion', () => {
   });
 });
 
-// Skipped until Task 2 puts data-reveal on the panels; then switch back to test().
-test.fixme('panels reveal as they scroll into view', async ({ page }) => {
+test('panels reveal as they scroll into view', async ({ page }) => {
   await page.goto('/personal/');
   const count = await page.locator('[data-reveal]').count();
   expect(count).toBeGreaterThan(0);

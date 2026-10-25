@@ -44,7 +44,7 @@
 .has-tone {
   position: relative;
 }
-.has-tone > :not(.tone-fine):not(.tone-mid):not(.tone-coarse):not(.tone-grad):not(.hatch):not(.sfx) {
+.has-tone > :not(.tone-fine):not(.tone-mid):not(.tone-coarse):not(.tone-grad):not(.hatch):not(.sfx):not(.spread__label) {
   position: relative;
   z-index: 1;
 }
