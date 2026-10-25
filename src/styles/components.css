@@ -267,7 +267,7 @@ a.bubble--ink:focus-visible {
   font: 400 1rem/1 var(--font-display);
   letter-spacing: 0.25em;
   text-transform: uppercase;
-  color: var(--tone);
+  color: var(--ink);
 }
 .chapter__num {
   position: absolute;
