@@ -39,6 +39,10 @@ const ratio = frameWidth && frameHeight ? `${frameWidth} / ${frameHeight}` : '16
       frame.setAttribute('allowfullscreen', '');
       frame.tabIndex = 0;
       // The game takes the keys: focus the frame now, again once it has loaded, and whenever the player is pressed.
+      // While it holds focus the page does not scroll, so keys the game lets through cannot move the page.
+      const lock = (on: boolean) => document.documentElement.classList.toggle('is-playing', on);
+      frame.addEventListener('focus', () => lock(true));
+      frame.addEventListener('blur', () => lock(false));
       frame.addEventListener('load', () => frame.focus());
       stage.addEventListener('pointerdown', () => frame.focus());
       stage.replaceChildren(frame);

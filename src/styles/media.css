@@ -283,10 +283,13 @@ a.next-panel:focus-visible > .sfx {
 .play__panel .player {
   border: 0;
 }
-/* the player holds the keys: a paper ring on the stage while the frame has focus */
+/* the player holds the keys: a paper ring on the stage while the frame has focus, and the page stays put */
 .player__stage:focus-within {
   outline: 3px solid var(--paper);
   outline-offset: -3px;
+}
+html.is-playing {
+  overflow: hidden;
 }
 .player__poster {
   position: absolute;

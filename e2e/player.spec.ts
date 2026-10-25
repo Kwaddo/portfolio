@@ -15,6 +15,8 @@ test('the game iframe exists only after clicking Play, and is sandboxed', async 
 
 test('the player keeps the keys until the visitor clicks outside it', async ({ page }) => {
   await page.route('https://kwaddo.github.io/**', (route) => route.abort());
+  // a short viewport so the page is scrollable on every project
+  await page.setViewportSize({ width: 360, height: 500 });
   await page.goto('/personal/games/smobb/play/');
   await page.getByRole('button', { name: /^Play/ }).click();
   await expect(page.locator('iframe')).toBeFocused();
