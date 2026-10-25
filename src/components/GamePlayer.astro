@@ -36,10 +36,14 @@ const ratio = frameWidth && frameHeight ? `${frameWidth} / ${frameHeight}` : '16
       frame.title = root.dataset.title!;
       frame.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-pointer-lock allow-fullscreen');
       frame.setAttribute('allow', 'fullscreen');
+      frame.setAttribute('allowfullscreen', '');
       frame.tabIndex = 0;
+      // The game takes the keys: focus the frame now, again once it has loaded, and whenever the player is pressed.
+      frame.addEventListener('load', () => frame.focus());
+      stage.addEventListener('pointerdown', () => frame.focus());
       stage.replaceChildren(frame);
       frame.focus();
-      fullscreen.hidden = false;
+      fullscreen.hidden = !document.fullscreenEnabled;
       // Games that declare a native size are scaled to fit the stage instead of being clipped.
       const w = Number(root.dataset.width);
       const h = Number(root.dataset.height);
@@ -47,21 +51,17 @@ const ratio = frameWidth && frameHeight ? `${frameWidth} / ${frameHeight}` : '16
         frame.classList.add('player__frame--fixed');
         frame.style.width = `${w}px`;
         frame.style.height = `${h}px`;
+        // Fits the stage, which is the fullscreen element too, so the game fills the screen at its ratio.
         const fit = () => {
-          if (document.fullscreenElement === frame) {
-            frame.style.transform = '';
-            return;
-          }
           const s = Math.min(stage.clientWidth / w, stage.clientHeight / h);
           frame.style.transform = `scale(${s})`;
         };
         fit();
         new ResizeObserver(fit).observe(stage);
-        document.addEventListener('fullscreenchange', fit);
       }
     });
     fullscreen.addEventListener('click', () => {
-      stage.querySelector('iframe')?.requestFullscreen().catch(() => {});
+      stage.requestFullscreen().catch(() => {});
     });
   });
 </script>

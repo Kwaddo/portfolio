@@ -252,22 +252,41 @@ a.next-panel:focus-visible > .sfx {
   aspect-ratio: 16 / 9;
   background: var(--ink);
 }
-/* play page: the stage is sized to the viewport so the whole game is visible without scrolling */
+/* play page: header and player share one block sized to the viewport, so the whole game is visible without scrolling
+   and the title, the back link and the frame share the same start and end edges */
+.play {
+  inline-size: min(100%, calc((100svh - 16rem) * var(--play-ratio, 1.7778)));
+  margin-inline: auto;
+}
 .play__head {
   display: flex;
   flex-wrap: wrap;
+  justify-content: space-between;
   align-items: baseline;
-  gap: 0.5rem 1.5rem;
+  gap: 0.5rem 1rem;
+  margin-block-end: clamp(0.875rem, 2vw, 1.5rem);
+  padding-block-end: 0.5rem;
+  border-block-end: var(--rule);
 }
 .play__head h1 {
   font-size: clamp(1.75rem, 4vw, 2.5rem);
 }
-.play .play__panel {
-  margin-inline: auto;
-  inline-size: min(100%, calc((100svh - 16rem) * var(--play-ratio, 1.7778)));
+@media (max-width: 47.99rem) {
+  .play {
+    inline-size: 100%;
+  }
+  .play__head {
+    flex-direction: column-reverse;
+    align-items: start;
+  }
 }
 .play__panel .player {
   border: 0;
+}
+/* the player holds the keys: a paper ring on the stage while the frame has focus */
+.player__stage:focus-within {
+  outline: 3px solid var(--paper);
+  outline-offset: -3px;
 }
 .player__poster {
   position: absolute;
