@@ -41,9 +41,15 @@ const work = defineCollection({
         draft: z.boolean().default(false),
         cover: image().optional(),
         coverAlt: z.string().optional(),
+        gallery: z
+          .array(z.object({ src: image(), alt: z.string(), caption: z.string().optional() }))
+          .default([]),
       })
       .refine(needsCoverAlt, { message: 'coverAlt is required when cover is set', path: ['coverAlt'] })
-      .refine((d) => !(d.confidential && d.cover), { message: 'confidential entries must not have a cover', path: ['cover'] }),
+      .refine((d) => !(d.confidential && (d.cover || d.gallery.length > 0)), {
+        message: 'confidential entries must not have a cover or gallery',
+        path: ['cover'],
+      }),
 });
 
 const games = defineCollection({

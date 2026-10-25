@@ -43,27 +43,31 @@
 
 /* ---------- timeline ---------- */
 .timeline {
+  position: relative;
   display: grid;
-  gap: 1rem;
+  gap: 1.25rem;
   margin-block-end: 0;
   margin-inline: 0;
   padding: 0;
-  padding-inline-start: 1rem;
-  border-inline-start: var(--rule);
+  padding-inline-start: 1.25rem;
   list-style: none;
+}
+.timeline::before {
+  content: '';
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: 0;
+  inline-size: 3px;
+  background: var(--ink);
+  transform-origin: top;
 }
 .timeline__item {
   display: grid;
-  gap: 0.25rem 1.5rem;
-}
-@media (min-width: 40rem) {
-  .timeline__item {
-    grid-template-columns: 11rem 1fr;
-  }
+  gap: 0.35rem 1.5rem;
+  align-items: start;
 }
 .timeline__period {
-  color: var(--tone);
-  font-size: 0.9rem;
+  justify-self: start;
 }
 .timeline__title {
   font-weight: 700;
@@ -73,4 +77,50 @@
 }
 .timeline__summary {
   color: var(--tone);
+}
+@media (min-width: 40rem) {
+  .timeline:not(.timeline--alt) .timeline__item {
+    grid-template-columns: 11rem 1fr;
+  }
+}
+/* alternating layout: spine down the middle, entries either side of it */
+@media (min-width: 48rem) {
+  .timeline--alt {
+    padding-inline-start: 0;
+    grid-template-columns: 1fr 3rem 1fr;
+    column-gap: 0;
+  }
+  .timeline--alt::before {
+    inset-inline-start: calc(50% - 1.5px);
+  }
+  .timeline--alt .timeline__item {
+    grid-template-columns: 1fr;
+    padding: 1rem;
+    border: var(--rule);
+    background: var(--paper);
+  }
+  .timeline--alt .timeline__item:nth-child(odd) {
+    grid-column: 1;
+    text-align: end;
+  }
+  .timeline--alt .timeline__item:nth-child(odd) .timeline__period {
+    justify-self: end;
+  }
+  .timeline--alt .timeline__item:nth-child(even) {
+    grid-column: 3;
+  }
+  /* the spine draws in once, top to bottom, when the list scrolls into view */
+  html.js .timeline--alt::before {
+    scale: 1 0;
+    transition: scale var(--t-slow) var(--ease-out);
+  }
+  html.js .timeline--alt.is-in::before {
+    scale: 1 1;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  html.js .timeline--alt::before {
+    scale: 1 1;
+    transition: none;
+  }
 }

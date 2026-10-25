@@ -4,6 +4,7 @@ import Base from '../../layouts/Base.astro';
 import Spread from '../../components/Spread.astro';
 import ProjectCard from '../../components/ProjectCard.astro';
 import Timeline from '../../components/Timeline.astro';
+import InkRule from '../../components/InkRule.astro';
 import { byOrder, published } from '../../lib/content';
 
 const timeline = published(await getCollection('timeline'));
@@ -32,9 +33,10 @@ const work = byOrder(published(await getCollection('work')));
         ))
       }
     </Spread>
+    <InkRule variant="splat-a" />
     <section class="stack" aria-labelledby="timeline-title">
-      <h2 id="timeline-title">Timeline</h2>
-      <Timeline entries={timeline} />
+      <h2 id="timeline-title">Timeline<InkRule variant="draw" /></h2>
+      <Timeline entries={timeline} alternate />
     </section>
   </div>
 </Base>

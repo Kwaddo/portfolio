@@ -1,7 +1,10 @@
 ---
 import { getCollection, render } from 'astro:content';
-import Frame from '../../components/Frame.astro';
 import Base from '../../layouts/Base.astro';
+import Frame from '../../components/Frame.astro';
+import Bubble from '../../components/Bubble.astro';
+import Sfx from '../../components/Sfx.astro';
+import InkRule from '../../components/InkRule.astro';
 import { published } from '../../lib/content';
 
 export async function getStaticPaths() {
@@ -16,11 +19,42 @@ const { Content } = await render(entry);
 <Base title={data.title} description={data.summary}>
   <article class="wrap stack">
     <p><a class="back" href="/work/">All work</a></p>
-    <h1>{data.title}</h1>
-    <p class="lede">{data.role} · {data.period}</p>
-    {data.stack.length > 0 && <ul class="chips">{data.stack.map((s) => <li>{s}</li>)}</ul>}
-    {data.confidential && <p class="notice">This work is confidential. This page lists only my role and dates.</p>}
-    {data.cover && <Frame src={data.cover} alt={data.coverAlt!} eager sizes="(min-width: 72rem) 68rem, 100vw" />}
-    <div class="prose"><Content /></div>
+    <header class="spread hero-spread has-tone">
+      <Sfx word="WORK" rotate="-5deg" />
+      <div class="hero-spread__text">
+        <h1>{data.title}</h1>
+        <div class="panel__caps">
+          <Bubble shape="caption" as="span">{data.role}</Bubble>
+          <Bubble shape="caption" as="span">{data.period}</Bubble>
+        </div>
+        {data.stack.length > 0 && <ul class="chips" aria-label="Stack">{data.stack.map((s) => <li>{s}</li>)}</ul>}
+      </div>
+      {
+        data.cover && (
+          <div class="hero-spread__media">
+            <Frame src={data.cover} alt={data.coverAlt!} eager sizes="(min-width: 48rem) 42vw, 100vw" />
+          </div>
+        )
+      }
+    </header>
+    {
+      data.confidential && (
+        <p class="notice has-tone">
+          <span class="hatch" aria-hidden="true"></span>
+          <span>This work is confidential. This page lists only my role and dates.</span>
+        </p>
+      )
+    }
+    <div class="prose dropcap"><Content /></div>
+    {
+      data.gallery.length > 0 && (
+        <section aria-labelledby="gallery" class="stack">
+          <h2 id="gallery">Screenshots<InkRule variant="draw" /></h2>
+          <div class="gallery">
+            {data.gallery.map((g, i) => <Frame src={g.src} alt={g.alt} caption={g.caption} tilt={i % 3 === 1} />)}
+          </div>
+        </section>
+      )
+    }
   </article>
 </Base>

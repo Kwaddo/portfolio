@@ -98,6 +98,10 @@
   .gallery > .frame--landscape {
     grid-column: span 8;
   }
+  /* exactly two frames: a 2-up spread */
+  .gallery:has(> :nth-child(2):last-child) > .frame--landscape {
+    grid-column: span 6;
+  }
 }
 
 /* project hero */
