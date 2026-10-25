@@ -5,6 +5,7 @@ import Frame from '../../components/Frame.astro';
 import Bubble from '../../components/Bubble.astro';
 import Sfx from '../../components/Sfx.astro';
 import Spread from '../../components/Spread.astro';
+import Panel from '../../components/Panel.astro';
 import InkRule from '../../components/InkRule.astro';
 import { published } from '../../lib/content';
 
@@ -24,11 +25,7 @@ const { Content } = await render(entry);
       <Sfx word="WORK" rotate="-5deg" />
       <div class="hero-spread__text">
         <h1>{data.title}</h1>
-        <div class="panel__caps">
-          <Bubble shape="caption" as="span">{data.role}</Bubble>
-          <Bubble shape="caption" as="span">{data.period}</Bubble>
-        </div>
-        {data.stack.length > 0 && <ul class="chips" aria-label="Stack">{data.stack.map((s) => <li>{s}</li>)}</ul>}
+        <p class="lede">{data.summary}</p>
       </div>
       {
         data.cover && (
@@ -46,7 +43,20 @@ const { Content } = await render(entry);
         </p>
       )
     }
-    <div class="prose dropcap"><Content /></div>
+    <div class="project">
+      <aside class="project__aside">
+        <Panel weight={4} tone="fine" shadow class="facts-panel">
+          <div class="panel__body">
+            <div class="panel__caps">
+              <Bubble shape="caption" as="span">{data.role}</Bubble>
+              <Bubble shape="caption" as="span">{data.period}</Bubble>
+            </div>
+            {data.stack.length > 0 && <ul class="chips" aria-label="Stack">{data.stack.map((s) => <li>{s}</li>)}</ul>}
+          </div>
+        </Panel>
+      </aside>
+      <div class="project__main prose dropcap"><Content /></div>
+    </div>
     {
       data.gallery.length > 0 && (
         <section aria-labelledby="gallery" class="stack">

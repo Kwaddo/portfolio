@@ -35,6 +35,8 @@ const downloadUrl = 'downloadUrl' in data ? data.downloadUrl : undefined;
 const liveUrl = 'liveUrl' in data ? data.liveUrl : undefined;
 const external = { target: '_blank', rel: 'noopener noreferrer' } as const;
 const letter = data.title.trim().charAt(0).toUpperCase();
+// a lone landscape shot spans eight columns with its caption as a bubble in the remaining four
+const solo = data.gallery.length === 1 && data.gallery[0].caption && data.gallery[0].src.width / data.gallery[0].src.height > 1.2 ? data.gallery[0] : undefined;
 ---
 <Base title={data.title} description={data.summary}>
   <article class="wrap stack">
@@ -45,11 +47,6 @@ const letter = data.title.trim().charAt(0).toUpperCase();
       <div class="hero-spread__text">
         <h1>{data.title}</h1>
         <p class="lede">{data.summary}</p>
-        <div class="panel__caps">
-          <StatusBadge status={data.status} />
-          <Bubble shape="caption" as="span">Last worked {formatMonth(data.lastWorked)}</Bubble>
-        </div>
-        {data.stack.length > 0 && <ul class="chips" aria-label="Stack">{data.stack.map((s) => <li>{s}</li>)}</ul>}
       </div>
       <div class="hero-spread__media">
         {
@@ -68,15 +65,41 @@ const letter = data.title.trim().charAt(0).toUpperCase();
       </div>
     </header>
 
-    <div class="prose dropcap"><Content /></div>
-
-    <div class="cta-row">
-      {playable === 'embed' && <Bubble shape="shout" as="a" href={`${base}play/`} class="bubble--ink">Play</Bubble>}
-      {playable === 'external' && playUrl && <Bubble shape="shout" as="a" href={playUrl} class="bubble--ink" {...external}>Play</Bubble>}
-      {liveUrl && <a class="btn btn--solid" href={liveUrl} {...external}>Open live site</a>}
-      {downloadUrl && <a class="btn" href={downloadUrl} {...external}>Download</a>}
-      {data.repoUrl && <a class="btn" href={data.repoUrl} {...external}>Source</a>}
-      {data.journey && <a class="btn" href={`${base}journey/`}>Read the journey</a>}
+    <div class="project">
+      <aside class="project__aside">
+        <Panel weight={4} tone="fine" shadow class="facts-panel">
+          <div class="panel__body">
+            <div class="panel__caps">
+              <StatusBadge status={data.status} />
+              <Bubble shape="caption" as="span">Last worked {formatMonth(data.lastWorked)}</Bubble>
+            </div>
+            {data.stack.length > 0 && <ul class="chips" aria-label="Stack">{data.stack.map((s) => <li>{s}</li>)}</ul>}
+            {
+              data.collaborators.length > 0 && (
+                <p class="credits">
+                  Built with{' '}
+                  {data.collaborators.map((c, i) => (
+                    <>
+                      {i > 0 && ', '}
+                      {c.url ? <a href={c.url} {...external}>{c.name}</a> : c.name}
+                    </>
+                  ))}
+                  .
+                </p>
+              )
+            }
+            <div class="cta-row">
+              {playable === 'embed' && <Bubble shape="shout" as="a" href={`${base}play/`} class="bubble--ink">Play</Bubble>}
+              {playable === 'external' && playUrl && <Bubble shape="shout" as="a" href={playUrl} class="bubble--ink" {...external}>Play</Bubble>}
+              {liveUrl && <a class="btn btn--solid" href={liveUrl} {...external}>Open live site</a>}
+              {downloadUrl && <a class="btn" href={downloadUrl} {...external}>Download</a>}
+              {data.repoUrl && <a class="btn" href={data.repoUrl} {...external}>Source</a>}
+              {data.journey && <a class="btn" href={`${base}journey/`}>Read the journey</a>}
+            </div>
+          </div>
+        </Panel>
+      </aside>
+      <div class="project__main prose dropcap"><Content /></div>
     </div>
 
     {
@@ -85,27 +108,22 @@ const letter = data.title.trim().charAt(0).toUpperCase();
           <h2 id="gallery">Gallery<InkRule variant="draw" /></h2>
           <Spread layout="stack" as="div" ink>
             <div class="gallery">
-              {data.gallery.map((g, i) => <Frame src={g.src} alt={g.alt} caption={g.caption} tilt={i % 3 === 1} />)}
+              {
+                solo ? (
+                  <>
+                    <Frame src={solo.src} alt={solo.alt} />
+                    <Bubble shape="caption" as="div" class="gallery__cap">{solo.caption}</Bubble>
+                  </>
+                ) : (
+                  data.gallery.map((g, i) => <Frame src={g.src} alt={g.alt} caption={g.caption} tilt={i % 3 === 1} />)
+                )
+              }
             </div>
           </Spread>
         </section>
       )
     }
 
-    {
-      data.collaborators.length > 0 && (
-        <p class="credits">
-          Built with{' '}
-          {data.collaborators.map((c, i) => (
-            <>
-              {i > 0 && ', '}
-              {c.url ? <a href={c.url} {...external}>{c.name}</a> : c.name}
-            </>
-          ))}
-          .
-        </p>
-      )
-    }
     <Devlog items={devlog} />
 
     {
