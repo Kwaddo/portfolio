@@ -1,4 +1,5 @@
 ---
+import Icon from '../../components/Icon.astro';
 import { getCollection, render } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import DateStamp from '../../components/DateStamp.astro';
@@ -28,7 +29,7 @@ const projectHref = !project
 ---
 <Base title={`${formatDay(entry.data.date)} | Journal`} description={firstSentence(entry.body ?? '')}>
   <article class="wrap stack">
-    <p><a class="back" href="/journal/">Journal</a></p>
+    <p><a class="btn btn--back" href="/journal/"><Icon name="arrow-left" />Journal</a></p>
     <DateStamp date={entry.data.date} as="h1" />
     {
       entry.data.tags.length > 0 && (
@@ -40,7 +41,7 @@ const projectHref = !project
       )
     }
     <div class="prose"><Content /></div>
-    {projectHref && <p><a href={projectHref}>About {project}</a></p>}
+    {projectHref && <p><a class="btn" href={projectHref}><Icon name="arrow-right" />About {project}</a></p>}
     {(older || newer) && <nav class="pager" aria-label="More entries">
       {older ? <a class="btn" href={`/journal/${older.id}/`}>Older: {formatDay(older.data.date)}</a> : <span />}
       {newer ? <a class="btn" href={`/journal/${newer.id}/`}>Newer: {formatDay(newer.data.date)}</a> : <span />}

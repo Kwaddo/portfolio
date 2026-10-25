@@ -1,6 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import DateStamp from './DateStamp.astro';
+import Icon from './Icon.astro';
 import { excerpt, newestFirst } from '../lib/journal';
 import { published } from '../lib/content';
 
@@ -22,7 +23,7 @@ const latest = newestFirst(published(await getCollection('journal'))).slice(0, 3
           ))
         }
       </ol>
-      <p><a href="/journal/">All entries</a></p>
+      <p><a class="btn" href="/journal/"><Icon name="arrow-right" />All entries</a></p>
     </section>
   )
 }

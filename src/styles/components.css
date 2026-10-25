@@ -30,6 +30,30 @@
 .btn[hidden] {
   display: none;
 }
+.btn .icon {
+  flex: none;
+  inline-size: 1em;
+  block-size: 1em;
+}
+[dir='rtl'] .icon--flip {
+  transform: scaleX(-1);
+}
+.btn--back {
+  padding: 0.45rem 0.8rem;
+  font-size: 0.75rem;
+}
+.facts__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+.facts__links .btn {
+  padding: 0.25rem 0.55rem;
+  font-size: 0.7rem;
+}
+.chips a {
+  text-decoration: none;
+}
 /* primary play action: a wide inked button with a drawn triangle, pressed into its shadow on hover */
 .btn--play {
   display: flex;
@@ -380,12 +404,4 @@ a.bubble--ink:focus-visible {
   }
 }
 
-.back::before {
-  content: '\2190';
-  display: inline-block;
-  margin-inline-end: 0.4em;
-}
-[dir='rtl'] .back::before {
-  content: '\2192';
-}
 

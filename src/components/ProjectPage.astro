@@ -9,6 +9,7 @@ import Spread from './Spread.astro';
 import Sfx from './Sfx.astro';
 import InkRule from './InkRule.astro';
 import Devlog from './Devlog.astro';
+import Icon from './Icon.astro';
 import { formatMonth } from '../lib/dates';
 import { forProject, newestFirst, toDevlog } from '../lib/journal';
 import { byOrder, nextProject, published, type JourneyRef } from '../lib/content';
@@ -40,7 +41,7 @@ const solo = data.gallery.length === 1 && data.gallery[0].caption && data.galler
 ---
 <Base title={data.title} description={data.summary}>
   <article class="wrap stack">
-    <p><a class="back" href="/personal/">All personal projects</a></p>
+    <p><a class="btn btn--back" href="/personal/"><Icon name="arrow-left" />All personal projects</a></p>
 
     <header class="spread hero-spread has-tone">
       <Sfx word={kind === 'games' ? 'PLAY' : 'LAB'} rotate="-5deg" />
@@ -93,10 +94,10 @@ const solo = data.gallery.length === 1 && data.gallery[0].caption && data.galler
             {
               (liveUrl || downloadUrl || data.repoUrl || data.journey) && (
                 <div class="cta-row">
-                  {liveUrl && <a class="btn btn--solid" href={liveUrl} {...external}>Open live site</a>}
-                  {downloadUrl && <a class="btn" href={downloadUrl} {...external}>Download</a>}
-                  {data.repoUrl && <a class="btn" href={data.repoUrl} {...external}>Source</a>}
-                  {data.journey && <a class="btn" href={`${base}journey/`}>Read the journey</a>}
+                  {liveUrl && <a class="btn btn--solid" href={liveUrl} {...external}><Icon name="external" />Open live site</a>}
+                  {downloadUrl && <a class="btn" href={downloadUrl} {...external}><Icon name="download" />Download</a>}
+                  {data.repoUrl && <a class="btn" href={data.repoUrl} {...external}><Icon name="code" />Source</a>}
+                  {data.journey && <a class="btn" href={`${base}journey/`}><Icon name="arrow-right" />Read the journey</a>}
                 </div>
               )
             }

@@ -53,17 +53,35 @@
   color: var(--paper);
 }
 .footer__inner {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
   gap: 1rem 2rem;
   align-items: center;
-  justify-content: space-between;
 }
 .footer ul {
   display: flex;
-  gap: 1.25rem;
+  flex-wrap: wrap;
+  gap: 0.5rem;
   margin: 0;
   padding: 0;
   list-style: none;
+}
+/* paper-ruled buttons on the ink band */
+.footer .btn {
+  border-color: var(--paper);
+  background: var(--ink);
+  color: var(--paper);
+}
+.footer .btn:hover,
+.footer .btn:focus-visible {
+  background: var(--paper);
+  color: var(--ink);
+}
+@media (min-width: 48rem) {
+  .footer__inner {
+    grid-template-columns: auto 1fr auto;
+  }
+  .footer ul {
+    justify-content: center;
+  }
 }
 

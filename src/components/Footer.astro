@@ -1,17 +1,18 @@
 ---
 import { site } from '../data/site';
+import Icon from './Icon.astro';
 const year = new Date().getFullYear();
 ---
 <footer class="footer on-ink">
   <div class="wrap footer__inner">
     <p>&copy; {year} {site.name}</p>
     <ul>
-      <li><a href={site.links.github} rel="me noopener">GitHub</a></li>
-      <li><a href={site.links.linkedin} rel="me noopener">LinkedIn</a></li>
-      <li><a href="/resume/">Resume</a></li>
-      <li><a href="/uses/">Uses</a></li>
-      <li><a href="/rss.xml">RSS</a></li>
+      <li><a class="btn" href={site.links.github} rel="me noopener"><Icon name="github" />GitHub</a></li>
+      <li><a class="btn" href={site.links.linkedin} rel="me noopener"><Icon name="linkedin" />LinkedIn</a></li>
+      <li><a class="btn" href="/resume/"><Icon name="file" />Resume</a></li>
+      <li><a class="btn" href="/uses/"><Icon name="code" />Uses</a></li>
+      <li><a class="btn" href="/rss.xml"><Icon name="rss" />RSS</a></li>
     </ul>
-    <a href="#main">Back to top</a>
+    <a class="btn" href="#main"><Icon name="arrow-up" />Back to top</a>
   </div>
 </footer>

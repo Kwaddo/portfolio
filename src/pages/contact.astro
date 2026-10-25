@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import WorkWithMe from '../components/WorkWithMe.astro';
+import Icon from '../components/Icon.astro';
 import { site } from '../data/site';
 ---
 <Base title="Contact" description="How to reach Ali Khalaf about roles and freelance projects.">
@@ -10,9 +11,9 @@ import { site } from '../data/site';
   <WorkWithMe />
   <div class="wrap stack">
     <h2>Elsewhere</h2>
-    <ul class="prose">
-      <li><a href={site.links.github} rel="me noopener">GitHub</a></li>
-      <li><a href={site.links.linkedin} rel="me noopener">LinkedIn</a></li>
-    </ul>
+    <p class="cta-row">
+      <a class="btn" href={site.links.github} rel="me noopener"><Icon name="github" />GitHub</a>
+      <a class="btn" href={site.links.linkedin} rel="me noopener"><Icon name="linkedin" />LinkedIn</a>
+    </p>
   </div>
 </Base>

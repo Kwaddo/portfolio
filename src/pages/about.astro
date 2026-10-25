@@ -7,6 +7,7 @@ import InkRule from '../components/InkRule.astro';
 import Frame from '../components/Frame.astro';
 import Panel from '../components/Panel.astro';
 import Sfx from '../components/Sfx.astro';
+import Icon from '../components/Icon.astro';
 import { byOrder, published } from '../lib/content';
 import { site } from '../data/site';
 import { skills } from '../data/skills';
@@ -33,9 +34,9 @@ const portrait = Object.values(portraits)[0]?.default;
         <div><dt>Languages</dt><dd>{skills.languages.join(', ')}</dd></div>
         <div>
           <dt>Elsewhere</dt>
-          <dd>
-            <a href={site.links.github} rel="me noopener">GitHub</a>{' · '}
-            <a href={site.links.linkedin} rel="me noopener">LinkedIn</a>
+          <dd class="facts__links">
+            <a class="btn" href={site.links.github} rel="me noopener"><Icon name="github" />GitHub</a>
+            <a class="btn" href={site.links.linkedin} rel="me noopener"><Icon name="linkedin" />LinkedIn</a>
           </dd>
         </div>
       </dl>

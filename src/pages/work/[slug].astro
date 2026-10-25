@@ -6,6 +6,7 @@ import Bubble from '../../components/Bubble.astro';
 import Sfx from '../../components/Sfx.astro';
 import Spread from '../../components/Spread.astro';
 import Panel from '../../components/Panel.astro';
+import Icon from '../../components/Icon.astro';
 import InkRule from '../../components/InkRule.astro';
 import { published } from '../../lib/content';
 
@@ -20,7 +21,7 @@ const { Content } = await render(entry);
 ---
 <Base title={data.title} description={data.summary}>
   <article class="wrap stack">
-    <p><a class="back" href="/work/">All work</a></p>
+    <p><a class="btn btn--back" href="/work/"><Icon name="arrow-left" />All work</a></p>
     <header class="spread hero-spread has-tone">
       <Sfx word="WORK" rotate="-5deg" />
       <div class="hero-spread__text">
