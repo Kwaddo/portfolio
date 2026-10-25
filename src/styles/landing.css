@@ -146,7 +146,7 @@
   display: grid;
   align-content: end;
   gap: 0.75rem;
-  min-block-size: clamp(16rem, 38vh, 22rem);
+  min-block-size: clamp(17rem, 40vh, 23rem); /* headroom for the title's lean */
   overflow: hidden;
   /* the background bleeds; the content sits on the wrap's columns */
   padding: clamp(1.25rem, 4vw, 2.5rem) var(--bleed);
@@ -186,21 +186,14 @@
 [dir='rtl'] .split__door:focus-visible > .split__lines {
   translate: -12px 2px;
 }
-.split__door:hover .sfx > span,
-.split__door:focus-visible .sfx > span {
-  translate: -0.02em 0;
-}
-[dir='rtl'] .split__door:hover .sfx > span,
-[dir='rtl'] .split__door:focus-visible .sfx > span {
-  translate: 0.02em 0;
-}
+/* the title is the door's lettering: on hover its stroke, fill and shadow invert with the door */
 .split__door:hover h2,
 .split__door:focus-visible h2 {
-  text-shadow: 6px 6px 0 var(--tone);
+  translate: -0.02em 0;
 }
 [dir='rtl'] .split__door:hover h2,
 [dir='rtl'] .split__door:focus-visible h2 {
-  text-shadow: -6px 6px 0 var(--tone);
+  translate: 0.02em 0;
 }
 .split__door:hover .split__count,
 .split__door:focus-visible .split__count {
@@ -221,30 +214,16 @@
       opacity var(--t-base),
       translate var(--t-base) var(--ease-out);
   }
-  .split__door .sfx > span {
+  .split__door h2 {
     transition:
       translate var(--t-base) var(--ease-out),
       color var(--t-base),
       -webkit-text-stroke-color var(--t-base),
-      filter var(--t-base);
-  }
-  .split__door h2 {
-    transition: text-shadow var(--t-base) var(--ease-out);
+      text-shadow var(--t-base);
   }
   .split__door .split__count {
     transition: translate var(--t-fast);
   }
-}
-/* the word sits inside the door above its bottom edge, on the wrap's columns; its box is always wide enough for the
-   rotated glyphs and their shadow, so the word is only ever cut by the slant, never by its own box */
-.split__door .sfx {
-  inset-block-start: auto;
-  inset-block-end: 0.25rem;
-  inset-inline: var(--bleed);
-  padding-block: 0.15em; /* headroom for the rotated glyph corners and the shadow */
-  padding-inline-end: 0.2em;
-  block-size: 1.3em;
-  font-size: clamp(4rem, 9vw, 8rem);
 }
 .split__count {
   justify-self: start;
@@ -274,12 +253,6 @@
 [dir='rtl'] .split__door--personal > .split__lines {
   mask-image: linear-gradient(to right, transparent 45%, #000 100%);
 }
-.split__door .sfx > span {
-  translate: -0.12em 0;
-}
-[dir='rtl'] .split__door .sfx > span {
-  translate: 0.12em 0;
-}
 .split__door--work {
   background: var(--paper);
   color: var(--ink);
@@ -289,9 +262,32 @@
   background: var(--ink);
   color: var(--paper);
 }
+.split__door {
+  --sfx-stroke: var(--ink);
+  --sfx-fill: var(--paper);
+}
+.split__door--personal {
+  --sfx-stroke: var(--paper);
+  --sfx-fill: var(--ink);
+}
+/* the title IS the lettering: stroked paper letters with a hard shadow, leaning up from the start, sized to the door's column so the
+   rotated word always ends before the cut (PERSONAL is 3.9em wide) */
 .split__door h2 {
-  font-size: clamp(3.5rem, 8vw, 6rem);
+  justify-self: start;
+  margin-block-end: 0.1em;
+  padding-inline: 0.06em 0.1em;
+  font-size: clamp(3.5rem, 8vw, 7rem);
   line-height: 0.9;
+  letter-spacing: 0.02em;
+  color: var(--sfx-fill);
+  -webkit-text-stroke: 4px var(--sfx-stroke);
+  paint-order: stroke fill;
+  text-shadow: 0.06em 0.06em 0 var(--sfx-stroke);
+  rotate: -4deg; /* pivots on its centre: the end rises and the start dips by half the lean each */
+}
+[dir='rtl'] .split__door h2 {
+  text-shadow: -0.06em 0.06em 0 var(--sfx-stroke);
+  rotate: 4deg;
 }
 .split__door p {
   max-inline-size: 21ch;
@@ -313,8 +309,8 @@
   background: var(--ink);
   color: var(--paper);
 }
-.split__door--work:hover .sfx,
-.split__door--work:focus-visible .sfx {
+.split__door--work:hover,
+.split__door--work:focus-visible {
   --sfx-stroke: var(--paper);
   --sfx-fill: var(--ink);
 }
@@ -323,8 +319,8 @@
   background: var(--paper);
   color: var(--ink);
 }
-.split__door--personal:hover .sfx,
-.split__door--personal:focus-visible .sfx {
+.split__door--personal:hover,
+.split__door--personal:focus-visible {
   --sfx-stroke: var(--ink);
   --sfx-fill: var(--paper);
 }
@@ -341,18 +337,6 @@
     padding-inline-end: calc(var(--cut) + 2rem);
     clip-path: polygon(0 0, 100% 0, calc(100% - var(--cut)) 100%, 0 100%);
   }
-  /* the clip box starts past the text column so the word is never under copy */
-  /* the box starts past the 21ch text column; the word is sized to the span left before the cut (WORK is 2.4em + its lean and shadow) */
-  .split__door .sfx {
-    font-size: min(clamp(4rem, 9vw, 8rem), calc((50vw - var(--bleed) - 17.5rem) / 2.7));
-  }
-  .split__door--work .sfx {
-    inset-inline-start: calc(var(--bleed) + 13.5rem);
-    inset-inline-end: var(--cut);
-  }
-  .split__door--personal .sfx {
-    inset-inline-start: calc(var(--cut) + 2rem + 13.5rem);
-  }
   .split__door--personal {
     margin-inline-start: calc(var(--cut) * -1);
     padding-inline-start: calc(var(--cut) + 2rem);
@@ -366,24 +350,6 @@
   }
 }
 
-/* below 80rem the doors are too narrow for text and word side by side, so the word takes the empty top band and the slant cuts it */
-@media (min-width: 48rem) and (max-width: 79.99rem) {
-  .split__door {
-    min-block-size: clamp(19rem, 38vh, 22rem);
-  }
-  .split__door h2 {
-    font-size: clamp(3rem, 7vw, 6rem);
-  }
-  .split__door .sfx {
-    inset-block: 0 auto;
-    inset-inline: 0;
-    font-size: clamp(3.5rem, 8vw, 7rem);
-  }
-  .split__door--personal .sfx {
-    inset-inline-end: var(--bleed);
-    padding-inline-end: 0.1em; /* keeps the word's lean clear of the title's end at 64rem */
-  }
-}
 
 /* ---------- work with me: three panels ---------- */
 .wwm {
