@@ -17,11 +17,9 @@ export async function isDark(img: ImageMetadata): Promise<boolean> {
   if (!path) return false;
   let pending = cache.get(path);
   if (!pending) {
-    pending = sharp(path)
-      .resize(32, 32, { fit: 'fill' })
-      .greyscale()
-      .raw()
-      .toBuffer()
+    // Promise.resolve first so a synchronous throw from sharp lands in the catch too.
+    pending = Promise.resolve()
+      .then(() => sharp(path).resize(32, 32, { fit: 'fill' }).greyscale().raw().toBuffer())
       .then((buf) => isDarkBuffer(new Uint8Array(buf)))
       .catch(() => false);
     cache.set(path, pending);

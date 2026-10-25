@@ -27,9 +27,10 @@
   inline-size: 100%;
   cursor: pointer;
 }
+/* ink ring on the paper outside the border: visible whatever the image luminance */
 .frame button:focus-visible {
-  outline: 3px solid var(--paper);
-  outline-offset: -6px;
+  outline: 3px solid var(--ink);
+  outline-offset: 6px;
 }
 .frame img {
   display: block;
@@ -148,6 +149,9 @@
 .next-panel .panel__body {
   padding: 1.5rem;
 }
+.next-panel .panel__meta {
+  color: var(--ink);
+}
 /* the NEXT word sits centred behind the panel's text, clipped by the panel */
 .next-panel > .sfx {
   inset-block-start: 50%;
@@ -195,7 +199,7 @@ a.next-panel:focus-visible > .sfx > span {
 }
 .play .play__panel {
   margin-inline: auto;
-  inline-size: min(100%, calc((100svh - 13rem) * var(--play-ratio, 1.7778)));
+  inline-size: min(100%, calc((100svh - 16rem) * var(--play-ratio, 1.7778)));
 }
 .play__panel .player {
   border: 0;
