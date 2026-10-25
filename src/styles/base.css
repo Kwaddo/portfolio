@@ -7,6 +7,8 @@
 html {
   -webkit-text-size-adjust: 100%;
   scroll-padding-block-start: calc(var(--nav-h) + 1rem);
+  /* the canvas behind rubber-band overscroll: paper above the page, ink below the ink footer */
+  background: linear-gradient(to bottom, var(--paper) 50%, var(--ink) 50%) fixed;
 }
 
 body {
