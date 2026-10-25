@@ -1,25 +1,20 @@
-/* ---------- hero ---------- */
+/* ---------- hero: a two-panel spread, shout bubble beside an inked HELLO panel ---------- */
 .hero {
-  position: relative;
-  display: grid;
-  gap: 1rem;
-  padding-block: clamp(1rem, 4vw, 3rem) 2.5rem;
-  /* clip the speed lines but leave room for the shout bubble's outline, which overhangs its box */
+  align-items: stretch;
+  /* room under the panels for the caption overhang and the shadow before the doors */
+  padding-block-end: 1.25rem;
+  /* clip the HELLO panel's burst but leave room for the shout bubble's outline, which overhangs its box */
   overflow: clip;
   overflow-clip-margin: 2rem;
 }
-.hero__speed {
-  inset: -60% -30%;
-  opacity: 0.32;
-  background: repeating-conic-gradient(from 0deg at 50% 50%, currentColor 0deg 1deg, transparent 1deg 6deg);
-  color: var(--ink);
-  mask-image: radial-gradient(circle at 25% 50%, transparent 10%, #000 55%, transparent 80%);
+.hero__start {
+  justify-content: center;
+  padding: clamp(1.5rem, 4vw, 2.5rem) clamp(1.25rem, 4vw, 3rem) clamp(2.25rem, 5vw, 3rem);
 }
 .hero__bubble {
-  padding: 2.5rem 3.75rem 2.75rem;
-  justify-self: start;
+  align-self: start;
   max-inline-size: 100%;
-  margin-inline-start: 0.75rem;
+  padding: 2.5rem 3.75rem 2.75rem;
 }
 .hero__bubble h1 {
   font-size: clamp(2.5rem, 8vw, 5.5rem);
@@ -30,11 +25,45 @@
   letter-spacing: 0.08em;
   color: var(--ink);
 }
+/* availability as a caption pinned over the panel's bottom-start corner */
 .hero__avail {
-  position: relative;
-  z-index: 1;
-  max-inline-size: var(--measure);
-  color: var(--tone);
+  position: absolute;
+  inset-block-end: -0.9rem;
+  inset-inline-start: clamp(1rem, 3vw, 2rem);
+  z-index: 2;
+  max-inline-size: calc(100% - 2rem);
+}
+.hero__end {
+  min-block-size: 9rem;
+  overflow: hidden;
+  background: var(--ink);
+  color: var(--paper);
+}
+.hero__end > .tone-coarse {
+  background-image: radial-gradient(circle at center, var(--paper) 1.6px, transparent 2.1px);
+}
+.hero__speed {
+  inset: -40%;
+  opacity: 0.32;
+  color: var(--paper);
+  background: repeating-conic-gradient(from 0deg at 50% 50%, currentColor 0deg 1deg, transparent 1deg 6deg);
+  mask-image: radial-gradient(circle at 50% 50%, transparent 8%, #000 60%);
+}
+.hero__end > .sfx {
+  inset: 0;
+  display: grid;
+  place-items: center;
+  overflow: visible;
+  font-size: clamp(4rem, 14vw, 11rem);
+  text-align: center;
+}
+@media (min-width: 48rem) {
+  .spread.hero > .hero__start {
+    grid-column: span 7;
+  }
+  .spread.hero > .hero__end {
+    grid-column: span 5;
+  }
 }
 
 /* ---------- doors ---------- */
@@ -48,26 +77,55 @@
   display: grid;
   align-content: end;
   gap: 0.75rem;
-  min-block-size: 18rem;
+  min-block-size: clamp(16rem, 38vh, 22rem);
   overflow: hidden;
-  padding: clamp(1.5rem, 5vw, 3rem);
+  padding: clamp(1.25rem, 4vw, 2.5rem);
   text-decoration: none;
   isolation: isolate;
 }
-.split__door > :not(.tone-mid):not(.sfx):not(.speed) {
+.split__door > :not(.tone-mid):not(.sfx):not(.speed):not(.split__lines) {
   position: relative;
   z-index: 1;
 }
 .split__door > .tone-mid,
 .split__door > .sfx,
-.split__door > .speed {
+.split__door > .speed,
+.split__door > .split__lines {
   position: absolute;
   z-index: 0;
 }
+/* the word sits inside the door above its bottom edge; its clip box starts past the text column so it is never under copy */
 .split__door .sfx {
   inset-block-start: auto;
-  inset-block-end: -0.1em;
-  font-size: clamp(4.5rem, 16vw, 10rem);
+  inset-block-end: 0.25rem;
+  inset-inline-start: calc(clamp(1.25rem, 4vw, 2.5rem) + 14rem);
+  font-size: clamp(4rem, 9vw, 8rem);
+}
+.split__count {
+  justify-self: start;
+  color: var(--ink);
+}
+/* speed lines along the cut: stripes parallel to the slant, fading away from it */
+.split__lines {
+  inset: 0;
+  opacity: 0.2;
+  pointer-events: none;
+  background: repeating-linear-gradient(101deg, currentColor 0 2px, transparent 2px 9px);
+}
+.split__door--work > .split__lines {
+  mask-image: linear-gradient(to right, transparent 45%, #000 100%);
+}
+.split__door--personal > .split__lines {
+  mask-image: linear-gradient(to left, transparent 45%, #000 100%);
+}
+[dir='rtl'] .split__lines {
+  background: repeating-linear-gradient(79deg, currentColor 0 2px, transparent 2px 9px);
+}
+[dir='rtl'] .split__door--work > .split__lines {
+  mask-image: linear-gradient(to left, transparent 45%, #000 100%);
+}
+[dir='rtl'] .split__door--personal > .split__lines {
+  mask-image: linear-gradient(to right, transparent 45%, #000 100%);
 }
 .split__door .sfx > span {
   translate: -0.12em 0;
@@ -82,11 +140,11 @@
   color: var(--paper);
 }
 .split__door h2 {
-  font-size: clamp(3rem, 12vw, 7rem);
+  font-size: clamp(3.5rem, 8vw, 6rem);
   line-height: 0.9;
 }
 .split__door p {
-  max-inline-size: 24ch;
+  max-inline-size: 21ch;
 }
 .split__door .speed {
   inset: -40%;
@@ -128,7 +186,6 @@
 @media (min-width: 48rem) {
   .split {
     grid-template-columns: 1fr 1fr;
-    min-block-size: min(32rem, 70svh);
   }
   .split__door--work {
     padding-inline-end: calc(var(--cut) + 2rem);
@@ -136,6 +193,9 @@
   }
   .split__door--work .sfx {
     inset-inline-end: var(--cut);
+  }
+  .split__door--personal .sfx {
+    inset-inline-start: calc(var(--cut) + 2rem + 14rem);
   }
   .split__door--personal {
     margin-inline-start: calc(var(--cut) * -1);
@@ -150,9 +210,42 @@
   }
 }
 
+/* mid widths: the doors are too narrow for text and word side by side, so the word takes the empty top band and the slant cuts it */
+@media (min-width: 48rem) and (max-width: 71.99rem) {
+  .split__door .sfx {
+    inset-block: 0.25rem auto;
+    inset-inline: 0;
+  }
+}
+
 /* ---------- work with me: three panels ---------- */
 .wwm {
-  padding-block: 3rem 1rem;
+  padding-block: 0 0.5rem;
+}
+/* the word peeks above the first panel on the start side, under the heading row */
+.wwm__spread:has(> .sfx) {
+  padding-block-start: 3.25rem;
+}
+.wwm__spread > .sfx {
+  inset-block-start: -0.2em;
+  padding-inline-start: 1.5rem;
+  font-size: clamp(4rem, 10vw, 8rem);
+  text-align: start;
+}
+.wwm__ink {
+  border-color: var(--ink);
+  background: var(--ink);
+  color: var(--paper);
+}
+.wwm__ink .btn {
+  border-color: var(--paper);
+  background: var(--ink);
+  color: var(--paper);
+}
+.wwm__ink .btn:hover,
+.wwm__ink .btn:focus-visible {
+  background: var(--paper);
+  color: var(--ink);
 }
 .wwm__list {
   display: grid;
@@ -182,8 +275,27 @@
     opacity: 0;
   }
 }
-html.js:not(.seen) .hero__speed {
-  animation: fade-in 200ms var(--ease-out) both;
+@keyframes wipe-in {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+  to {
+    clip-path: inset(0);
+  }
+}
+@keyframes wipe-in-rtl {
+  from {
+    clip-path: inset(0 0 0 100%);
+  }
+  to {
+    clip-path: inset(0);
+  }
+}
+html.js:not(.seen) .hero__end {
+  animation: wipe-in 350ms var(--ease-out) 250ms both;
+}
+html[dir='rtl'].js:not(.seen) .hero__end {
+  animation-name: wipe-in-rtl;
 }
 html.js:not(.seen) .hero__bubble {
   animation: pop 180ms var(--ease-snap) 150ms both;
@@ -207,7 +319,7 @@ html.js:not(.seen) .wwm {
   animation: fade-in 200ms var(--ease-out) 700ms both;
 }
 @media (prefers-reduced-motion: reduce) {
-  html.js:not(.seen) .hero__speed,
+  html.js:not(.seen) .hero__end,
   html.js:not(.seen) .hero__bubble,
   html.js:not(.seen) .hero__avail,
   html.js:not(.seen) .split__door--work,

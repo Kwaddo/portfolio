@@ -6,7 +6,7 @@ import { site } from '../data/site';
 ---
 <section class="wwm wrap stack" aria-labelledby="wwm-title">
   <h2 id="wwm-title">Work with me</h2>
-  <Spread layout="3up">
+  <Spread layout="3up" sfx="HUH?" class="wwm__spread">
     <Panel shadow index={0}>
       <div class="panel__body">
         <h3 class="panel__title">What I take on</h3>
@@ -25,7 +25,7 @@ import { site } from '../data/site';
         <p>Send a short brief: what you're building, your timeline and a budget range. {site.responseTime}</p>
       </div>
     </Panel>
-    <Panel shadow tone="fine" index={2}>
+    <Panel shadow index={2} class="wwm__ink on-ink">
       <div class="panel__body">
         <h3 class="panel__title">Say hello</h3>
         <CopyEmail />

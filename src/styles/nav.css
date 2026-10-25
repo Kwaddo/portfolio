@@ -48,7 +48,6 @@
 }
 
 .footer {
-  margin-block-start: 3rem;
   padding-block: 2rem;
   background: var(--ink);
   color: var(--paper);
