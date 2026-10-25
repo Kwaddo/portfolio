@@ -1408,7 +1408,9 @@ git commit -m "feat: add spread and panel system, rebuild project cards and inde
   display: grid;
   gap: 1rem;
   padding-block: clamp(1rem, 4vw, 3rem) 2.5rem;
-  overflow: hidden;
+  /* clip the speed lines but leave room for the shout bubble's outline, which overhangs its box */
+  overflow: clip;
+  overflow-clip-margin: 2rem;
 }
 .hero__speed {
   inset: -60% -30%;
@@ -1419,6 +1421,7 @@ git commit -m "feat: add spread and panel system, rebuild project cards and inde
 .hero__bubble {
   justify-self: start;
   max-inline-size: 100%;
+  margin-inline-start: 0.75rem;
 }
 .hero__bubble h1 {
   font-size: clamp(2.5rem, 8vw, 5.5rem);
