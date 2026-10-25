@@ -153,3 +153,15 @@ Dark mode, custom cursor, sound, scroll-scrubbed storytelling, character illustr
 ## Rollout
 
 One implementation plan, Phase 4, in this order so each step is visible and reviewable: tokens and CSS split → `Panel`/`Spread`/`Bubble`/`Sfx`/`InkRule` → page wipe and reveal → landing → personal index and project page → work pages → about and journey → journal, contact, 404, resume → final review. Every step keeps `npm run verify` and `npm run e2e` green and adds Playwright checks for the wipe (no horizontal overflow mid-transition) and for reduced motion (no animations when the media query is on).
+
+## Addendum: ink density pass (2026-10-25)
+
+Owner review of the first seven tasks: too much space between parts, some sections weak, the result still more minimal than manga. Corrections, applied as one pass before the journal/contact work:
+
+- Gutters between panels shrink to a dedicated token (0.5-0.875rem); page padding keeps the wider gutter. Spreads no longer pad a band above themselves for the peeking word; the word overlaps the heading row instead.
+- Panels fill their boxes: feature-panel media grows to the panel height (object-fit cover), initial-letter fallbacks get a bigger stroked letter and a speed burst. No blank area taller than 6rem inside a panel.
+- More ink: SFX words are stroked 3px with a hard drop shadow, vertical labels become inked tabs hanging off the page edge, borders go to 4px (feature 5px), shadows to 8px, hero speed lines are visible, live/released badges are filled.
+- Black pages: a spread can invert to a full-bleed ink page with paper panels and paper shadows. Used for the Lab spread, the work timeline and project galleries.
+- Landing: the hero is a two-panel spread (shout bubble + an inked HELLO panel), the doors are shorter with fully visible words and derived-count captions, Work With Me is a tight 3-up with an inked third panel.
+- Project and work pages: two columns at desktop (prose + sticky facts panel), galleries never leave an empty third.
+- Acceptance: `/` and `/personal/` at least 15 % shorter at 1280; all Phase 4 gates unchanged.
