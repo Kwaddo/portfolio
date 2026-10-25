@@ -432,13 +432,13 @@
     opacity: 0;
   }
 }
-html.js:not(.seen) .hero__end {
+html.js:not(.seen) .hero .hero__end {
   animation: wipe-in 350ms var(--ease-out) 250ms both;
 }
-html.js:not(.seen) .hero__figure img {
+html.js:not(.seen) .hero .hero__figure img {
   animation: rise 450ms var(--ease-out) 380ms both;
 }
-html[dir='rtl'].js:not(.seen) .hero__end {
+html[dir='rtl'].js:not(.seen) .hero .hero__end {
   animation-name: wipe-in-rtl;
 }
 html.js:not(.seen) .hero__bubble {

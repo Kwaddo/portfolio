@@ -2,15 +2,13 @@
 import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import Bubble from '../components/Bubble.astro';
-import Sfx from '../components/Sfx.astro';
 import Spread from '../components/Spread.astro';
 import Panel from '../components/Panel.astro';
 import WorkWithMe from '../components/WorkWithMe.astro';
 import JournalTicker from '../components/JournalTicker.astro';
+import FigurePanel from '../components/FigurePanel.astro';
 import { published } from '../lib/content';
 import { site } from '../data/site';
-import figureA from '../assets/figure-a.png';
-import figureB from '../assets/figure-b.png';
 
 // Door captions carry counts derived from the collections, never typed numbers.
 const [work, games, lab, timeline] = await Promise.all([
@@ -32,33 +30,7 @@ const count = (n: number, one: string) => `${n} ${n === 1 ? one : `${one}s`}`;
       </Bubble>
       <Bubble shape="caption" as="div" class="hero__avail">{site.availability}</Bubble>
     </Panel>
-    <div class="hero__end-cell">
-      <Panel weight={5} tone="coarse" class="hero__end on-ink">
-        <span class="speed hero__speed" aria-hidden="true"></span>
-        <Sfx word="KWADDO" rotate="-8deg" paper />
-      </Panel>
-      <div class="hero__figure">
-        <img src={figureA.src} width={figureA.width} height={figureA.height} alt="Ali Khalaf, drawn in ink" loading="lazy" decoding="async" data-figure="a" />
-        <img src={figureB.src} width={figureB.width} height={figureB.height} alt="Ali Khalaf, drawn in ink" loading="lazy" decoding="async" hidden data-figure="b" />
-        <script is:inline data-astro-rerun>
-          // One figure per visit: picked at random on the first page view of the session, then kept. Runs before the lazy loader can start the other image.
-          (function () {
-            var pick;
-            try {
-              pick = sessionStorage.getItem('figure');
-              if (pick !== 'a' && pick !== 'b') {
-                pick = Math.random() < 0.5 ? 'a' : 'b';
-                sessionStorage.setItem('figure', pick);
-              }
-            } catch (e) {
-              pick = 'a';
-            }
-            var imgs = document.currentScript.parentNode.querySelectorAll('img[data-figure]');
-            for (var i = 0; i < imgs.length; i++) imgs[i].hidden = imgs[i].getAttribute('data-figure') !== pick;
-          })();
-        </script>
-      </div>
-    </div>
+    <FigurePanel word="KWADDO" rotate="-8deg" />
   </Spread>
   <section class="split" aria-label="Choose a track">
     <a class="split__door split__door--work" href="/work/">

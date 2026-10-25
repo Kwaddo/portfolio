@@ -6,7 +6,7 @@ import Timeline from '../components/Timeline.astro';
 import InkRule from '../components/InkRule.astro';
 import Frame from '../components/Frame.astro';
 import Panel from '../components/Panel.astro';
-import Sfx from '../components/Sfx.astro';
+import FigurePanel from '../components/FigurePanel.astro';
 import Icon from '../components/Icon.astro';
 import { byOrder, dropcap, published } from '../lib/content';
 import { site } from '../data/site';
@@ -25,10 +25,10 @@ const portrait = Object.values(portraits)[0]?.default;
 <Base title="About" description="The story of Ali Khalaf: a software engineer from Bahrain who learns by building.">
   <script slot="head" type="application/ld+json" set:html={jsonLdScript(personLd())} />
   <div class="wrap stack">
-    <header class="page-head has-tone">
-      <Sfx word="HELLO" rotate="-5deg" />
-      <h1>About</h1>
-      <dl class="facts">
+    <header class="page-head page-head--figure">
+      <div class="page-head__text">
+        <h1>About</h1>
+        <dl class="facts">
         <div><dt>Name</dt><dd>{site.name}</dd></div>
         <div><dt>Role</dt><dd>{site.role}</dd></div>
         <div><dt>Based in</dt><dd>{site.location}</dd></div>
@@ -41,6 +41,8 @@ const portrait = Object.values(portraits)[0]?.default;
           </dd>
         </div>
       </dl>
+      </div>
+      <FigurePanel word="HELLO" rotate="-5deg" alternate inset />
     </header>
 
     {

@@ -1,0 +1,47 @@
+---
+// An inked panel with a burst, a paper word and one of the two drawn figures. The session picks a figure once (hero); `alternate`
+// shows the other one. Exactly one image is requested per page: the picker hides the other before the lazy loader reaches it.
+import Panel from './Panel.astro';
+import Sfx from './Sfx.astro';
+import figureA from '../assets/figure-a.png';
+import figureB from '../assets/figure-b.png';
+
+interface Props {
+  word: 'KWADDO' | 'HELLO' | 'HUH?';
+  rotate?: string;
+  alternate?: boolean;
+  inset?: boolean;
+  class?: string;
+}
+const { word, rotate = '-8deg', alternate = false, inset = false, class: cls } = Astro.props;
+const alt = 'Ali Khalaf, drawn in ink';
+---
+<div class:list={['hero__end-cell', inset && 'hero__end-cell--inset', cls]}>
+  <Panel weight={5} tone="coarse" class="hero__end on-ink">
+    <span class="speed hero__speed" aria-hidden="true"></span>
+    <Sfx word={word} rotate={rotate} paper />
+  </Panel>
+  <div class="hero__figure" data-alternate={alternate ? '' : undefined}>
+    <img src={figureA.src} width={figureA.width} height={figureA.height} alt={alt} loading="lazy" decoding="async" data-figure="a" />
+    <img src={figureB.src} width={figureB.width} height={figureB.height} alt={alt} loading="lazy" decoding="async" hidden data-figure="b" />
+    <script is:inline data-astro-rerun>
+      // One figure per visit: picked at random on the first page view of the session, then kept; `alternate` shows the other.
+      (function () {
+        var pick;
+        try {
+          pick = sessionStorage.getItem('figure');
+          if (pick !== 'a' && pick !== 'b') {
+            pick = Math.random() < 0.5 ? 'a' : 'b';
+            sessionStorage.setItem('figure', pick);
+          }
+        } catch (e) {
+          pick = 'a';
+        }
+        var root = document.currentScript.parentNode;
+        if (root.hasAttribute('data-alternate')) pick = pick === 'a' ? 'b' : 'a';
+        var imgs = root.querySelectorAll('img[data-figure]');
+        for (var i = 0; i < imgs.length; i++) imgs[i].hidden = imgs[i].getAttribute('data-figure') !== pick;
+      })();
+    </script>
+  </div>
+</div>
