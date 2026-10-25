@@ -15,6 +15,7 @@
   mask-image: radial-gradient(circle at 25% 50%, transparent 10%, #000 55%, transparent 80%);
 }
 .hero__bubble {
+  padding: 2.5rem 3.75rem 2.75rem;
   justify-self: start;
   max-inline-size: 100%;
   margin-inline-start: 0.75rem;
@@ -52,19 +53,20 @@
   text-decoration: none;
   isolation: isolate;
 }
-.split__door > * {
+.split__door > :not(.tone-mid):not(.sfx):not(.speed) {
   position: relative;
   z-index: 1;
 }
 .split__door > .tone-mid,
 .split__door > .sfx,
 .split__door > .speed {
+  position: absolute;
   z-index: 0;
 }
 .split__door .sfx {
   inset-block-start: auto;
   inset-block-end: -0.1em;
-  font-size: clamp(4.5rem, 19vw, 12rem);
+  font-size: clamp(4.5rem, 16vw, 10rem);
 }
 .split__door .sfx > span {
   translate: -0.12em 0;
@@ -115,6 +117,11 @@
 .split__door--personal:focus-visible .sfx > span {
   -webkit-text-stroke-color: var(--ink);
 }
+@media (max-width: 40rem) {
+  .hero__bubble {
+    padding-inline: 2rem;
+  }
+}
 @media (min-width: 48rem) {
   .split {
     grid-template-columns: 1fr 1fr;
@@ -123,6 +130,9 @@
   .split__door--work {
     padding-inline-end: calc(var(--cut) + 2rem);
     clip-path: polygon(0 0, 100% 0, calc(100% - var(--cut)) 100%, 0 100%);
+  }
+  .split__door--work .sfx {
+    inset-inline-end: var(--cut);
   }
   .split__door--personal {
     margin-inline-start: calc(var(--cut) * -1);
@@ -184,7 +194,6 @@ html.js:not(.seen) .split__door--work {
 html.js:not(.seen) .split__door--personal {
   animation: slide-end 350ms var(--ease-out) 350ms both;
 }
-[dir='rtl'] html.js:not(.seen) .split__door--work,
 html[dir='rtl'].js:not(.seen) .split__door--work {
   animation-name: slide-end;
 }
