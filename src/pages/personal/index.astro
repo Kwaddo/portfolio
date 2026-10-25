@@ -2,6 +2,7 @@
 import { getCollection } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import Spread from '../../components/Spread.astro';
+import Bubble from '../../components/Bubble.astro';
 import ProjectCard from '../../components/ProjectCard.astro';
 import InkRule from '../../components/InkRule.astro';
 import { byOrder, published } from '../../lib/content';
@@ -14,7 +15,7 @@ const lab = byOrder(published(await getCollection('lab')));
   <div class="wrap stack">
     <header class="page-head">
       <h1>Personal</h1>
-      <p class="lede">Games and experiments, built for the love of it. Each has a short overview, and some have a longer story behind them.</p>
+      <Bubble shape="round" as="p" class="lede bubble--up">Games and experiments, built for the love of it. Each has a short overview, and some have a longer story behind them.</Bubble>
     </header>
 
     <h2 id="games">Games<InkRule variant="draw" /></h2>

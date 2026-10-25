@@ -8,7 +8,7 @@ import Spread from '../../components/Spread.astro';
 import Panel from '../../components/Panel.astro';
 import Icon from '../../components/Icon.astro';
 import InkRule from '../../components/InkRule.astro';
-import { published } from '../../lib/content';
+import { dropcap, published } from '../../lib/content';
 
 export async function getStaticPaths() {
   const work = published(await getCollection('work'));
@@ -56,7 +56,7 @@ const { Content } = await render(entry);
           </div>
         </Panel>
       </aside>
-      <div class="project__main prose dropcap"><Content /></div>
+      <div class:list={['project__main', dropcap(entry.body)]}><Content /></div>
     </div>
     {
       data.gallery.length > 0 && (

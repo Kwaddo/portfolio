@@ -26,3 +26,7 @@ export const nextProject = (refs: JourneyRef[], kind: JourneyRef['kind'], id: st
   if (i + 1 < same.length) return same[i + 1];
   return refs.find((r) => r.kind !== kind);
 };
+
+/** Prose classes for a markdown body with a drop cap; narrow openers (I, J, L, 1) get a wider box so they frame like an S. */
+export const dropcap = (body: string | undefined): string =>
+  /^[IJL1]/.test((body ?? '').trimStart()) ? 'prose dropcap dropcap--narrow' : 'prose dropcap';

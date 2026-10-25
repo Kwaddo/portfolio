@@ -222,3 +222,87 @@ main:has(> .wrap > .stack:last-child > .spread--ink:last-child) {
   inset: calc(-1 * var(--gutter-panel)) 40% 0 calc(-1 * var(--gutter-panel));
   mask-image: radial-gradient(ellipse 100% 120% at 0% 40%, #000 25%, transparent 72%);
 }
+
+/* ---------- lettering: section and page headings as inked manga type ----------
+   Ink fill over a 3px paper stroke (the halo that lifts the letters off bursts and tone) with a hard offset shadow, leaning 6deg.
+   The lean is on the heading box: these boxes hold only the text and its brush underline, so nothing else moves. */
+:is(.stack, .page-head, .hero-spread__text) > :is(h1, h2),
+.chapter__text > h2 {
+  -webkit-text-stroke: 3px var(--paper);
+  paint-order: stroke fill;
+  text-shadow: 0.06em 0.06em 0 var(--ink);
+  transform: skewX(-6deg);
+  transform-origin: 0 100%;
+}
+[dir='rtl'] :is(.stack, .page-head, .hero-spread__text) > :is(h1, h2),
+[dir='rtl'] .chapter__text > h2 {
+  text-shadow: -0.06em 0.06em 0 var(--ink);
+  transform: skewX(6deg);
+  transform-origin: 100% 100%;
+}
+/* the heading's burst and underline are not lettering */
+.stack > h2::before {
+  transform: skewX(6deg);
+}
+:is(.stack, .page-head) > :is(h1, h2) {
+  padding-inline-end: 0.12em; /* room for the shadow at the end of the box */
+}
+
+/* ---------- ledes as dialogue: a round balloon whose tail points up at the heading ---------- */
+.page-head > .bubble--round {
+  justify-self: start;
+  max-inline-size: min(100%, 44rem);
+  margin-block-start: 1.4rem;
+  color: var(--ink);
+}
+.bubble--up .bubble__tail {
+  inset-block-start: auto;
+  inset-block-end: calc(100% - 2px);
+  scale: 1 -1;
+}
+
+/* ---------- narration boxes: captions, chips and periods are rectangles with one cut corner and a 2px frame ----------
+   The box is ink, clipped with a 10px chamfer at the top start; a paper inset 2px inside carries the text. */
+.bubble--caption,
+.frame__cap {
+  border: 0;
+  padding: calc(0.3rem + 2px) calc(0.65rem + 2px);
+  background: var(--ink);
+  clip-path: polygon(10px 0, 100% 0, 100% 100%, 0 100%, 0 10px);
+}
+.bubble--caption::before,
+.frame__cap::before {
+  content: '';
+  position: absolute;
+  inset: 2px;
+  z-index: -1;
+  background: var(--paper);
+  clip-path: polygon(8.8px 0, 100% 0, 100% 100%, 0 100%, 0 8.8px);
+  pointer-events: none;
+}
+.bubble--caption {
+  isolation: isolate;
+}
+.bubble--caption > .bubble__body {
+  z-index: 1;
+}
+[dir='rtl'] .bubble--caption,
+[dir='rtl'] .frame__cap {
+  clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 0 100%);
+}
+[dir='rtl'] .bubble--caption::before,
+[dir='rtl'] .frame__cap::before {
+  clip-path: polygon(0 0, calc(100% - 8.8px) 0, 100% 8.8px, 100% 100%, 0 100%);
+}
+/* the current timeline entry stays stamped in ink */
+.timeline__item:first-child .bubble--caption.timeline__period::before {
+  background: var(--ink);
+}
+
+/* ---------- live and released badges on an eight-point burst ---------- */
+.badge--live,
+.badge--released {
+  border: 0;
+  padding: 0.5rem 1.1rem;
+  clip-path: polygon(100% 50%, 88.8% 66.1%, 85.4% 85.4%, 66.1% 88.8%, 50% 100%, 33.9% 88.8%, 14.6% 85.4%, 11.2% 66.1%, 0 50%, 11.2% 33.9%, 14.6% 14.6%, 33.9% 11.2%, 50% 0, 66.1% 11.2%, 85.4% 14.6%, 88.8% 33.9%);
+}

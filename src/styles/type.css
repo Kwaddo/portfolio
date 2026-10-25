@@ -83,7 +83,8 @@ h3 {
   }
 }
 
-/* ---------- drop caps: a small inked panel two body lines tall (2 x 1.6rem = 3.2rem, border included), the glyph filling it ---------- */
+/* ---------- drop caps: a small inked panel two body lines tall (2 x 1.6rem = 3.2rem), the glyph filling it, with air around it:
+   0.2rem above, 0.85rem beside and 0.35rem below so the shadow (4px) never touches the third line, which returns to the margin ---------- */
 .dropcap > p:first-of-type {
   min-block-size: 3.2rem; /* a one-line opener still clears the box */
 }
@@ -92,14 +93,18 @@ h3 {
 }
 .dropcap > p:first-of-type::first-letter {
   float: inline-start;
-  margin-block: 0.2rem -0.3rem; /* the float's margin box stays under two lines, so the third line clears it */
-  margin-inline-end: 0.5rem;
+  margin-block: 0.2rem 0.35rem; /* the float's margin box (3.2 + 41 + 5.6 = 49.8px) stays under two lines */
+  margin-inline-end: 0.85rem;
   padding: 0.06em 0.16em 0;
   border: 3px solid var(--ink);
   background: var(--paper);
   color: var(--ink);
   box-shadow: 4px 4px 0 var(--ink);
-  font: 400 3.3rem/0.78 var(--font-display);
+  font: 400 2.6rem/0.78 var(--font-display);
+}
+/* narrow openers (I, J, L, 1) get a wider box so they frame like an S; ::first-letter ignores inline-size */
+.dropcap--narrow > p:first-of-type::first-letter {
+  padding: 0.06em 0.42em 0; /* the shorthand: ::first-letter ignores padding-inline */
 }
 [dir='rtl'] .dropcap > p:first-of-type::first-letter {
   box-shadow: -4px 4px 0 var(--ink);

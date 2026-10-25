@@ -12,7 +12,7 @@ import Devlog from './Devlog.astro';
 import Icon from './Icon.astro';
 import { formatMonth } from '../lib/dates';
 import { forProject, newestFirst, toDevlog } from '../lib/journal';
-import { byOrder, nextProject, published, type JourneyRef } from '../lib/content';
+import { byOrder, dropcap, nextProject, published, type JourneyRef } from '../lib/content';
 
 interface Props {
   kind: 'games' | 'lab';
@@ -104,7 +104,7 @@ const solo = data.gallery.length === 1 && data.gallery[0].caption && data.galler
           </div>
         </Panel>
       </aside>
-      <div class="project__main prose dropcap"><Content /></div>
+      <div class:list={['project__main', dropcap(entry.body)]}><Content /></div>
     </div>
 
     {

@@ -12,7 +12,7 @@ interface Props {
 }
 const { shape = 'round', tail = 'start', as: Tag = 'div', href, target, rel, class: cls } = Astro.props;
 // phrasing hosts (span, a) must not contain a div
-const Body = Tag === 'span' || Tag === 'a' ? 'span' : 'div';
+const Body = Tag === 'span' || Tag === 'a' || Tag === 'p' ? 'span' : 'div';
 ---
 <Tag class:list={['bubble', `bubble--${shape}`, `bubble--tail-${tail}`, cls]} href={href} target={target} rel={rel}>
   {

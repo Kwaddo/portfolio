@@ -8,7 +8,7 @@ import Frame from '../components/Frame.astro';
 import Panel from '../components/Panel.astro';
 import Sfx from '../components/Sfx.astro';
 import Icon from '../components/Icon.astro';
-import { byOrder, published } from '../lib/content';
+import { byOrder, dropcap, published } from '../lib/content';
 import { site } from '../data/site';
 import { skills } from '../data/skills';
 import { jsonLdScript, personLd } from '../lib/jsonld';
@@ -60,7 +60,7 @@ const portrait = Object.values(portraits)[0]?.default;
             )}
             <div class="chapter__text">
               <h2>{c.data.title}</h2>
-              <div class="prose dropcap"><Content /></div>
+              <div class={dropcap(c.body)}><Content /></div>
             </div>
           </article>
         </>
