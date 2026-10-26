@@ -1,6 +1,6 @@
 ---
 import type { DevlogItem } from '../lib/journal';
-import { formatDay } from '../lib/dates';
+import Strip from './Strip.astro';
 
 interface Props {
   items: DevlogItem[];
@@ -11,19 +11,8 @@ const { items } = Astro.props;
   items.length > 0 && (
     <section class="stack" aria-labelledby="devlog-title">
       <h2 id="devlog-title">From the devlog</h2>
-      <ol class="entries">
-        {
-          items.map((i) => (
-            <li class="entry">
-              <a class="entry__link" href={i.href}>
-                <p class="stamp">
-                  <time datetime={i.date.toISOString().slice(0, 10)}>{formatDay(i.date)}</time>
-                </p>
-                <p>{i.text}</p>
-              </a>
-            </li>
-          ))
-        }
+      <ol class="strips">
+        {items.map((i, n) => <Strip href={i.href} date={i.date} text={i.text} index={n} />)}
       </ol>
     </section>
   )

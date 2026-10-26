@@ -14,15 +14,15 @@
   .notice,
   .chapter__text,
   .chapter__side,
-  .entry__link,
+  .strip__link,
   .timeline--alt .timeline__item {
     border-image: var(--frame-ink) 15 / 3 / 1 stretch; /* the band is three border widths: one outside, one on, one inside */
   }
   .spread--ink .frame,
   a.panel:hover,
   a.panel:focus-visible,
-  .entry__link:hover,
-  .entry__link:focus-visible {
+  .strip__link:hover,
+  .strip__link:focus-visible {
     border-image-source: var(--frame-paper);
   }
   /* an ink panel on paper keeps its ink frame invisible, as before */

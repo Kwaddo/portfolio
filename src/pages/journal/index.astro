@@ -2,8 +2,10 @@
 import Icon from '../../components/Icon.astro';
 import { getCollection } from 'astro:content';
 import Base from '../../layouts/Base.astro';
-import DateStamp from '../../components/DateStamp.astro';
 import Bubble from '../../components/Bubble.astro';
+import Panel from '../../components/Panel.astro';
+import Sfx from '../../components/Sfx.astro';
+import Strip from '../../components/Strip.astro';
 import { excerpt, newestFirst, tagsOf, tagSlug } from '../../lib/journal';
 import { published } from '../../lib/content';
 
@@ -12,7 +14,8 @@ const tags = tagsOf(entries);
 ---
 <Base title="Journal" description="Daily notes from Ali Khalaf: what is being built, learned and played.">
   <div class="wrap stack">
-    <header class="page-head">
+    <header class="page-head has-tone">
+      <Sfx word="LOG" rotate="-5deg" />
       <h1>Journal</h1>
       <Bubble shape="round" as="p" class="lede bubble--up">Short daily notes.</Bubble>
     </header>
@@ -26,18 +29,16 @@ const tags = tagsOf(entries);
         </ul>
       )
     }
-    {entries.length === 0 && <p>No entries yet.</p>}
-    <ol class="entries">
-      {
-        entries.map((e) => (
-          <li class="entry">
-            <a class="entry__link" href={`/journal/${e.id}/`}>
-              <DateStamp date={e.data.date} />
-              <p>{excerpt(e.body ?? '', 200)}</p>
-            </a>
-          </li>
-        ))
-      }
-    </ol>
+    {
+      entries.length === 0 ? (
+        <Panel tone="fine" shadow>
+          <div class="panel__body strips-empty"><Bubble shape="caption" as="p">No entries yet.</Bubble></div>
+        </Panel>
+      ) : (
+        <ol class="strips">
+          {entries.map((e, i) => <Strip href={`/journal/${e.id}/`} date={e.data.date} text={excerpt(e.body ?? '', 220)} index={i} />)}
+        </ol>
+      )
+    }
   </div>
 </Base>

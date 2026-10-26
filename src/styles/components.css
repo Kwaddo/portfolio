@@ -52,7 +52,15 @@
   font-size: 0.7rem;
 }
 .chips a {
+  display: inline-block;
+  margin: -0.15rem -0.6rem; /* the link fills its chip */
+  padding: 0.15rem 0.6rem;
   text-decoration: none;
+}
+.chips a:hover,
+.chips a:focus-visible {
+  background: var(--ink);
+  color: var(--paper);
 }
 /* primary play action: a wide inked button with a drawn triangle, pressed into its shadow on hover */
 .btn--play {
@@ -107,6 +115,17 @@
   .email__link {
     display: inline-block;
     padding-block: 0.6rem;
+  }
+  /* tag chips that link are 44px targets too */
+  .chips li:has(> a) {
+    padding: 0;
+  }
+  .chips a {
+    display: inline-flex;
+    align-items: center;
+    min-block-size: 2.75rem;
+    margin: 0;
+    padding: 0 0.8rem;
   }
 }
 /* ---------- badges ---------- */

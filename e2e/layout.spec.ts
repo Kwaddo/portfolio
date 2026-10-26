@@ -61,7 +61,7 @@ for (const dir of ['ltr', 'rtl'] as const) {
         if (!wrap) return [];
         const { left, right } = wrap.getBoundingClientRect();
         const out: string[] = [];
-        for (const el of document.querySelectorAll<HTMLElement>('.panel, .bubble, .frame, .timeline__item, .chapter__text, .chapter__side, .notice, .player, .btn, .badge, .frame__cap, img, .split__door h2, .split__door p, .sfx > span')) {
+        for (const el of document.querySelectorAll<HTMLElement>('.panel, .strip__link, .bubble, .frame, .timeline__item, .chapter__text, .chapter__side, .notice, .player, .btn, .badge, .frame__cap, img, .split__door h2, .split__door p, .sfx > span')) {
           if (el.closest('.nav, .footer')) continue;
           const style = getComputedStyle(el);
           if (style.display === 'none' || style.visibility === 'hidden') continue;

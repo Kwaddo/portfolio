@@ -3,9 +3,10 @@ import Icon from '../../components/Icon.astro';
 import { getCollection, render } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import DateStamp from '../../components/DateStamp.astro';
+import Panel from '../../components/Panel.astro';
 import { firstSentence, neighbors, newestFirst, tagSlug } from '../../lib/journal';
 import { formatDay } from '../../lib/dates';
-import { published } from '../../lib/content';
+import { dropcap, published } from '../../lib/content';
 
 export async function getStaticPaths() {
   const entries = newestFirst(published(await getCollection('journal')));
@@ -31,20 +32,24 @@ const projectHref = !project
   <article class="wrap stack">
     <p><a class="btn btn--back" href="/journal/"><Icon name="arrow-left" />Journal</a></p>
     <DateStamp date={entry.data.date} as="h1" />
-    {
-      entry.data.tags.length > 0 && (
-        <ul class="chips">
-          {entry.data.tags.map((t) => (
-            <li><a href={`/journal/tag/${tagSlug(t)}/`}>{t}</a></li>
-          ))}
-        </ul>
-      )
-    }
-    <div class="prose"><Content /></div>
-    {projectHref && <p><a class="btn" href={projectHref}><Icon name="arrow-right" />About {project}</a></p>}
+    <Panel weight={4} shadow>
+      <div class="panel__body entry-panel">
+        {
+          entry.data.tags.length > 0 && (
+            <ul class="chips">
+              {entry.data.tags.map((t) => (
+                <li><a href={`/journal/tag/${tagSlug(t)}/`}>{t}</a></li>
+              ))}
+            </ul>
+          )
+        }
+        <div class={dropcap(entry.body)}><Content /></div>
+        {projectHref && <p><a class="btn" href={projectHref}><Icon name="arrow-right" />About {project}</a></p>}
+      </div>
+    </Panel>
     {(older || newer) && <nav class="pager" aria-label="More entries">
-      {older ? <a class="btn" href={`/journal/${older.id}/`}>Older: {formatDay(older.data.date)}</a> : <span />}
-      {newer ? <a class="btn" href={`/journal/${newer.id}/`}>Newer: {formatDay(newer.data.date)}</a> : <span />}
+      {older ? <a class="btn" href={`/journal/${older.id}/`}><Icon name="arrow-left" />Older: {formatDay(older.data.date)}</a> : <span />}
+      {newer ? <a class="btn" href={`/journal/${newer.id}/`}>Newer: {formatDay(newer.data.date)}<Icon name="arrow-right" /></a> : <span />}
     </nav>}
   </article>
 </Base>

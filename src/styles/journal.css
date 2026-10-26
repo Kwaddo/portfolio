@@ -5,34 +5,80 @@
   letter-spacing: 0.02em;
   text-transform: uppercase;
 }
-.entries {
+/* ---------- strips: tall narrow panels, the date runs vertically ---------- */
+.strips {
   display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 11rem), 1fr));
   gap: var(--gutter-panel);
   margin-block-end: 0;
   margin-inline: 0;
   padding: 0;
   list-style: none;
 }
-.entry__link {
+.strip__link {
+  position: relative;
   display: grid;
-  gap: 0.5rem;
-  padding: 1rem;
+  grid-template-columns: auto 1fr;
+  gap: 0.75rem;
+  min-block-size: 14rem;
+  padding: 0.9rem;
   border: var(--rule);
   background: var(--paper);
   color: var(--ink);
+  box-shadow: 4px 4px 0 var(--ink);
   text-decoration: none;
+  isolation: isolate;
+  overflow: clip; /* the burst stays inside the panel (the shadow is outside overflow and survives) */
+  transition:
+    background var(--t-fast),
+    color var(--t-fast);
 }
-.entry__link p:not(.stamp) {
+[dir='rtl'] .strip__link {
+  box-shadow: -4px 4px 0 var(--ink);
+}
+.strip__date {
+  margin: 0;
+  font: 400 1.1rem/1 var(--font-display);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  writing-mode: vertical-rl;
+  padding-inline-end: 0.6rem;
+  border-inline-end: 2px solid currentColor;
+}
+.strip__text {
   color: var(--tone);
+  font-size: 0.9rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 7;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
-.entry__link:hover,
-.entry__link:focus-visible {
+.strip__link:hover,
+.strip__link:focus-visible {
   background: var(--ink);
   color: var(--paper);
 }
-.entry__link:hover p:not(.stamp),
-.entry__link:focus-visible p:not(.stamp) {
+.strip__link:hover .strip__text,
+.strip__link:focus-visible .strip__text {
   color: var(--paper);
+}
+.strip__link .speed {
+  inset: -30%;
+}
+.strip__link:hover .speed,
+.strip__link:focus-visible .speed {
+  opacity: 0.16;
+}
+/* the empty journal: one narration box inside a toned panel */
+.strips-empty {
+  min-block-size: 14rem;
+  place-content: center;
+  justify-items: start;
+}
+/* the entry body: tags, prose and the project button in one framed panel */
+.entry-panel {
+  gap: 1.25rem;
+  padding: clamp(1rem, 3vw, 2rem);
 }
 .pager {
   display: flex;
