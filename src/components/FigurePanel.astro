@@ -1,6 +1,6 @@
 ---
 // An inked panel with a burst, a paper word and one of the two drawn figures. The session picks a figure once (hero); `alternate`
-// shows the other one. Exactly one image is requested per page: the picker hides the other before the lazy loader reaches it.
+// shows the other one. Exactly one image is requested per page: the markup holds no image (noscript aside), the picker creates it.
 import Panel from './Panel.astro';
 import Sfx from './Sfx.astro';
 import figureA from '../assets/figure-a.png';
@@ -21,11 +21,21 @@ const alt = 'Ali Khalaf, drawn in ink';
     <span class="speed hero__speed" aria-hidden="true"></span>
     <Sfx word={word} rotate={rotate} paper />
   </Panel>
-  <div class="hero__figure" data-alternate={alternate ? '' : undefined} data-b={figureB.src} data-b-width={figureB.width} data-b-height={figureB.height}>
-    <img src={figureA.src} width={figureA.width} height={figureA.height} alt={alt} loading="lazy" decoding="async" data-figure="a" />
+  <div
+    class="hero__figure"
+    data-alternate={alternate ? '' : undefined}
+    data-alt={alt}
+    data-a={figureA.src}
+    data-a-width={figureA.width}
+    data-a-height={figureA.height}
+    data-b={figureB.src}
+    data-b-width={figureB.width}
+    data-b-height={figureB.height}
+  >
+    <noscript><img src={figureA.src} width={figureA.width} height={figureA.height} alt={alt} loading="lazy" decoding="async" data-figure="a" /></noscript>
     <script is:inline data-astro-rerun>
       // One figure per visit: picked at random on the first page view of the session, then kept; `alternate` shows the other.
-      // Only figure a is in the markup (the no-JS fallback); figure b is created here, so exactly one image is ever requested.
+      // No image is in the markup (the no-JS fallback sits in noscript): the chosen one is created here, so exactly one is ever requested.
       (function () {
         var pick;
         try {
@@ -39,17 +49,15 @@ const alt = 'Ali Khalaf, drawn in ink';
         }
         var root = document.currentScript.parentNode;
         if (root.hasAttribute('data-alternate')) pick = pick === 'a' ? 'b' : 'a';
-        if (pick !== 'b') return;
-        var a = root.querySelector('img[data-figure]');
-        var b = document.createElement('img');
-        b.loading = 'lazy';
-        b.decoding = 'async';
-        b.width = Number(root.getAttribute('data-b-width'));
-        b.height = Number(root.getAttribute('data-b-height'));
-        b.alt = a.alt;
-        b.setAttribute('data-figure', 'b');
-        b.src = root.getAttribute('data-b');
-        a.replaceWith(b);
+        var img = document.createElement('img');
+        img.loading = 'lazy';
+        img.decoding = 'async';
+        img.width = Number(root.getAttribute('data-' + pick + '-width'));
+        img.height = Number(root.getAttribute('data-' + pick + '-height'));
+        img.alt = root.getAttribute('data-alt');
+        img.setAttribute('data-figure', pick);
+        img.src = root.getAttribute('data-' + pick);
+        root.appendChild(img);
       })();
     </script>
   </div>

@@ -48,10 +48,16 @@ const ratio = frameWidth && frameHeight ? `${frameWidth} / ${frameHeight}` : '16
       frame.tabIndex = 0;
       // The game takes the keys: focus the frame now, again once it has loaded, and whenever the player is pressed.
       // While it holds focus the page does not scroll, so keys the game lets through cannot move the page.
+      // The lock follows the active element, not the frame's own focus events: Chromium fires none on a cross-origin
+      // frame entered by sequential navigation (Shift+Tab out, Tab back in), so every focus change re-reads it.
       const lock = (on: boolean) => document.documentElement.classList.toggle('is-playing', on);
-      frame.addEventListener('focus', () => lock(true));
+      const sync = () => { if (frame.isConnected) lock(document.activeElement === frame); };
+      addEventListener('focus', sync);
+      addEventListener('blur', sync);
+      document.addEventListener('focusin', sync);
+      document.addEventListener('focusout', () => setTimeout(sync));
       frame.addEventListener('blur', () => {
-        lock(false);
+        sync();
         // The game is cross-origin, so a Tab it does not consume walks out of the frame to the next control (or to the document).
         // Send focus back when it left forwards and no pointer was involved; Shift+Tab (backwards) and clicks keep their exit.
         setTimeout(() => {
@@ -70,6 +76,7 @@ const ratio = frameWidth && frameHeight ? `${frameWidth} / ${frameHeight}` : '16
       stage.replaceChildren(frame);
       stage.scrollIntoView({ block: 'nearest' }); // a landscape phone shows the whole stage before the page locks
       frame.focus();
+      sync();
       fullscreen.hidden = !document.fullscreenEnabled;
       hint.hidden = false;
       // Games that declare a native size are scaled to fit the stage instead of being clipped.

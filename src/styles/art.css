@@ -262,7 +262,8 @@ main:has(> .wrap > .stack:last-child > .spread--ink:last-child) {
   rotate: 6deg;
 }
 
-/* ---------- page heads: a tone field at the end side fading to paper ---------- */
+/* ---------- page heads: a tone field at the end side fading to paper ----------
+   The four-value `inset` is physical (a listed exception, like the mask directions); the [dir='rtl'] rule mirrors it. */
 .page-head {
   position: relative;
   isolation: isolate;
@@ -322,7 +323,8 @@ main:has(> .wrap > .stack:last-child > .spread--ink:last-child) {
 }
 
 /* ---------- narration boxes: captions, chips and periods are rectangles with one cut corner and a 2px frame ----------
-   The box is ink, clipped with a 10px chamfer at the top start; a paper inset 2px inside carries the text. */
+   The box is ink, clipped with a 10px chamfer at the top start; a paper inset 2px inside carries the text.
+   Contrast audits that read ancestor backgrounds see ink on ink (1:1); the text sits on the ::before paper inset (19:1). */
 .bubble--caption,
 .frame__cap {
   border: 0;

@@ -51,9 +51,20 @@ test('Tab stays in the game; Shift+Tab and a click outside leave it', async ({ p
   await page.keyboard.press('Shift+Tab');
   await page.waitForTimeout(100);
   await expect(frame).not.toBeFocused();
-  await frame.focus();
+  await expect(page.locator('html')).not.toHaveClass(/is-playing/);
+  // back in by Tab (no focus event reaches a cross-origin frame this way): the lock still engages and the keys stay with the game
+  await page.setViewportSize({ width: 360, height: 500 });
+  await page.keyboard.press('Tab');
+  await page.waitForTimeout(100);
   await expect(frame).toBeFocused();
+  await expect(page.locator('html')).toHaveClass(/is-playing/);
+  await page.keyboard.press('ArrowDown');
+  await page.waitForTimeout(200);
+  expect(await page.evaluate(() => window.scrollY)).toBe(0);
   await page.locator('h1').click();
   await expect(frame).not.toBeFocused();
   await expect(page.locator('html')).not.toHaveClass(/is-playing/);
+  await page.keyboard.press('ArrowDown');
+  await page.waitForTimeout(300);
+  expect(await page.evaluate(() => window.scrollY)).toBeGreaterThan(0);
 });

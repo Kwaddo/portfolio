@@ -87,8 +87,10 @@
     letter-spacing: 0;
     text-transform: none;
   }
-  /* badges print as plain ruled labels: no backgrounds, no star clip */
-  .badge {
+  /* badges print as plain ruled labels: no backgrounds, no star clip (the star badges' art.css rules outrank a bare .badge) */
+  .resume .badge,
+  .resume .badge--live,
+  .resume .badge--released {
     padding: 0 0.4em;
     border: 1pt solid var(--ink);
     background: none;
