@@ -166,8 +166,11 @@
   }
 }
 
-/* phone: a portrait cover sits centred under the lede */
+/* phone: the word rises less (the back button above it is a 44px target now); a portrait cover sits centred under the lede */
 @media (max-width: 47.99rem) {
+  .hero-spread > .sfx {
+    inset-block-start: -0.4em;
+  }
   .hero-spread__media > .frame--portrait {
     margin-inline: auto;
   }

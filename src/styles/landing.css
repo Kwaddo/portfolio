@@ -369,6 +369,11 @@
   .hero__figure img {
     block-size: 95%;
   }
+  /* the seated figure is wide: on a phone the word moves to the top start, where only its head is (KWA read at 360 otherwise) */
+  .hero__end-cell:has(img[data-figure='b']) > .hero__end > .sfx {
+    place-items: start start;
+    padding-block-start: 4%;
+  }
   .split {
     --cut: 2.5rem;
   }
