@@ -59,7 +59,11 @@ const ratio = frameWidth && frameHeight ? `${frameWidth} / ${frameHeight}` : '16
           if (forward) frame.focus();
         });
       });
-      frame.addEventListener('load', () => frame.focus());
+      // on load, take focus only if the visitor has not moved on to the bar's buttons
+      frame.addEventListener('load', () => {
+        const active = document.activeElement;
+        if (!active || active === document.body || stage.contains(active)) frame.focus();
+      });
       stage.addEventListener('pointerdown', () => frame.focus());
       stage.replaceChildren(frame);
       frame.focus();

@@ -63,10 +63,10 @@
 }
 /* the seated figure is wider: a slightly smaller word and figure keep five letters readable */
 @media (min-width: 64rem) {
-  .hero__end-cell:has(img[data-figure='b']:not([hidden])) > .hero__end > .sfx {
+  .hero__end-cell:has(img[data-figure='b']) > .hero__end > .sfx {
     font-size: clamp(3rem, 6.5vw, 5.25rem);
   }
-  .hero__end-cell:has(img[data-figure='b']:not([hidden])) .hero__figure img {
+  .hero__end-cell:has(img[data-figure='b']) .hero__figure img {
     block-size: min(105%, calc(100% + 2rem + clamp(1rem, 2.5vw, 1.75rem) - 0.25rem));
   }
 }
@@ -105,6 +105,17 @@
   font-size: clamp(3.25rem, 7.5vw, 6rem); /* KWADDO sits low on the start side; only its last letters go behind the figure */
   text-align: start;
 }
+/* RTL: the figure stands on the left, where the word's K would be; the word takes the top of the panel, start-aligned, one step smaller */
+@media (min-width: 64rem) {
+  [dir='rtl'] .hero__end > .sfx {
+    place-items: start start;
+    padding-block-start: 4%;
+    font-size: clamp(3rem, 6.5vw, 5.5rem);
+  }
+  [dir='rtl'] .hero__end-cell:has(img[data-figure='b']) > .hero__end > .sfx {
+    font-size: clamp(2.75rem, 5.5vw, 4.5rem);
+  }
+}
 @media (min-width: 48rem) {
   .spread.hero > .hero__start {
     grid-column: span 7;
@@ -132,6 +143,10 @@
   }
   .hero__figure img {
     block-size: min(105%, calc(100% + 2rem + clamp(1rem, 2.5vw, 1.75rem) - 0.25rem));
+  }
+  /* RTL: the head sits top-left, under the word's K; one step smaller keeps the K clear */
+  [dir='rtl'] .hero__end > .sfx {
+    font-size: clamp(2rem, 4.2vw, 3.25rem);
   }
 }
 

@@ -21,11 +21,11 @@ const alt = 'Ali Khalaf, drawn in ink';
     <span class="speed hero__speed" aria-hidden="true"></span>
     <Sfx word={word} rotate={rotate} paper />
   </Panel>
-  <div class="hero__figure" data-alternate={alternate ? '' : undefined}>
+  <div class="hero__figure" data-alternate={alternate ? '' : undefined} data-b={figureB.src} data-b-width={figureB.width} data-b-height={figureB.height}>
     <img src={figureA.src} width={figureA.width} height={figureA.height} alt={alt} loading="lazy" decoding="async" data-figure="a" />
-    <img src={figureB.src} width={figureB.width} height={figureB.height} alt={alt} loading="lazy" decoding="async" hidden data-figure="b" />
     <script is:inline data-astro-rerun>
       // One figure per visit: picked at random on the first page view of the session, then kept; `alternate` shows the other.
+      // Only figure a is in the markup (the no-JS fallback); figure b is created here, so exactly one image is ever requested.
       (function () {
         var pick;
         try {
@@ -39,8 +39,17 @@ const alt = 'Ali Khalaf, drawn in ink';
         }
         var root = document.currentScript.parentNode;
         if (root.hasAttribute('data-alternate')) pick = pick === 'a' ? 'b' : 'a';
-        var imgs = root.querySelectorAll('img[data-figure]');
-        for (var i = 0; i < imgs.length; i++) imgs[i].hidden = imgs[i].getAttribute('data-figure') !== pick;
+        if (pick !== 'b') return;
+        var a = root.querySelector('img[data-figure]');
+        var b = document.createElement('img');
+        b.loading = 'lazy';
+        b.decoding = 'async';
+        b.width = Number(root.getAttribute('data-b-width'));
+        b.height = Number(root.getAttribute('data-b-height'));
+        b.alt = a.alt;
+        b.setAttribute('data-figure', 'b');
+        b.src = root.getAttribute('data-b');
+        a.replaceWith(b);
       })();
     </script>
   </div>

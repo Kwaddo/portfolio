@@ -24,8 +24,8 @@ export function findViolations(path: string, html: string): string[] {
     if (re.test(markupOnly ? markup : html)) out.push(`${path}: ${name}`);
   }
   let visible = html.replace(/<script type="application\/ld\+json">[\s\S]*?<\/script>/g, '').replace(ATTRS, '');
-  // The one allowed appearance of the handle as text: the decorative, aria-hidden KWADDO word in the landing hero.
-  visible = visible.replace(/<span class="sfx[^"]*" aria-hidden="true"[^>]*><span>KWADDO<\/span><\/span>/g, '');
+  // The one allowed appearance of the handle as text: the decorative, aria-hidden KWADDO word in the landing hero, and only there.
+  if (path === 'index.html') visible = visible.replace(/<span class="sfx[^"]*" aria-hidden="true"[^>]*><span>KWADDO<\/span><\/span>/g, '');
   // Sitemap and RSS legitimately carry the site URL in these elements and attributes.
   if (path.endsWith('.xml')) visible = visible.replace(/<(loc|link|guid)\b[^>]*>[\s\S]*?<\/\1>/g, '').replace(/\s(?:href|url)="[^"]*"/g, '');
   if (/kwaddo/i.test(visible)) out.push(`${path}: Kwaddo handle shown as text`);

@@ -10,6 +10,7 @@ html {
   /* nothing scrolls sideways and nothing rubber-bands past the page */
   overflow-x: clip;
   overscroll-behavior: none;
+  scrollbar-gutter: stable; /* the scroll lock while a game plays never shifts the page on classic scrollbars */
   /* the canvas behind rubber-band overscroll: paper above the page, ink below the ink footer */
   background: linear-gradient(to bottom, var(--paper) 50%, var(--ink) 50%) fixed;
 }

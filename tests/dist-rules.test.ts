@@ -46,6 +46,9 @@ describe('findViolations', () => {
     expect(findViolations('index.html', `<div>${sfx}</div>`)).toEqual([]);
     expect(findViolations('index.html', `<div>${sfx}<p>by Kwaddo</p></div>`)).toHaveLength(1);
     expect(findViolations('index.html', '<span class="sfx"><span>KWADDO</span></span>')).toHaveLength(1);
+    // hero only: the same word on any other page is a violation
+    expect(findViolations('about/index.html', `<div>${sfx}</div>`)).toHaveLength(1);
+    expect(findViolations('about/index.html', `<div>${sfx}<p>by Kwaddo</p></div>`)).toHaveLength(1);
   });
 
   test('flags the Kwaddo handle as visible text but not in attributes', () => {
