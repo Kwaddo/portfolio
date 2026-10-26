@@ -5,6 +5,7 @@
   z-index: 50;
   background: var(--paper);
   border-block-end: var(--rule);
+  box-shadow: 0 4px 0 var(--ink); /* a second ink line: the strip reads as a panel edge */
 }
 .nav__inner {
   display: flex;
@@ -18,6 +19,15 @@
   letter-spacing: 0.02em;
   text-decoration: none;
   text-transform: uppercase;
+  /* the name is a stamp: paper letters on an ink block, leaning with the headings */
+  padding-inline: 0.5rem;
+  background: var(--ink);
+  color: var(--paper);
+  transform: skewX(-6deg);
+  justify-self: start;
+}
+[dir='rtl'] .nav__brand {
+  transform: skewX(6deg);
 }
 .nav__list {
   display: flex;
@@ -34,6 +44,12 @@
 .nav__list a[aria-current='page'] {
   text-decoration: underline;
   text-decoration-thickness: 3px;
+  text-underline-offset: 0.3em;
+}
+.nav__list a:not([aria-current='page']):hover {
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.3em;
 }
 .nav__cta {
   margin-inline-start: auto;

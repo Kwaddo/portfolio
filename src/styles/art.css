@@ -434,12 +434,26 @@ main:has(> .wrap > .stack:last-child > .spread--ink:last-child) {
 }
 .lost {
   display: grid;
-  gap: var(--gutter-panel);
-  align-items: center;
+  gap: 3.5rem;
+  justify-items: center;
+  padding-block: 2rem 4rem;
+  inline-size: min(100%, 38rem);
+  margin-inline: auto;
+  text-align: center;
+}
+.lost > * {
+  inline-size: 100%;
+}
+.lost__code {
+  display: block;
+  font: 700 0.8rem / 1 var(--font-body);
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  margin-block-end: 0.6rem;
+  color: var(--tone);
 }
 @media (min-width: 48rem) {
-  .page-head--figure,
-  .lost {
+  .page-head--figure {
     grid-template-columns: 7fr 5fr;
   }
   .hero__end-cell--inset .hero__figure img {
@@ -452,5 +466,5 @@ main:has(> .wrap > .stack:last-child > .spread--ink:last-child) {
   content: none;
 }
 .lost > .bubble--thought {
-  margin-inline: 7%;
+  margin-inline: 0;
 }
