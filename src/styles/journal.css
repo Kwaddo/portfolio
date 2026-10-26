@@ -73,8 +73,8 @@ p.timeline__period {
   color: var(--tone);
   font-size: 0.9rem;
 }
-/* the current entry is stamped in ink */
-.timeline__item:first-child .timeline__period {
+/* the current entry is stamped in ink (the caption-box timelines; the resume's plain periods stay plain) */
+.timeline__item:first-child .bubble--caption.timeline__period {
   background: var(--ink);
   color: var(--paper);
 }
