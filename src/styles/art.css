@@ -131,12 +131,12 @@
   /* content never under the cut */
   :is(.spread--feature-start, .spread--feature-quad, .spread--3up) > .panel:first-of-type > .panel__body,
   .timeline--alt .timeline__item:nth-child(odd) {
-    padding-inline-end: calc(1rem + var(--cut));
+    padding-inline-end: calc(1rem + var(--cut, 0px));
   }
   :is(.spread--feature-end, .spread--3up) > .panel:last-of-type > .panel__body,
   .spread--feature-end > .panel:first-of-type > .panel__body,
   .timeline--alt .timeline__item:nth-child(even) {
-    padding-inline-start: calc(1rem + var(--cut));
+    padding-inline-start: calc(1rem + var(--cut, 0px));
   }
 }
 
@@ -149,14 +149,14 @@
     position: relative;
   }
   .timeline--alt .timeline__item:nth-child(odd) {
-    padding-inline-end: calc(1rem + var(--cut));
+    padding-inline-end: calc(1rem + var(--cut, 0px));
     clip-path: polygon(-6px -6px, 100% -6px, 100% 0, calc(100% - var(--cut)) 100%, calc(100% - var(--cut)) calc(100% + var(--shadow-x)), -6px calc(100% + var(--shadow-x)));
   }
   [dir='rtl'] .timeline--alt .timeline__item:nth-child(odd) {
     clip-path: polygon(0 -6px, calc(100% + 6px) -6px, calc(100% + 6px) calc(100% + var(--shadow-x)), var(--cut) calc(100% + var(--shadow-x)), var(--cut) 100%, 0 0);
   }
   .timeline--alt .timeline__item:nth-child(even) {
-    padding-inline-start: calc(1rem + var(--cut));
+    padding-inline-start: calc(1rem + var(--cut, 0px));
     clip-path: polygon(var(--cut) -6px, calc(100% + var(--shadow-x)) -6px, calc(100% + var(--shadow-x)) calc(100% + var(--shadow-x)), -6px calc(100% + var(--shadow-x)), -6px 100%, var(--cut) 0);
   }
   [dir='rtl'] .timeline--alt .timeline__item:nth-child(even) {
