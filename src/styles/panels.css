@@ -49,6 +49,13 @@
     grid-row: span 2;
     align-self: stretch;
   }
+  /* a spread whose last panel would sit alone under the rest lets it run the full width instead */
+  .spread--fill > :not(.spread__label):not(.sfx):last-child {
+    grid-column: 1 / -1;
+  }
+  .spread--fill > :not(.spread__label):not(.sfx):last-child .panel__media {
+    aspect-ratio: 5 / 1;
+  }
   /* quad: one tall feature and four small panels in two rows; a strip over 2-up below 64rem */
   .spread--feature-quad > :not(.spread__label):not(.sfx) {
     grid-column: span 6;

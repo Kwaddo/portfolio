@@ -5,7 +5,8 @@ period: 2025 - 2026
 stack: [Laravel, PostgreSQL, Redis, React, TypeScript, Tailwind]
 summary: A multi-tenant healthcare management platform, now being wound down. I kept light oversight of the system.
 confidential: false
-order: 2
+kind: system
+order: 5
 cover: ../../assets/media/cuspio/cover.png
 coverAlt: The CuspIO dashboard for a demo clinic, with appointment and patient counts, a recent patients list and an appointment activity chart.
 gallery:

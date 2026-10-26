@@ -39,6 +39,7 @@ const work = defineCollection({
         period: z.string(),
         stack: z.array(z.string()).default([]),
         summary: z.string(),
+        kind: z.enum(['role', 'system']).default('role'),
         confidential: z.boolean().default(false),
         order: z.number(),
         draft: z.boolean().default(false),
