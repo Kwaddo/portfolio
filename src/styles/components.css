@@ -99,6 +99,16 @@
   box-shadow: -2px 2px 0 var(--ink);
 }
 
+/* touch widths: every button is a 44px target; the plain email link too */
+@media (max-width: 63.99rem), (pointer: coarse) {
+  .btn {
+    min-block-size: 2.75rem;
+  }
+  .email__link {
+    display: inline-block;
+    padding-block: 0.6rem;
+  }
+}
 /* ---------- badges ---------- */
 .badge {
   display: inline-block;
@@ -404,4 +414,24 @@ a.bubble--ink:focus-visible {
   }
 }
 
-
+/* phone: the copy button takes the row; facts as a two-column grid; chapter numerals as a short band */
+@media (max-width: 47.99rem) {
+  .email > button.btn {
+    inline-size: 100%;
+    justify-content: center;
+  }
+  .facts {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+  .facts > div {
+    flex-wrap: wrap;
+  }
+  .facts > div:has(.facts__links) {
+    grid-column: 1 / -1;
+  }
+  .chapter__side {
+    --num: 6rem;
+    min-block-size: 7rem;
+  }
+}
