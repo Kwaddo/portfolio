@@ -105,11 +105,13 @@
   font-size: clamp(3.25rem, 7.5vw, 6rem); /* KWADDO sits low on the start side; only its last letters go behind the figure */
   text-align: start;
 }
-/* RTL: the figure stands on the left, where the word's K would be; the word takes the top of the panel, start-aligned, one step smaller */
+/* RTL: the figure stands on the left, where the word's K would be; the word takes the top of the panel, start-aligned (one step smaller at desktop) */
+[dir='rtl'] .hero__end > .sfx {
+  place-items: start start;
+  padding-block-start: 4%;
+}
 @media (min-width: 64rem) {
   [dir='rtl'] .hero__end > .sfx {
-    place-items: start start;
-    padding-block-start: 4%;
     font-size: clamp(3rem, 6.5vw, 5.5rem);
   }
   [dir='rtl'] .hero__end-cell:has(img[data-figure='b']) > .hero__end > .sfx {
@@ -127,19 +129,22 @@
 /* mid widths: the name needs the room, the HELLO panel narrows */
 @media (min-width: 48rem) and (max-width: 63.99rem) {
   .spread.hero > .hero__start {
-    grid-column: span 8;
+    grid-column: span 7;
   }
   .spread.hero > .hero__end-cell {
-    grid-column: span 4;
+    grid-column: span 5;
+  }
+  .hero__start {
+    padding-inline: clamp(1rem, 2.5vw, 1.75rem);
   }
   .hero__bubble {
-    padding-inline: 2rem 2.25rem;
+    padding-inline: 1.75rem 2rem;
   }
-  /* the narrow four-column panel: a small word at the very top start (only the head is up there), figure at 105% on the end */
+  /* the five-column panel: a word at the very top start (only the head is up there), figure at 105% on the end */
   .hero__end > .sfx {
     place-items: start start;
     padding-block-start: 3%;
-    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-size: clamp(2.75rem, 5.5vw, 4.5rem);
   }
   .hero__figure img {
     block-size: min(105%, calc(100% + 2rem + clamp(1rem, 2.5vw, 1.75rem) - 0.25rem));
@@ -339,14 +344,61 @@
   --sfx-stroke: var(--ink);
   --sfx-fill: var(--paper);
 }
-@media (max-width: 40rem) {
+/* ---------- phone: bubble panel over the figure panel, caption inside the bubble panel; doors stacked with one diagonal between them ---------- */
+@media (max-width: 47.99rem) {
+  .hero {
+    padding-block-start: 1rem;
+    padding-block-end: 0.5rem;
+  }
+  .hero__start {
+    padding-block-end: clamp(1.5rem, 4vw, 2.5rem);
+  }
   .hero__bubble {
     padding-inline: 2rem;
+  }
+  .hero__avail {
+    position: relative; /* in the flow, and still the box its paper inset positions against */
+    inset: auto;
+    align-self: start;
+    max-inline-size: 100%;
+    margin-block-start: 1.25rem;
+  }
+  .hero__end {
+    min-block-size: 19rem;
+  }
+  .hero__figure img {
+    block-size: 95%;
+  }
+  .split {
+    --cut: 2.5rem;
+  }
+  .split__door {
+    min-block-size: 14rem;
+    padding-block: 1.25rem;
+  }
+  /* the work door's bottom edge runs diagonally into the personal door, which rises --cut under it */
+  .split__door--work {
+    border-block-end: 0;
+    clip-path: polygon(0 0, 100% 0, 100% calc(100% - var(--cut)), 0 100%);
+  }
+  .split__door--personal {
+    min-block-size: calc(14rem + var(--cut));
+    margin-block-start: calc(-1 * var(--cut));
+    clip-path: polygon(0 var(--cut), 100% 0, 100% 100%, 0 100%);
+  }
+  [dir='rtl'] .split__door--work {
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 calc(100% - var(--cut)));
+  }
+  [dir='rtl'] .split__door--personal {
+    clip-path: polygon(0 0, 100% var(--cut), 100% 100%, 0 100%);
   }
 }
 @media (min-width: 48rem) {
   .split {
     grid-template-columns: 1fr 1fr;
+  }
+  .split__door {
+    min-block-size: clamp(15rem, 34vh, 23rem);
   }
   .split__door--work {
     padding-inline-end: calc(var(--cut) + 2rem);
@@ -369,6 +421,10 @@
 /* ---------- work with me: three panels ---------- */
 .wwm {
   padding-block: 0;
+}
+/* after another wrapped block (the contact page's heading, the journal ticker) the section keeps its heading row */
+.wrap + .wwm {
+  margin-block-start: clamp(1.5rem, 3vw, 2.5rem);
 }
 /* the inked panel carries HUH? below its copy (never behind it), in the room the stretched row leaves */
 .wwm__ink {
