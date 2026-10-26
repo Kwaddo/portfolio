@@ -25,7 +25,7 @@ const { Content } = await render(entry);
     <header class="spread hero-spread has-tone">
       <Sfx word="WORK" rotate="-5deg" />
       <div class="hero-spread__text">
-        <h1>{data.title}</h1>
+        <h1 style={`--w: ${Math.max(...data.title.split(/\s+/).map((w) => w.length))}`}>{data.title}</h1>
         <p class="lede">{data.summary}</p>
       </div>
       {
