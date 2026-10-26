@@ -103,6 +103,12 @@
   max-inline-size: 32ch;
   font-size: 0.8rem;
 }
+/* large phone: two portraits side by side, landscapes still one per row */
+@media (min-width: 36rem) and (max-width: 47.99rem) {
+  .gallery > .frame--portrait {
+    grid-column: span 6;
+  }
+}
 @media (min-width: 48rem) {
   .gallery > .frame--portrait {
     grid-column: span 3;
@@ -160,6 +166,13 @@
   }
 }
 
+/* phone: a portrait cover sits centred under the lede */
+@media (max-width: 47.99rem) {
+  .hero-spread__media > .frame--portrait {
+    margin-inline: auto;
+  }
+}
+
 /* ---------- project body: prose beside a sticky facts panel at desktop ---------- */
 .project {
   display: grid;
@@ -177,6 +190,16 @@
 }
 .facts-panel .credits {
   font-size: 0.95rem;
+}
+/* below desktop the facts are a full-width panel under the hero: a compact two-column grid, actions across both */
+@media (max-width: 63.99rem) {
+  .facts-panel .panel__body {
+    grid-template-columns: 1fr 1fr;
+    align-items: start;
+  }
+  .facts-panel .panel__body > :is(.btn--play, .cta-row, .credits) {
+    grid-column: 1 / -1;
+  }
 }
 @media (min-width: 64rem) {
   .project {
@@ -242,6 +265,15 @@ a.next-panel:focus-visible > .sfx {
   --sfx-fill: var(--ink);
 }
 
+/* the note shown while the fixed frame is scaled under 60 % */
+.player__note {
+  color: var(--tone);
+  font-size: 0.8rem;
+}
+.player__note[hidden] {
+  display: none;
+}
+
 /* ---------- game player ---------- */
 .player {
   border: var(--rule);
@@ -286,8 +318,14 @@ a.next-panel:focus-visible > .sfx {
     inline-size: 100%;
   }
   .play__head {
-    flex-direction: column-reverse;
+    flex-direction: column;
     align-items: start;
+  }
+}
+/* landscape phone: the stage fits under the sticky nav; the bar may sit below the fold */
+@media (max-height: 30rem) {
+  .play {
+    inline-size: min(100%, calc((100svh - 7.5rem) * var(--play-ratio, 1.7778)));
   }
 }
 .play__panel .player {

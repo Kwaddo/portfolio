@@ -21,6 +21,7 @@ const ratio = frameWidth && frameHeight ? `${frameWidth} / ${frameHeight}` : '16
   <div class="player__bar">
     <button class="btn" type="button" data-fullscreen hidden>Fullscreen</button>
     <a class="btn" href={src} target="_blank" rel="noopener noreferrer">Open in a new tab</a>
+    <p class="player__note" data-note hidden>Best on a wider screen</p>
     <p class="player__hint" data-hint hidden>Shift+Tab leaves the game</p>
   </div>
 </div>
@@ -33,6 +34,7 @@ const ratio = frameWidth && frameHeight ? `${frameWidth} / ${frameHeight}` : '16
     const start = root.querySelector<HTMLButtonElement>('[data-start]')!;
     const fullscreen = root.querySelector<HTMLButtonElement>('[data-fullscreen]')!;
     const hint = root.querySelector<HTMLElement>('[data-hint]')!;
+    const note = root.querySelector<HTMLElement>('[data-note]')!;
     let pointerAt = 0;
     document.addEventListener('pointerdown', () => { pointerAt = Date.now(); }, true);
     start.addEventListener('click', () => {
@@ -66,6 +68,7 @@ const ratio = frameWidth && frameHeight ? `${frameWidth} / ${frameHeight}` : '16
       });
       stage.addEventListener('pointerdown', () => frame.focus());
       stage.replaceChildren(frame);
+      stage.scrollIntoView({ block: 'nearest' }); // a landscape phone shows the whole stage before the page locks
       frame.focus();
       fullscreen.hidden = !document.fullscreenEnabled;
       hint.hidden = false;
@@ -80,6 +83,7 @@ const ratio = frameWidth && frameHeight ? `${frameWidth} / ${frameHeight}` : '16
         const fit = () => {
           const s = Math.min(stage.clientWidth / w, stage.clientHeight / h);
           frame.style.transform = `scale(${s})`;
+          note.hidden = s >= 0.6; // a small stage gets a plain note in the bar
         };
         fit();
         new ResizeObserver(fit).observe(stage);
