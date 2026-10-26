@@ -1,6 +1,7 @@
 ---
 import { isActive, nav } from '../lib/nav';
 import { site } from '../data/site';
+import Icon from './Icon.astro';
 
 interface Props {
   pathname: string;
@@ -14,7 +15,7 @@ const { pathname } = Astro.props;
       <ul class="nav__list">
         {
           nav.map((item) => (
-            <li class:list={[item.href === '/contact/' && 'nav__contact']}>
+            <li>
               <a href={item.href} aria-current={isActive(pathname, item.href) ? 'page' : undefined}>
                 {item.label}
               </a>
@@ -23,6 +24,6 @@ const { pathname } = Astro.props;
         }
       </ul>
     </nav>
-    <a class="btn btn--solid nav__cta" href="/contact/">Get in touch</a>
+    <a class="btn btn--solid nav__cta" href="/contact/" aria-label="Get in touch"><Icon name="mail" /><span class="nav__cta-text">Get in touch</span></a>
   </div>
 </header>

@@ -30,3 +30,9 @@
     --shadow-x: 8px;
   }
 }
+/* phone: the nav is two rows (name + CTA, then the link row) */
+@media (max-width: 47.99rem) {
+  :root {
+    --nav-h: 5.75rem;
+  }
+}
