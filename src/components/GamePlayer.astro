@@ -81,6 +81,13 @@ const ratio = frameWidth && frameHeight ? `${frameWidth} / ${frameHeight}` : '16
       });
       stage.addEventListener('pointerdown', () => frame.focus());
       stage.replaceChildren(frame);
+      // A focus guard right after the player: Tab out of the game (or out of its last control) lands here and goes straight back,
+      // so it can never walk on to the page or the browser's own controls. Shift+Tab still leaves, as the hint says.
+      const guard = document.createElement('span');
+      guard.tabIndex = 0;
+      guard.setAttribute('aria-hidden', 'true');
+      guard.addEventListener('focus', () => frame.focus());
+      stage.after(guard);
       stage.scrollIntoView({ block: 'nearest' }); // a landscape phone shows the whole stage before the page locks
       frame.focus();
       sync();
