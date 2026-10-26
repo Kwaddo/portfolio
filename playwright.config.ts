@@ -14,5 +14,7 @@ export default defineConfig({
     { name: 'desktop', use: { ...devices['Desktop Chrome'] } },
     { name: 'firefox', use: { ...devices['Desktop Firefox'] }, testMatch: /layout\.spec\.ts/ },
     { name: 'webkit-phone', use: { ...devices['iPhone 14'] }, testMatch: /layout\.spec\.ts/ },
+    { name: 'tablet', use: { ...devices['iPad Mini'] }, testMatch: /layout\.spec\.ts/ },
+    { name: 'tablet-landscape', use: { ...devices['iPad Mini landscape'] }, testMatch: /layout\.spec\.ts/ },
   ],
 });
