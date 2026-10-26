@@ -1,0 +1,57 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import Bubble from '../components/Bubble.astro';
+import Spread from '../components/Spread.astro';
+import Panel from '../components/Panel.astro';
+import WorkWithMe from '../components/WorkWithMe.astro';
+import JournalTicker from '../components/JournalTicker.astro';
+import FigurePanel from '../components/FigurePanel.astro';
+import { published } from '../lib/content';
+import { site } from '../data/site';
+
+// Door captions carry counts derived from the collections, never typed numbers.
+const [work, games, lab, timeline] = await Promise.all([
+  getCollection('work'),
+  getCollection('games'),
+  getCollection('lab'),
+  getCollection('timeline'),
+]);
+const roles = published(timeline).filter((e) => e.data.kind === 'work').length;
+const systems = published(work).filter((e) => !e.data.confidential).length;
+const count = (n: number, one: string) => `${n} ${n === 1 ? one : `${one}s`}`;
+---
+<Base>
+  <Spread layout="stack" class="hero wrap">
+    <Panel weight={5} shadow class="hero__start">
+      <Bubble shape="shout" class="hero__bubble">
+        <h1>{site.name}</h1>
+        <p class="hero__role">{site.role}</p>
+      </Bubble>
+      <Bubble shape="caption" as="div" class="hero__avail">{site.availability}</Bubble>
+    </Panel>
+    <FigurePanel word="KWADDO" rotate="-8deg" />
+  </Spread>
+  <section class="split" aria-label="Choose a track">
+    <a class="split__door split__door--work" href="/work/">
+      <span class="tone-mid" aria-hidden="true"></span>
+      <span class="tone-coarse tone--paper" aria-hidden="true"></span>
+      <span class="split__lines" aria-hidden="true"></span>
+      <span class="speed" aria-hidden="true"></span>
+      <h2>Work</h2>
+      <p>Roles, and the systems behind them.</p>
+      <Bubble shape="caption" as="span" class="split__count">{count(roles, 'role')} · {count(systems, 'system')}</Bubble>
+    </a>
+    <a class="split__door split__door--personal on-ink" href="/personal/">
+      <span class="tone-mid tone--paper" aria-hidden="true"></span>
+      <span class="tone-coarse" aria-hidden="true"></span>
+      <span class="split__lines" aria-hidden="true"></span>
+      <span class="speed" aria-hidden="true"></span>
+      <h2>Personal</h2>
+      <p>Games, experiments and the stories behind them.</p>
+      <Bubble shape="caption" as="span" class="split__count">{count(published(games).length, 'game')} · {count(published(lab).length, 'experiment')}</Bubble>
+    </a>
+  </section>
+  <JournalTicker />
+  <WorkWithMe />
+</Base>

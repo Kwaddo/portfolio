@@ -1,0 +1,45 @@
+---
+import { site } from '../data/site';
+import Icon from './Icon.astro';
+const year = new Date().getFullYear();
+---
+<footer class="footer on-ink">
+  <div class="wrap footer__inner">
+    <p>&copy; {year} {site.name}</p>
+    <ul>
+      <li><a class="btn" href={site.links.github} rel="me noopener"><Icon name="github" />GitHub</a></li>
+      <li><a class="btn" href={site.links.linkedin} rel="me noopener"><Icon name="linkedin" />LinkedIn</a></li>
+      <li><a class="btn" href="/resume/"><Icon name="file" />Resume</a></li>
+      <li><a class="btn" href="/uses/"><Icon name="code" />Uses</a></li>
+      <li><a class="btn" href="/rss.xml"><Icon name="rss" />RSS</a></li>
+    </ul>
+    <a class="btn" href="#main" data-top><Icon name="arrow-up" />Back to top</a>
+  </div>
+</footer>
+
+<script>
+  // Back to top glides instead of snapping; focus lands on main once the scroll settles. Instant under reduced motion.
+  const bind = () => {
+    document.querySelectorAll<HTMLAnchorElement>('[data-top]:not([data-bound])').forEach((link) => {
+      link.dataset.bound = '1';
+      link.addEventListener('click', (event) => {
+        event.preventDefault();
+        const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const main = document.getElementById('main');
+        const land = () => {
+          main?.setAttribute('tabindex', '-1');
+          main?.focus({ preventScroll: true });
+        };
+        window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' });
+        if (reduce || window.scrollY === 0) return land();
+        const timer = setTimeout(land, 1200);
+        addEventListener('scrollend', () => {
+          clearTimeout(timer);
+          land();
+        }, { once: true });
+      });
+    });
+  };
+  bind();
+  document.addEventListener('astro:page-load', bind);
+</script>

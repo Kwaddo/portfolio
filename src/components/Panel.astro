@@ -1,0 +1,38 @@
+---
+interface Props {
+  w?: 1 | 2 | 3;
+  tall?: boolean;
+  tilt?: boolean;
+  weight?: 3 | 4 | 5;
+  tone?: 'fine' | 'mid' | 'coarse' | 'grad' | 'hatch';
+  shadow?: boolean;
+  fill?: boolean;
+  burst?: boolean;
+  href?: string;
+  index?: number;
+  class?: string;
+  as?: 'div' | 'article' | 'li' | 'section';
+}
+const { w, tall = false, tilt = false, weight = 3, tone, shadow = false, fill = false, burst = true, href, index, class: cls, as = 'div' } = Astro.props;
+const Tag = href ? 'a' : as;
+const toneClass = tone === 'hatch' ? 'hatch' : tone ? `tone-${tone}` : undefined;
+---
+<Tag
+  class:list={[
+    'panel',
+    w && `panel--w${w}`,
+    tall && 'panel--tall',
+    tilt && 'panel--tilt',
+    weight !== 3 && `panel--weight-${weight}`,
+    shadow && 'panel--shadow',
+    fill && 'panel--fill',
+    cls,
+  ]}
+  href={href}
+  data-reveal={index !== undefined ? '' : undefined}
+  style={index !== undefined ? `--i: ${index}` : undefined}
+>
+  {toneClass && <span class={toneClass} aria-hidden="true"></span>}
+  {href && burst && <span class="speed" aria-hidden="true"></span>}
+  <slot />
+</Tag>

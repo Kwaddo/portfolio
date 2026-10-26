@@ -1,0 +1,551 @@
+/* ---------- hero: a two-panel spread, shout bubble beside an inked HELLO panel ---------- */
+.hero {
+  align-items: stretch;
+  padding-block-start: 2rem; /* headroom for the figure's head above its panel, clear of the nav */
+  /* room under the panels for the caption overhang and the shadow before the doors */
+  padding-block-end: 1rem;
+  /* clip the HELLO panel's burst but leave room for the shout bubble's outline, which overhangs its box */
+  overflow: clip;
+  overflow-clip-margin: 2rem;
+}
+.hero__start {
+  justify-content: center;
+  padding: clamp(1.5rem, 4vw, 2.5rem) clamp(1.25rem, 4vw, 3rem) clamp(2.25rem, 5vw, 3rem);
+}
+.hero__bubble {
+  align-self: start;
+  max-inline-size: 100%;
+  padding: 2rem 3.25rem 2.25rem 3rem;
+}
+.hero__bubble h1 {
+  font-size: clamp(2.5rem, 8vw, 5.5rem);
+}
+.hero__bubble .hero__role {
+  margin-block-start: 0.25rem;
+  font: 400 clamp(1.1rem, 2.4vw, 1.6rem) / 1.1 var(--font-display);
+  letter-spacing: 0.08em;
+  color: var(--ink);
+}
+/* availability as a caption over the panel's bottom edge (vertical overhang only; it stays inside the columns) */
+.hero__avail {
+  position: absolute;
+  inset-block-end: -0.9rem;
+  inset-inline-start: clamp(1rem, 3vw, 2rem);
+  z-index: 2;
+  max-inline-size: calc(100% - 2rem);
+}
+/* the end cell: the clipped HELLO panel plus a figure layer that may break the panel's top edge */
+.hero__end-cell {
+  position: relative;
+  display: grid;
+}
+.hero__end {
+  min-block-size: 17rem;
+  overflow: hidden;
+  background: var(--ink);
+  color: var(--paper);
+}
+.hero__figure {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  justify-content: flex-end; /* anchored to the end edge; the word reads on the start side */
+  align-items: flex-end;
+  pointer-events: none;
+}
+.hero__figure img {
+  block-size: 100%; /* stacked under the bubble on phones: no break-out */
+  inline-size: auto;
+  max-inline-size: 70%;
+  object-fit: contain;
+  object-position: bottom;
+}
+/* the seated figure is wider: a slightly smaller word and figure keep five letters readable */
+@media (min-width: 64rem) {
+  .hero__end-cell:has(img[data-figure='b']) > .hero__end > .sfx {
+    font-size: clamp(3rem, 6.5vw, 5.25rem);
+  }
+  .hero__end-cell:has(img[data-figure='b']) .hero__figure img {
+    block-size: min(105%, calc(100% + 2rem + clamp(1rem, 2.5vw, 1.75rem) - 0.25rem));
+  }
+}
+@media (min-width: 48rem) {
+  .hero__figure img {
+    /* the head and shoulders break the top border, within the hero's headroom plus main's padding, so never under the nav */
+    block-size: min(110%, calc(100% + 2rem + clamp(1rem, 2.5vw, 1.75rem) - 0.25rem));
+    filter: drop-shadow(6px 6px 0 var(--paper));
+  }
+  [dir='rtl'] .hero__figure img {
+    filter: drop-shadow(-6px 6px 0 var(--paper));
+  }
+}
+.hero__end > .tone-coarse {
+  background-image: radial-gradient(circle at center, var(--paper) 1.6px, transparent 2.1px);
+}
+.hero__speed {
+  inset: -40%;
+  opacity: 0.32;
+  color: var(--paper);
+  /* the burst converges on the figure, which stands on the end side */
+  background: repeating-conic-gradient(from 0deg at 76% 56%, currentColor 0deg 1deg, transparent 1deg 6deg);
+  mask-image: radial-gradient(circle at 76% 56%, transparent 6%, #000 55%);
+}
+[dir='rtl'] .hero__speed {
+  background: repeating-conic-gradient(from 0deg at 24% 56%, currentColor 0deg 1deg, transparent 1deg 6deg);
+  mask-image: radial-gradient(circle at 24% 56%, transparent 6%, #000 55%);
+}
+.hero__end > .sfx {
+  inset: 0;
+  display: grid;
+  place-items: end start;
+  padding-inline-start: 4%;
+  padding-block-end: 7%;
+  overflow: visible;
+  font-size: clamp(3.25rem, 7.5vw, 6rem); /* KWADDO sits low on the start side; only its last letters go behind the figure */
+  text-align: start;
+}
+/* RTL: the figure stands on the left, where the word's K would be; the word takes the top of the panel, start-aligned (one step smaller at desktop) */
+[dir='rtl'] .hero__end > .sfx {
+  place-items: start start;
+  padding-block-start: 4%;
+}
+@media (min-width: 64rem) {
+  [dir='rtl'] .hero__end > .sfx {
+    font-size: clamp(3rem, 6.5vw, 5.5rem);
+  }
+  [dir='rtl'] .hero__end-cell:has(img[data-figure='b']) > .hero__end > .sfx {
+    font-size: clamp(2.75rem, 5.5vw, 4.5rem);
+  }
+}
+@media (min-width: 48rem) {
+  .spread.hero > .hero__start {
+    grid-column: span 7;
+  }
+  .spread.hero > .hero__end-cell {
+    grid-column: span 5;
+  }
+}
+/* mid widths: the name needs the room, the HELLO panel narrows */
+@media (min-width: 48rem) and (max-width: 63.99rem) {
+  .spread.hero > .hero__start {
+    grid-column: span 7;
+  }
+  .spread.hero > .hero__end-cell {
+    grid-column: span 5;
+  }
+  .hero__start {
+    padding-inline: clamp(1rem, 2.5vw, 1.75rem);
+  }
+  .hero__bubble {
+    padding-inline: 1.75rem 2rem;
+  }
+  /* the five-column panel: a word at the very top start (only the head is up there), figure at 105% on the end */
+  .hero__end > .sfx {
+    place-items: start start;
+    padding-block-start: 3%;
+    font-size: clamp(2.75rem, 5.5vw, 4.5rem);
+  }
+  .hero__figure img {
+    block-size: min(105%, calc(100% + 2rem + clamp(1rem, 2.5vw, 1.75rem) - 0.25rem));
+  }
+  /* RTL: the head sits top-left, under the word's K; one step smaller keeps the K clear */
+  [dir='rtl'] .hero__end > .sfx {
+    font-size: clamp(2rem, 4.2vw, 3.25rem);
+  }
+}
+
+/* ---------- doors ---------- */
+.split {
+  --cut: 4rem;
+  display: grid;
+  grid-template-columns: 1fr;
+}
+.split__door {
+  position: relative;
+  display: grid;
+  align-content: end;
+  gap: 0.75rem;
+  min-block-size: clamp(17rem, 40vh, 23rem); /* headroom for the title's lean */
+  overflow: hidden;
+  /* the background bleeds; the content sits on the wrap's columns */
+  padding: clamp(1.25rem, 4vw, 2.5rem) var(--bleed);
+  text-decoration: none;
+  isolation: isolate;
+}
+.split__door > :not(.tone-mid):not(.tone-coarse):not(.sfx):not(.speed):not(.split__lines) {
+  position: relative;
+  z-index: 1;
+}
+.split__door > .tone-mid,
+.split__door > .tone-coarse,
+.split__door > .sfx,
+.split__door > .speed,
+.split__door > .split__lines {
+  position: absolute;
+  z-index: 0;
+}
+/* hover: the tone crossfades to a coarser one, the lines brighten and drift, the word slides out, the title gets a shadow */
+.split__door > .tone-coarse {
+  opacity: 0;
+}
+.split__door:hover > .tone-mid,
+.split__door:focus-visible > .tone-mid {
+  opacity: 0;
+}
+.split__door:hover > .tone-coarse,
+.split__door:focus-visible > .tone-coarse {
+  opacity: 0.28;
+}
+.split__door:hover > .split__lines,
+.split__door:focus-visible > .split__lines {
+  opacity: 0.4;
+  translate: 12px 2px;
+}
+[dir='rtl'] .split__door:hover > .split__lines,
+[dir='rtl'] .split__door:focus-visible > .split__lines {
+  translate: -12px 2px;
+}
+/* the title is the door's lettering: on hover its stroke, fill and shadow invert with the door */
+.split__door:hover h2,
+.split__door:focus-visible h2 {
+  translate: -0.02em 0;
+}
+[dir='rtl'] .split__door:hover h2,
+[dir='rtl'] .split__door:focus-visible h2 {
+  translate: 0.02em 0;
+}
+.split__door:hover .split__count,
+.split__door:focus-visible .split__count {
+  translate: 0 -2px;
+}
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .split__door {
+    transition:
+      background var(--t-base),
+      color var(--t-base);
+  }
+  .split__door > .tone-mid,
+  .split__door > .tone-coarse {
+    transition: opacity var(--t-base);
+  }
+  .split__door > .split__lines {
+    transition:
+      opacity var(--t-base),
+      translate var(--t-base) var(--ease-out);
+  }
+  .split__door h2 {
+    transition:
+      translate var(--t-base) var(--ease-out),
+      color var(--t-base),
+      -webkit-text-stroke-color var(--t-base),
+      text-shadow var(--t-base);
+  }
+  .split__door .split__count {
+    transition: translate var(--t-fast);
+  }
+}
+.split__count {
+  justify-self: start;
+  color: var(--ink);
+}
+/* speed lines along the cut: stripes parallel to the slant, fading away from it.
+   Gradient masks only take physical directions, so these are the one place with `to right`/`to left`,
+   mirrored by the [dir='rtl'] rules below (switch to `to inline-end` once supported). */
+.split__lines {
+  inset: 0;
+  opacity: 0.2;
+  pointer-events: none;
+  background: repeating-linear-gradient(101deg, currentColor 0 2px, transparent 2px 9px);
+}
+.split__door--work > .split__lines {
+  mask-image: linear-gradient(to right, transparent 45%, #000 100%);
+}
+.split__door--personal > .split__lines {
+  mask-image: linear-gradient(to left, transparent 45%, #000 100%);
+}
+[dir='rtl'] .split__lines {
+  background: repeating-linear-gradient(79deg, currentColor 0 2px, transparent 2px 9px);
+}
+[dir='rtl'] .split__door--work > .split__lines {
+  mask-image: linear-gradient(to left, transparent 45%, #000 100%);
+}
+[dir='rtl'] .split__door--personal > .split__lines {
+  mask-image: linear-gradient(to right, transparent 45%, #000 100%);
+}
+.split__door--work {
+  background: var(--paper);
+  color: var(--ink);
+  border-block: var(--rule);
+}
+.split__door--personal {
+  background: var(--ink);
+  color: var(--paper);
+}
+.split__door {
+  --sfx-stroke: var(--ink);
+  --sfx-fill: var(--paper);
+}
+.split__door--personal {
+  --sfx-stroke: var(--paper);
+  --sfx-fill: var(--ink);
+}
+/* the title IS the lettering: stroked paper letters with a hard shadow, leaning up from the start, sized to the door's column so the
+   rotated word always ends before the cut (PERSONAL is 3.9em wide) */
+.split__door h2 {
+  justify-self: start;
+  margin-block-end: 0.1em;
+  padding-inline: 0.06em 0.1em;
+  font-size: clamp(3.5rem, 8vw, 7rem);
+  line-height: 0.9;
+  letter-spacing: 0.02em;
+  color: var(--sfx-fill);
+  -webkit-text-stroke: 4px var(--sfx-stroke);
+  paint-order: stroke fill;
+  text-shadow: 0.06em 0.06em 0 var(--sfx-stroke);
+  rotate: -4deg; /* pivots on its centre: the end rises and the start dips by half the lean each */
+}
+[dir='rtl'] .split__door h2 {
+  text-shadow: -0.06em 0.06em 0 var(--sfx-stroke);
+  rotate: 4deg;
+}
+.split__door p {
+  max-inline-size: 21ch;
+}
+.split__door .speed {
+  inset: -40%;
+  mask-image: radial-gradient(circle at 50% 70%, transparent 20%, #000 70%);
+}
+.split__door:hover .speed,
+.split__door:focus-visible .speed {
+  opacity: 0.16;
+}
+.split__door:focus-visible {
+  outline: 4px solid currentColor;
+  outline-offset: -10px;
+}
+.split__door--work:hover,
+.split__door--work:focus-visible {
+  background: var(--ink);
+  color: var(--paper);
+}
+.split__door--work:hover,
+.split__door--work:focus-visible {
+  --sfx-stroke: var(--paper);
+  --sfx-fill: var(--ink);
+}
+.split__door--personal:hover,
+.split__door--personal:focus-visible {
+  background: var(--paper);
+  color: var(--ink);
+}
+.split__door--personal:hover,
+.split__door--personal:focus-visible {
+  --sfx-stroke: var(--ink);
+  --sfx-fill: var(--paper);
+}
+/* ---------- phone: bubble panel over the figure panel, caption inside the bubble panel; doors stacked with one diagonal between them ---------- */
+@media (max-width: 47.99rem) {
+  .hero {
+    padding-block-start: 1rem;
+    padding-block-end: 0.5rem;
+  }
+  .hero__start {
+    padding-block-end: clamp(1.5rem, 4vw, 2.5rem);
+  }
+  .hero__bubble {
+    padding-inline: 2rem;
+  }
+  .hero__avail {
+    position: relative; /* in the flow, and still the box its paper inset positions against */
+    inset: auto;
+    align-self: start;
+    max-inline-size: 100%;
+    margin-block-start: 1.25rem;
+  }
+  .hero__end {
+    min-block-size: 19rem;
+  }
+  .hero__figure img {
+    block-size: 95%;
+  }
+  /* the seated figure is wide: on a phone the word moves to the top start, where only its head is (KWA read at 360 otherwise) */
+  .hero__end-cell:has(img[data-figure='b']) > .hero__end > .sfx {
+    place-items: start start;
+    padding-block-start: 4%;
+  }
+  .split {
+    --cut: 2.5rem;
+  }
+  .split__door {
+    min-block-size: 14rem;
+    padding-block: 1.25rem;
+  }
+  /* the work door's bottom edge runs diagonally into the personal door, which rises --cut under it */
+  .split__door--work {
+    border-block-end: 0;
+    clip-path: polygon(0 0, 100% 0, 100% calc(100% - var(--cut)), 0 100%);
+  }
+  .split__door--personal {
+    min-block-size: calc(14rem + var(--cut));
+    margin-block-start: calc(-1 * var(--cut));
+    clip-path: polygon(0 var(--cut), 100% 0, 100% 100%, 0 100%);
+  }
+  [dir='rtl'] .split__door--work {
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 calc(100% - var(--cut)));
+  }
+  [dir='rtl'] .split__door--personal {
+    clip-path: polygon(0 0, 100% var(--cut), 100% 100%, 0 100%);
+  }
+}
+@media (min-width: 48rem) {
+  .split {
+    grid-template-columns: 1fr 1fr;
+  }
+  .split__door {
+    min-block-size: clamp(15rem, 34vh, 23rem);
+  }
+  .split__door--work {
+    padding-inline-end: calc(var(--cut) + 2rem);
+    clip-path: polygon(0 0, 100% 0, calc(100% - var(--cut)) 100%, 0 100%);
+  }
+  .split__door--personal {
+    margin-inline-start: calc(var(--cut) * -1);
+    padding-inline-start: calc(var(--cut) + 2rem);
+    clip-path: polygon(var(--cut) 0, 100% 0, 100% 100%, 0 100%);
+  }
+  [dir='rtl'] .split__door--work {
+    clip-path: polygon(var(--cut) 0, 100% 0, 100% 100%, 0 100%);
+  }
+  [dir='rtl'] .split__door--personal {
+    clip-path: polygon(0 0, 100% 0, calc(100% - var(--cut)) 100%, 0 100%);
+  }
+}
+
+
+/* ---------- work with me: three panels ---------- */
+.wwm {
+  padding-block: 0;
+}
+/* after another wrapped block (the contact page's heading, the journal ticker) the section keeps its heading row */
+.wrap + .wwm {
+  margin-block-start: clamp(1.5rem, 3vw, 2.5rem);
+}
+/* the inked panel carries HUH? below its copy (never behind it), in the room the stretched row leaves */
+.wwm__ink {
+  --huh: clamp(4rem, 7vw, 6rem);
+  padding-block-end: calc(var(--huh) + 0.5rem);
+  border-color: var(--ink);
+  background: var(--ink);
+  color: var(--paper);
+}
+.wwm__ink > .sfx {
+  inset: auto 0 0.25rem;
+  display: grid;
+  place-items: center;
+  block-size: calc(var(--huh) * 1.2);
+  overflow: visible;
+  font-size: var(--huh);
+  text-align: center;
+}
+.wwm__ink .btn {
+  border-color: var(--paper);
+  background: var(--ink);
+  color: var(--paper);
+}
+.wwm__ink .btn:hover,
+.wwm__ink .btn:focus-visible {
+  background: var(--paper);
+  color: var(--ink);
+}
+.wwm__list {
+  display: grid;
+  gap: 0.5rem;
+  margin: 0;
+  padding-inline-start: 1.25rem;
+}
+.wwm .panel__body {
+  gap: 0.75rem;
+}
+
+/* ---------- opening sequence: once per session, JS only, never under reduced motion ---------- */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes slide-start {
+  from {
+    translate: -8% 0;
+    opacity: 0;
+  }
+}
+@keyframes slide-end {
+  from {
+    translate: 8% 0;
+    opacity: 0;
+  }
+}
+@keyframes wipe-in {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+  to {
+    clip-path: inset(0);
+  }
+}
+@keyframes wipe-in-rtl {
+  from {
+    clip-path: inset(0 0 0 100%);
+  }
+  to {
+    clip-path: inset(0);
+  }
+}
+@keyframes rise {
+  from {
+    translate: 0 10%;
+    opacity: 0;
+  }
+}
+html.js:not(.seen) .hero .hero__end {
+  animation: wipe-in 350ms var(--ease-out) 250ms both;
+}
+html.js:not(.seen) .hero .hero__figure img {
+  animation: rise 450ms var(--ease-out) 380ms both;
+}
+html[dir='rtl'].js:not(.seen) .hero .hero__end {
+  animation-name: wipe-in-rtl;
+}
+html.js:not(.seen) .hero__bubble {
+  animation: pop 180ms var(--ease-snap) 150ms both;
+}
+html.js:not(.seen) .hero__avail {
+  animation: fade-in 150ms var(--ease-out) 300ms both;
+}
+html.js:not(.seen) .split__door--work {
+  animation: slide-start 350ms var(--ease-out) 350ms both;
+}
+html.js:not(.seen) .split__door--personal {
+  animation: slide-end 350ms var(--ease-out) 350ms both;
+}
+html[dir='rtl'].js:not(.seen) .split__door--work {
+  animation-name: slide-end;
+}
+html[dir='rtl'].js:not(.seen) .split__door--personal {
+  animation-name: slide-start;
+}
+html.js:not(.seen) .wwm {
+  animation: fade-in 200ms var(--ease-out) 700ms both;
+}
+@media (prefers-reduced-motion: reduce) {
+  html.js:not(.seen) .hero__end,
+  html.js:not(.seen) .hero__figure img,
+  html.js:not(.seen) .hero__bubble,
+  html.js:not(.seen) .hero__avail,
+  html.js:not(.seen) .split__door--work,
+  html.js:not(.seen) .split__door--personal,
+  html.js:not(.seen) .wwm {
+    animation: none;
+  }
+}

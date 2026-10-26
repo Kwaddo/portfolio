@@ -1,0 +1,64 @@
+---
+// An inked panel with a burst, a paper word and one of the two drawn figures. The session picks a figure once (hero); `alternate`
+// shows the other one. Exactly one image is requested per page: the markup holds no image (noscript aside), the picker creates it.
+import Panel from './Panel.astro';
+import Sfx from './Sfx.astro';
+import figureA from '../assets/figure-a.png';
+import figureB from '../assets/figure-b.png';
+
+interface Props {
+  word: 'KWADDO' | 'HELLO' | 'HUH?';
+  rotate?: string;
+  alternate?: boolean;
+  inset?: boolean;
+  class?: string;
+}
+const { word, rotate = '-8deg', alternate = false, inset = false, class: cls } = Astro.props;
+const alt = 'Ali Khalaf, drawn in ink';
+---
+<div class:list={['hero__end-cell', inset && 'hero__end-cell--inset', cls]}>
+  <Panel weight={5} tone="coarse" class="hero__end on-ink">
+    <span class="speed hero__speed" aria-hidden="true"></span>
+    <Sfx word={word} rotate={rotate} paper />
+  </Panel>
+  <div
+    class="hero__figure"
+    data-alternate={alternate ? '' : undefined}
+    data-alt={alt}
+    data-a={figureA.src}
+    data-a-width={figureA.width}
+    data-a-height={figureA.height}
+    data-b={figureB.src}
+    data-b-width={figureB.width}
+    data-b-height={figureB.height}
+  >
+    <noscript><img src={figureA.src} width={figureA.width} height={figureA.height} alt={alt} loading="lazy" decoding="async" data-figure="a" /></noscript>
+    <script is:inline data-astro-rerun>
+      // One figure per visit: picked at random on the first page view of the session, then kept; `alternate` shows the other.
+      // No image is in the markup (the no-JS fallback sits in noscript): the chosen one is created here, so exactly one is ever requested.
+      (function () {
+        var pick;
+        try {
+          pick = sessionStorage.getItem('figure');
+          if (pick !== 'a' && pick !== 'b') {
+            pick = Math.random() < 0.5 ? 'a' : 'b';
+            sessionStorage.setItem('figure', pick);
+          }
+        } catch (e) {
+          pick = 'a';
+        }
+        var root = document.currentScript.parentNode;
+        if (root.hasAttribute('data-alternate')) pick = pick === 'a' ? 'b' : 'a';
+        var img = document.createElement('img');
+        img.loading = 'lazy';
+        img.decoding = 'async';
+        img.width = Number(root.getAttribute('data-' + pick + '-width'));
+        img.height = Number(root.getAttribute('data-' + pick + '-height'));
+        img.alt = root.getAttribute('data-alt');
+        img.setAttribute('data-figure', pick);
+        img.src = root.getAttribute('data-' + pick);
+        root.appendChild(img);
+      })();
+    </script>
+  </div>
+</div>

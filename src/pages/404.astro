@@ -1,0 +1,19 @@
+---
+import Base from '../layouts/Base.astro';
+import Bubble from '../components/Bubble.astro';
+import FigurePanel from '../components/FigurePanel.astro';
+---
+<Base title="Page not found" description="That page does not exist." noindex>
+  <div class="wrap stack">
+    <div class="lost">
+      <Bubble shape="thought" class="pop"><h1>Page not found</h1><p>This panel is blank. The page you wanted is not here.</p></Bubble>
+      <FigurePanel word="HUH?" rotate="-8deg" inset />
+    </div>
+    <p class="email">
+      <a class="btn btn--solid" href="/">Home</a>
+      <a class="btn" href="/work/">Work</a>
+      <a class="btn" href="/personal/">Personal</a>
+      <a class="btn" href="/journal/">Journal</a>
+    </p>
+  </div>
+</Base>

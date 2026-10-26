@@ -1,0 +1,74 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Frame from '../../components/Frame.astro';
+import Bubble from '../../components/Bubble.astro';
+import Sfx from '../../components/Sfx.astro';
+import Spread from '../../components/Spread.astro';
+import Panel from '../../components/Panel.astro';
+import Icon from '../../components/Icon.astro';
+import InkRule from '../../components/InkRule.astro';
+import { dropcap, published } from '../../lib/content';
+
+export async function getStaticPaths() {
+  const work = published(await getCollection('work'));
+  return work.map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+}
+
+const { entry } = Astro.props;
+const { data } = entry;
+const { Content } = await render(entry);
+---
+<Base title={data.title} description={data.summary}>
+  <article class="wrap stack">
+    <p><a class="btn btn--back" href="/work/"><Icon name="arrow-left" />All work</a></p>
+    <header class="spread hero-spread has-tone">
+      <Sfx word="WORK" rotate="-5deg" />
+      <div class="hero-spread__text">
+        <h1>{data.title}</h1>
+        <p class="lede">{data.summary}</p>
+      </div>
+      {
+        data.cover && (
+          <div class="hero-spread__media">
+            <Frame src={data.cover} alt={data.coverAlt!} eager sizes="(min-width: 48rem) 42vw, 100vw" />
+          </div>
+        )
+      }
+    </header>
+    {
+      data.confidential && (
+        <p class="notice has-tone">
+          <span class="hatch" aria-hidden="true"></span>
+          <span>This work is confidential. This page lists only my role and dates.</span>
+        </p>
+      )
+    }
+    <div class="project">
+      <aside class="project__aside">
+        <Panel weight={4} tone="fine" shadow class="facts-panel">
+          <div class="panel__body">
+            <div class="panel__caps">
+              <Bubble shape="caption" as="span">{data.role}</Bubble>
+              <Bubble shape="caption" as="span">{data.period}</Bubble>
+            </div>
+            {data.stack.length > 0 && <ul class="chips" aria-label="Stack">{data.stack.map((s) => <li>{s}</li>)}</ul>}
+          </div>
+        </Panel>
+      </aside>
+      <div class:list={['project__main', dropcap(entry.body)]}><Content /></div>
+    </div>
+    {
+      data.gallery.length > 0 && (
+        <section aria-labelledby="gallery" class="stack">
+          <h2 id="gallery">Screenshots<InkRule variant="draw" /></h2>
+          <Spread layout="stack" as="div" ink>
+            <div class="gallery">
+              {data.gallery.map((g, i) => <Frame src={g.src} alt={g.alt} caption={g.caption} tilt={i % 3 === 1} />)}
+            </div>
+          </Spread>
+        </section>
+      )
+    }
+  </article>
+</Base>

@@ -1,0 +1,18 @@
+---
+import Base from '../layouts/Base.astro';
+import { uses } from '../data/uses';
+---
+<Base title="Uses" description="The languages, tools and engines Ali Khalaf builds with.">
+  <div class="wrap stack">
+    <h1>Uses</h1>
+    <p class="lede">What I build with.</p>
+    {
+      uses.map((g, n) => (
+        <section class="stack" aria-labelledby={`uses-${n}`}>
+          <h2 id={`uses-${n}`}>{g.group}</h2>
+          <ul class="chips">{g.items.map((item) => <li>{item}</li>)}</ul>
+        </section>
+      ))
+    }
+  </div>
+</Base>

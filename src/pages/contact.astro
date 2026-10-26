@@ -1,0 +1,19 @@
+---
+import Base from '../layouts/Base.astro';
+import WorkWithMe from '../components/WorkWithMe.astro';
+import Icon from '../components/Icon.astro';
+import { site } from '../data/site';
+---
+<Base title="Contact" description="How to reach Ali Khalaf about roles and freelance projects.">
+  <div class="wrap stack">
+    <h1>Get in touch</h1>
+  </div>
+  <WorkWithMe />
+  <div class="wrap stack">
+    <h2>Elsewhere</h2>
+    <p class="cta-row">
+      <a class="btn" href={site.links.github} rel="me noopener"><Icon name="github" />GitHub</a>
+      <a class="btn" href={site.links.linkedin} rel="me noopener"><Icon name="linkedin" />LinkedIn</a>
+    </p>
+  </div>
+</Base>

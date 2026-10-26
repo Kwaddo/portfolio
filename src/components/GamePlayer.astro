@@ -1,0 +1,105 @@
+---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+interface Props {
+  src: string;
+  title: string;
+  poster?: ImageMetadata;
+  posterAlt?: string;
+  frameWidth?: number;
+  frameHeight?: number;
+}
+const { src, title, poster, posterAlt, frameWidth, frameHeight } = Astro.props;
+const ratio = frameWidth && frameHeight ? `${frameWidth} / ${frameHeight}` : '16 / 9';
+---
+<div class="player" data-player data-src={src} data-title={title} data-width={frameWidth} data-height={frameHeight}>
+  <div class="player__stage" data-stage style={`aspect-ratio: ${ratio}`}>
+    {poster && <Image class="player__poster" src={poster} alt={posterAlt ?? ''} widths={[800, 1280]} sizes="100vw" />}
+    <button class="btn btn--play player__start" type="button" data-start>Play {title}</button>
+  </div>
+  <div class="player__bar">
+    <button class="btn" type="button" data-fullscreen hidden>Fullscreen</button>
+    <a class="btn" href={src} target="_blank" rel="noopener noreferrer">Open in a new tab</a>
+    <p class="player__note" data-note hidden>Best on a wider screen</p>
+    <p class="player__hint" data-hint hidden>Shift+Tab leaves the game</p>
+  </div>
+</div>
+
+<script>
+  // Binds once per element; re-run after every client-side navigation (the module itself loads once).
+  const bind = () => document.querySelectorAll<HTMLElement>('[data-player]:not([data-bound])').forEach((root) => {
+    root.dataset.bound = '1';
+    const stage = root.querySelector<HTMLElement>('[data-stage]')!;
+    const start = root.querySelector<HTMLButtonElement>('[data-start]')!;
+    const fullscreen = root.querySelector<HTMLButtonElement>('[data-fullscreen]')!;
+    const hint = root.querySelector<HTMLElement>('[data-hint]')!;
+    const note = root.querySelector<HTMLElement>('[data-note]')!;
+    let pointerAt = 0;
+    document.addEventListener('pointerdown', () => { pointerAt = Date.now(); }, true);
+    start.addEventListener('click', () => {
+      const frame = document.createElement('iframe');
+      frame.className = 'player__frame';
+      frame.src = root.dataset.src!;
+      frame.title = root.dataset.title!;
+      frame.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-pointer-lock allow-fullscreen');
+      frame.setAttribute('allow', 'fullscreen');
+      frame.setAttribute('allowfullscreen', '');
+      frame.tabIndex = 0;
+      // The game takes the keys: focus the frame now, again once it has loaded, and whenever the player is pressed.
+      // While it holds focus the page does not scroll, so keys the game lets through cannot move the page.
+      // The lock follows the active element, not the frame's own focus events: Chromium fires none on a cross-origin
+      // frame entered by sequential navigation (Shift+Tab out, Tab back in), so every focus change re-reads it.
+      const lock = (on: boolean) => document.documentElement.classList.toggle('is-playing', on);
+      const sync = () => { if (frame.isConnected) lock(document.activeElement === frame); };
+      addEventListener('focus', sync);
+      addEventListener('blur', sync);
+      document.addEventListener('focusin', sync);
+      document.addEventListener('focusout', () => setTimeout(sync));
+      frame.addEventListener('blur', () => {
+        sync();
+        // The game is cross-origin, so a Tab it does not consume walks out of the frame to the next control (or to the document).
+        // Send focus back when it left forwards and no pointer was involved; Shift+Tab (backwards) and clicks keep their exit.
+        setTimeout(() => {
+          const active = document.activeElement;
+          if (!document.hasFocus() || Date.now() - pointerAt < 300 || active === frame) return;
+          const forward = !active || active === document.body || Boolean(frame.compareDocumentPosition(active) & Node.DOCUMENT_POSITION_FOLLOWING);
+          if (forward) frame.focus();
+        });
+      });
+      // on load, take focus only if the visitor has not moved on to the bar's buttons
+      frame.addEventListener('load', () => {
+        const active = document.activeElement;
+        if (!active || active === document.body || stage.contains(active)) frame.focus();
+      });
+      stage.addEventListener('pointerdown', () => frame.focus());
+      stage.replaceChildren(frame);
+      stage.scrollIntoView({ block: 'nearest' }); // a landscape phone shows the whole stage before the page locks
+      frame.focus();
+      sync();
+      fullscreen.hidden = !document.fullscreenEnabled;
+      hint.hidden = false;
+      // Games that declare a native size are scaled to fit the stage instead of being clipped.
+      const w = Number(root.dataset.width);
+      const h = Number(root.dataset.height);
+      if (w && h) {
+        frame.classList.add('player__frame--fixed');
+        frame.style.width = `${w}px`;
+        frame.style.height = `${h}px`;
+        // Fits the stage, which is the fullscreen element too, so the game fills the screen at its ratio.
+        const fit = () => {
+          const s = Math.min(stage.clientWidth / w, stage.clientHeight / h);
+          frame.style.transform = `scale(${s})`;
+          note.hidden = s >= 0.6; // a small stage gets a plain note in the bar
+        };
+        fit();
+        new ResizeObserver(fit).observe(stage);
+      }
+    });
+    fullscreen.addEventListener('click', () => {
+      stage.requestFullscreen().catch(() => {});
+    });
+  });
+  bind();
+  document.addEventListener('astro:page-load', bind);
+</script>

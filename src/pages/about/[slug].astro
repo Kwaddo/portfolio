@@ -1,0 +1,10 @@
+---
+import JourneyView from '../../components/JourneyView.astro';
+import { storyPaths } from '../../lib/story-paths';
+
+export function getStaticPaths() {
+  return storyPaths();
+}
+const { title, chapters, next, devlog } = Astro.props;
+---
+<JourneyView title={title} chapters={chapters} backHref="/about/" next={next} devlog={devlog} />

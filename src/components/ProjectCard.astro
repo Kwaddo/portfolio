@@ -1,0 +1,56 @@
+---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import Panel from './Panel.astro';
+import StatusBadge from './StatusBadge.astro';
+import Bubble from './Bubble.astro';
+
+interface Props {
+  href: string;
+  title: string;
+  summary: string;
+  status?: 'live' | 'released' | 'prototype' | 'showcase' | 'archived';
+  cover?: ImageMetadata;
+  coverAlt?: string;
+  meta?: string;
+  level?: 2 | 3;
+  tilt?: boolean;
+  index?: number;
+  confidential?: boolean;
+  fill?: boolean;
+}
+const { href, title, summary, status, cover, coverAlt, meta, level = 3, tilt = false, index, confidential = false, fill = true } = Astro.props;
+const Tag = level === 2 ? 'h2' : 'h3';
+const letter = title.trim().charAt(0).toUpperCase();
+// in a tall feature slot (ratio ~0.83) a wide cover (over 1.5x the slot) is framed with contain, a tall one covers from its top; see panels.css and art.css
+const ratio = cover ? cover.width / cover.height : 1;
+const wide = ratio > 1.25;
+const tall = ratio < 1;
+---
+<Panel href={href} tilt={tilt} index={index} fill={fill} burst={false} shadow>
+  {
+    cover ? (
+      <div class:list={['panel__media', wide && 'panel__media--wide', tall && 'panel__media--tall']}>
+        <span class="tone-coarse" aria-hidden="true"></span>
+        <span class="speed" aria-hidden="true"></span>
+        <Image src={cover} alt={coverAlt ?? ''} widths={[400, 800]} sizes="(min-width: 48rem) 33vw, 100vw" />
+      </div>
+    ) : (
+      <div class="panel__media panel__initial" aria-hidden="true">
+        <span class={confidential ? 'hatch' : 'tone-coarse'} aria-hidden="true"></span>
+        <span class="speed" aria-hidden="true"></span>
+        <span class="panel__letter">{letter}</span>
+      </div>
+    )
+  }
+  <div class="panel__body">
+    <div class="panel__caps">
+      {status && <StatusBadge status={status} />}
+      {confidential && <Bubble shape="caption" as="span">Confidential</Bubble>}
+    </div>
+    <Tag class="panel__title">{title}</Tag>
+    {meta && <p class="panel__meta">{meta}</p>}
+    <p class="panel__text">{summary}</p>
+    <span class="panel__more" aria-hidden="true">Read more</span>
+  </div>
+</Panel>

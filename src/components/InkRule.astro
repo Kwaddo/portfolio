@@ -1,0 +1,33 @@
+---
+interface Props {
+  variant?: 'splat-a' | 'splat-b' | 'splat-c' | 'draw' | 'bar' | 'strip';
+}
+const { variant = 'splat-a' } = Astro.props;
+// Brush strokes: filled paths that taper to a point at both ends, a wavy top edge and a dry-brush break near each tip.
+const strokes = {
+  'splat-a': ['M22 24C70 6 130 26 190 12S310 8 370 18C360 30 300 38 190 34S70 38 22 24Z', 'M4 25C10 19 16 20 19 23C15 28 9 29 4 25Z', 'M376 16C382 12 390 13 396 18C391 23 383 22 376 16Z'],
+  'splat-b': ['M28 18C80 32 130 6 190 20S310 32 372 14C364 28 300 36 200 34S90 40 28 18Z', 'M6 22C12 16 18 17 22 20C18 25 12 26 6 22Z', 'M380 12C386 8 393 9 398 14C393 18 385 18 380 12Z'],
+  'splat-c': ['M32 26C90 6 150 30 210 10S320 6 366 22C354 32 290 40 220 32S100 40 32 26Z', 'M8 28C14 22 20 22 26 26C21 31 14 32 8 28Z', 'M372 20C379 16 388 17 394 22C388 26 380 26 372 20Z'],
+} as const;
+const drops = {
+  'splat-a': [[60, 12, 4], [300, 9, 3], [372, 14, 2]],
+  'splat-b': [[110, 10, 3], [250, 36, 3], [40, 32, 2]],
+  'splat-c': [[160, 36, 3], [330, 11, 4], [90, 9, 2]],
+} as const;
+---
+{
+  variant === 'bar' ? (
+    <div class="ink-bar" aria-hidden="true"></div>
+  ) : variant === 'strip' ? (
+    <div class="tone-strip" aria-hidden="true"></div>
+  ) : variant === 'draw' ? (
+    <svg class="ink-draw" viewBox="0 0 400 12" preserveAspectRatio="none" aria-hidden="true" data-reveal>
+      <path d="M6 7C70 1 130 9 200 3S330 1 388 5C330 10 210 12 130 11S60 11 6 7Z M391 6C394 3.5 398 4 400 6.5C398 8.5 394 8.5 391 6Z" fill="currentColor" />
+    </svg>
+  ) : (
+    <svg class="splat" viewBox="0 0 400 40" preserveAspectRatio="none" aria-hidden="true">
+      <path d={strokes[variant].join(' ')} fill="currentColor" />
+      {drops[variant].map(([cx, cy, r]) => <circle cx={cx} cy={cy} r={r} fill="currentColor" />)}
+    </svg>
+  )
+}

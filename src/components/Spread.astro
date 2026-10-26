@@ -1,0 +1,20 @@
+---
+import Sfx from './Sfx.astro';
+
+interface Props {
+  layout?: '3up' | 'feature-start' | 'feature-end' | 'feature-quad' | 'stack' | 'strips';
+  label?: string;
+  sfx?: 'WORK' | 'PLAY' | 'LAB' | 'LOG' | 'HELLO' | 'NEXT' | 'HUH?' | 'KWADDO';
+  sfxPaper?: boolean;
+  ink?: boolean;
+  class?: string;
+  as?: 'section' | 'div' | 'header' | 'ol' | 'ul';
+  ariaLabelledby?: string;
+}
+const { layout = '3up', label, sfx, sfxPaper = false, ink = false, class: cls, as: Tag = 'section', ariaLabelledby } = Astro.props;
+---
+<Tag class:list={['spread', `spread--${layout}`, label && 'spread--labelled', sfx && 'has-tone', ink && 'spread--ink on-ink', cls]} aria-labelledby={ariaLabelledby}>
+  {label && <span class="spread__label" aria-hidden="true"><span class="vlabel">{label}</span></span>}
+  {sfx && <Sfx word={sfx} paper={sfxPaper || ink} />}
+  <slot />
+</Tag>

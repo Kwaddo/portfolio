@@ -1,0 +1,164 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-padding-block-start: calc(var(--nav-h) + 1rem);
+  /* nothing scrolls sideways and nothing rubber-bands past the page */
+  overflow-x: clip;
+  overscroll-behavior: none;
+  scrollbar-gutter: stable; /* the scroll lock while a game plays never shifts the page on classic scrollbars */
+  /* the canvas behind rubber-band overscroll: paper above the page, ink below the ink footer */
+  background: linear-gradient(to bottom, var(--paper) 50%, var(--ink) 50%) fixed;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  min-block-size: 100svh;
+  margin: 0;
+  overflow-x: clip;
+  background: var(--paper);
+  color: var(--ink);
+  font: 400 1rem/1.6 var(--font-body);
+  overflow-wrap: break-word;
+}
+
+img,
+video,
+iframe {
+  max-inline-size: 100%;
+}
+img {
+  block-size: auto;
+}
+
+h1,
+h2,
+h3 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+}
+h1 {
+  max-inline-size: 100%;
+  font-size: clamp(2.5rem, 9vw, 5rem);
+  overflow-wrap: anywhere; /* a long title never widens the wrap */
+}
+h2 {
+  font-size: clamp(1.75rem, 5vw, 2.75rem);
+}
+h3 {
+  font-size: 1.5rem;
+}
+p {
+  margin: 0;
+}
+a {
+  color: inherit;
+  text-underline-offset: 0.2em;
+  text-decoration-thickness: 2px;
+}
+:focus-visible {
+  outline: 3px solid var(--ink);
+  outline-offset: 3px;
+}
+.on-ink :focus-visible {
+  outline-color: var(--paper);
+}
+
+main {
+  display: block;
+  flex: 1 0 auto;
+  padding-block: clamp(1rem, 2.5vw, 1.75rem) var(--gutter); /* one deliberate gutter of paper before the footer */
+  container-type: inline-size;
+  overflow-x: clip;
+  overflow-clip-margin: 0;
+}
+.wrap {
+  max-inline-size: var(--wrap);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+.stack > * + * {
+  margin-block-start: clamp(0.875rem, 2vw, 1.5rem);
+}
+/* sections separate by their heading row, not by void */
+.stack > h2 {
+  margin-block-start: clamp(2rem, 4vw, 3rem);
+}
+@media (max-width: 47.99rem) {
+  .stack > h2 {
+    margin-block-start: 1.5rem; /* one step tighter on phones */
+  }
+}
+.prose {
+  max-inline-size: var(--measure);
+}
+.prose > * + * {
+  margin-block-start: 1rem;
+}
+.prose ul,
+.prose ol {
+  padding-inline-start: 1.25rem;
+}
+.lede {
+  max-inline-size: var(--measure);
+  color: var(--tone);
+  font-size: 1.15rem;
+}
+
+.visually-hidden {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+.skip {
+  position: absolute;
+  inset-inline-start: var(--gutter);
+  inset-block-start: -4rem;
+  z-index: 100;
+  padding: 0.75rem 1rem;
+  background: var(--ink);
+  color: var(--paper);
+}
+.skip:focus {
+  inset-block-start: 0.5rem;
+}
+
+.notice {
+  padding: 1rem;
+  border: var(--rule);
+  border-style: dashed;
+  background: var(--tone-fill);
+}
+/* the sentence sits on a paper inset; the hatch stays around it, never under the text */
+.notice > span:last-child {
+  position: relative;
+  padding: 0.2rem 0.5rem;
+  background: var(--paper);
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}

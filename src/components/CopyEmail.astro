@@ -1,0 +1,53 @@
+---
+import { site } from '../data/site';
+import { toSpelledOut } from '../lib/email';
+---
+<div class="email" data-email data-user={site.emailParts.user} data-domain={site.emailParts.domain}>
+  <a class="email__link" data-email-link href="/contact/">{toSpelledOut(site.emailParts)}</a>
+  <button class="btn" type="button" data-email-copy hidden>Copy email</button>
+  <span class="visually-hidden" role="status" aria-live="polite" data-email-status></span>
+</div>
+
+<script>
+  import { toAddress } from '../lib/email';
+
+  async function copy(text: string, fallbackTarget: HTMLElement): Promise<boolean> {
+    try {
+      await navigator.clipboard.writeText(text);
+      return true;
+    } catch {
+      const range = document.createRange();
+      range.selectNodeContents(fallbackTarget);
+      const selection = getSelection();
+      selection?.removeAllRanges();
+      selection?.addRange(range);
+      return false;
+    }
+  }
+
+  // Binds once per element; re-run after every client-side navigation (the module itself loads once).
+  const bind = () => document.querySelectorAll<HTMLElement>('[data-email]:not([data-bound])').forEach((root) => {
+    root.dataset.bound = '1';
+    const address = toAddress({ user: root.dataset.user!, domain: root.dataset.domain! });
+    const link = root.querySelector<HTMLAnchorElement>('[data-email-link]')!;
+    const button = root.querySelector<HTMLButtonElement>('[data-email-copy]')!;
+    const status = root.querySelector<HTMLElement>('[data-email-status]')!;
+    link.href = `mailto:${address}`;
+    link.textContent = address;
+    button.hidden = false;
+    let timer: ReturnType<typeof setTimeout>;
+    button.addEventListener('click', async () => {
+      const ok = await copy(address, link);
+      const message = ok ? 'Copied' : 'Selected, press copy to finish';
+      status.textContent = message;
+      button.textContent = ok ? 'Copied' : 'Copy email';
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        status.textContent = '';
+        button.textContent = 'Copy email';
+      }, 2000);
+    });
+  });
+  bind();
+  document.addEventListener('astro:page-load', bind);
+</script>

@@ -1,0 +1,9 @@
+---
+interface Props {
+  word: 'WORK' | 'PLAY' | 'LAB' | 'LOG' | 'HELLO' | 'NEXT' | 'HUH?' | 'KWADDO';
+  rotate?: string;
+  paper?: boolean;
+}
+const { word, rotate = '-6deg', paper = false } = Astro.props;
+---
+<span class:list={['sfx', paper && 'sfx--paper']} aria-hidden="true" style={`--sfx-rotate: ${rotate}`}><span>{word}</span></span>

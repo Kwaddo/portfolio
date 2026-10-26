@@ -1,0 +1,50 @@
+/* Screentone layers. Always decorative, never behind body text. */
+.tone-fine,
+.tone-mid,
+.tone-coarse,
+.tone-grad,
+.hatch {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+.tone-fine {
+  opacity: 0.18;
+  background-image: radial-gradient(circle at center, var(--ink) 0.8px, transparent 1.2px);
+  background-size: 4px 4px;
+}
+.tone-mid {
+  opacity: 0.22;
+  background-image: radial-gradient(circle at center, var(--ink) 1px, transparent 1.4px);
+  background-size: 6px 6px;
+}
+.tone-coarse {
+  opacity: 0.28;
+  background-image: radial-gradient(circle at center, var(--ink) 1.6px, transparent 2.1px);
+  background-size: 10px 10px;
+}
+.tone-grad {
+  opacity: 0.3;
+  background-image: radial-gradient(circle at center, var(--ink) 1px, transparent 1.4px);
+  background-size: 6px 6px;
+  mask-image: linear-gradient(to bottom, #000 0%, transparent 100%);
+}
+.hatch {
+  opacity: 0.35;
+  background-image: repeating-linear-gradient(45deg, var(--ink) 0 1px, transparent 1px 6px);
+}
+.tone--paper {
+  background-image: radial-gradient(circle at center, var(--paper) 1px, transparent 1.4px);
+}
+.hatch.tone--paper {
+  background-image: repeating-linear-gradient(45deg, var(--paper) 0 1px, transparent 1px 6px);
+}
+/* anything that carries a tone layer must stack its content above it */
+.has-tone {
+  position: relative;
+}
+.has-tone > :not(.tone-fine):not(.tone-mid):not(.tone-coarse):not(.tone-grad):not(.hatch):not(.sfx):not(.spread__label) {
+  position: relative;
+  z-index: 1;
+}

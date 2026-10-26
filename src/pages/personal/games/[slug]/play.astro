@@ -1,0 +1,29 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../../../layouts/Base.astro';
+import GamePlayer from '../../../../components/GamePlayer.astro';
+import Panel from '../../../../components/Panel.astro';
+import Icon from '../../../../components/Icon.astro';
+import { published } from '../../../../lib/content';
+
+export async function getStaticPaths() {
+  const games = published(await getCollection('games')).filter((g) => g.data.playable === 'embed');
+  return games.map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+}
+
+const { entry } = Astro.props;
+const { data } = entry;
+---
+<Base title={`Play ${data.title}`} description={`Play ${data.title} in your browser.`}>
+  <div class="wrap">
+    <div class="play" style={`--play-ratio: ${data.frameWidth && data.frameHeight ? data.frameWidth / data.frameHeight : 16 / 9}`}>
+      <header class="play__head">
+        <h1>{data.title}</h1>
+        <a class="btn btn--back" href={`/personal/games/${entry.id}/`}><Icon name="arrow-left" />About {data.title}</a>
+      </header>
+      <Panel weight={4} shadow class="play__panel">
+        <GamePlayer src={data.playUrl!} title={data.title} poster={data.cover} posterAlt={data.coverAlt} frameWidth={data.frameWidth} frameHeight={data.frameHeight} />
+      </Panel>
+    </div>
+  </div>
+</Base>

@@ -1,0 +1,437 @@
+/* ---------- buttons ---------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.65rem 1.1rem;
+  border: var(--rule);
+  background: var(--paper);
+  color: var(--ink);
+  font: 700 0.85rem/1 var(--font-body);
+  letter-spacing: 0.06em;
+  text-decoration: none;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+.btn--solid {
+  background: var(--ink);
+  color: var(--paper);
+}
+.btn:hover,
+.btn:focus-visible {
+  background: var(--ink);
+  color: var(--paper);
+}
+.btn--solid:hover,
+.btn--solid:focus-visible {
+  background: var(--paper);
+  color: var(--ink);
+}
+.btn[hidden] {
+  display: none;
+}
+.btn .icon {
+  flex: none;
+  inline-size: 1em;
+  block-size: 1em;
+}
+[dir='rtl'] .icon--flip {
+  transform: scaleX(-1);
+}
+.btn--back {
+  padding: 0.45rem 0.8rem;
+  font-size: 0.75rem;
+}
+.facts__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+.facts__links .btn {
+  padding: 0.25rem 0.55rem;
+  font-size: 0.7rem;
+}
+.chips a {
+  text-decoration: none;
+}
+/* primary play action: a wide inked button with a drawn triangle, pressed into its shadow on hover */
+.btn--play {
+  display: flex;
+  justify-content: center;
+  gap: 0.6rem;
+  inline-size: 100%;
+  min-block-size: 3.5rem;
+  border-width: 4px;
+  background: var(--ink);
+  color: var(--paper);
+  box-shadow: 6px 6px 0 var(--tone);
+  font: 400 1.6rem/1 var(--font-display);
+  letter-spacing: 0.04em;
+  transition:
+    translate var(--t-fast),
+    box-shadow var(--t-fast),
+    background var(--t-fast),
+    color var(--t-fast);
+}
+.btn--play::before {
+  content: '';
+  inline-size: 0.8em;
+  block-size: 0.9em;
+  background: currentColor;
+  clip-path: polygon(0 0, 100% 50%, 0 100%);
+}
+[dir='rtl'] .btn--play::before {
+  clip-path: polygon(100% 0, 0 50%, 100% 100%);
+}
+[dir='rtl'] .btn--play {
+  box-shadow: -6px 6px 0 var(--tone);
+}
+.btn--play:hover,
+.btn--play:focus-visible {
+  translate: 2px 2px;
+  background: var(--paper);
+  color: var(--ink);
+  box-shadow: 2px 2px 0 var(--ink);
+}
+[dir='rtl'] .btn--play:hover,
+[dir='rtl'] .btn--play:focus-visible {
+  translate: -2px 2px;
+  box-shadow: -2px 2px 0 var(--ink);
+}
+
+/* touch widths: every button is a 44px target; the plain email link too */
+@media (max-width: 63.99rem), (pointer: coarse) {
+  .btn {
+    min-block-size: 2.75rem;
+  }
+  .email__link {
+    display: inline-block;
+    padding-block: 0.6rem;
+  }
+}
+/* ---------- badges ---------- */
+.badge {
+  display: inline-block;
+  justify-self: start;
+  padding: 0.1rem 0.5rem;
+  border: 2px solid currentColor;
+  font: 700 0.7rem/1.5 var(--font-body);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.badge--live,
+.badge--released {
+  background: var(--ink);
+  color: var(--paper);
+  border-color: var(--ink);
+}
+.badge--prototype {
+  border-style: dashed;
+}
+.badge--archived {
+  color: var(--tone);
+}
+
+/* ---------- bubbles ---------- */
+.bubble {
+  position: relative;
+  display: inline-block;
+  isolation: isolate;
+  color: var(--ink);
+  text-decoration: none;
+}
+.bubble__body {
+  position: relative;
+}
+.bubble--round {
+  max-inline-size: 34rem;
+  padding: 1rem 1.5rem;
+  border: var(--rule);
+  border-radius: 1.75rem;
+  background: var(--paper);
+}
+.bubble__tail {
+  position: absolute;
+  inset-block-start: calc(100% - 2px);
+  inline-size: 2.4rem;
+  block-size: 1.8rem;
+  overflow: visible;
+}
+.bubble__tail-fill {
+  fill: var(--paper);
+}
+.bubble__tail-line {
+  stroke: var(--ink);
+  stroke-width: 3px;
+  stroke-linejoin: round;
+}
+.bubble--tail-start .bubble__tail {
+  inset-inline-start: 2rem;
+}
+.bubble--tail-center .bubble__tail {
+  inset-inline-start: calc(50% - 1.2rem);
+}
+.bubble--tail-end .bubble__tail {
+  inset-inline-end: 2rem;
+  transform: scaleX(-1);
+}
+[dir='rtl'] .bubble--tail-start .bubble__tail {
+  transform: scaleX(-1);
+}
+[dir='rtl'] .bubble--tail-end .bubble__tail {
+  transform: none;
+}
+.bubble__bg {
+  position: absolute;
+  inset: -10% -6%;
+  inline-size: 112%;
+  block-size: 120%;
+  z-index: -1;
+  overflow: visible;
+  fill: var(--paper);
+  stroke: var(--ink);
+  stroke-width: 3px;
+  stroke-linejoin: round;
+}
+.bubble--shout {
+  padding: 1.5rem 2.75rem 1.75rem;
+}
+/* balloon: a 4px rule with a hard offset shadow; the hand-inked edge at desktop. scaleX mirrors tail and shadow together in RTL */
+.bubble--shout .bubble__bg {
+  stroke-width: 4px;
+  filter: drop-shadow(var(--shadow-x) var(--shadow-x) 0 var(--ink));
+}
+[dir='rtl'] .bubble--shout .bubble__bg {
+  transform: scaleX(-1);
+}
+@media (min-width: 48rem) {
+  .bubble--shout .bubble__bg {
+    filter: url(#ink) drop-shadow(var(--shadow-x) var(--shadow-x) 0 var(--ink));
+  }
+}
+.bubble--shout .bubble__body {
+  font-family: var(--font-display);
+  text-transform: uppercase;
+}
+.bubble--ink .bubble__bg {
+  fill: var(--ink);
+}
+.bubble--ink {
+  color: var(--paper);
+}
+a.bubble--shout:hover .bubble__bg,
+a.bubble--shout:focus-visible .bubble__bg {
+  fill: var(--ink);
+}
+a.bubble--shout:hover,
+a.bubble--shout:focus-visible {
+  color: var(--paper);
+}
+a.bubble--ink:hover .bubble__bg,
+a.bubble--ink:focus-visible .bubble__bg {
+  fill: var(--paper);
+}
+a.bubble--ink:hover,
+a.bubble--ink:focus-visible {
+  color: var(--ink);
+}
+.bubble--thought {
+  padding: 2rem 2.5rem;
+}
+.bubble__dots {
+  position: absolute;
+  inset-block-start: calc(100% + 0.25rem);
+  inset-inline-start: 1.5rem;
+  display: flex;
+  gap: 0.4rem;
+  align-items: flex-end;
+}
+.bubble__dots i {
+  display: block;
+  inline-size: 1rem;
+  block-size: 1rem;
+  border: var(--rule);
+  border-radius: 50%;
+  background: var(--paper);
+}
+.bubble__dots i:last-child {
+  inline-size: 0.6rem;
+  block-size: 0.6rem;
+}
+.bubble--caption {
+  padding: 0.3rem 0.65rem;
+  border: var(--rule);
+  background: var(--paper);
+  font: 700 0.75rem/1.4 var(--font-body);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.bubble h1 {
+  font-size: clamp(2.25rem, 7vw, 4.25rem);
+}
+.bubble p {
+  margin-block-start: 0.5rem;
+  color: var(--tone);
+}
+.bubble--ink p {
+  color: var(--paper);
+}
+
+/* ---------- ink rules ---------- */
+.splat {
+  display: block;
+  inline-size: 100%;
+  block-size: 1.5rem;
+  color: var(--ink);
+}
+.ink-draw {
+  display: block;
+  inline-size: min(100%, 14rem);
+  block-size: 0.7rem;
+  margin-block-start: 0.35rem;
+  color: var(--ink);
+}
+.email {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1rem;
+  align-items: center;
+  font-weight: 600;
+}
+/* ---------- facts strip: a row of caption boxes ---------- */
+.facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin: 0;
+}
+.facts > div {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.35rem 0.75rem;
+  border: var(--rule);
+  background: var(--paper);
+  box-shadow: 4px 4px 0 var(--ink);
+}
+[dir='rtl'] .facts > div {
+  box-shadow: -4px 4px 0 var(--ink);
+}
+.facts dt {
+  color: var(--tone);
+  font: 700 0.7rem/1.4 var(--font-body);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.facts dd {
+  margin: 0;
+  font-weight: 600;
+}
+
+/* ---------- chapters: text panel + side panel, alternating ---------- */
+.chapter {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: var(--gutter-panel);
+  align-items: stretch;
+}
+/* no .has-tone here: its child rule would outrank .chapter__num and pull the numeral into the flow */
+.chapter__side {
+  --num: clamp(7rem, 16vw, 13rem);
+  position: relative;
+  grid-column: span 12;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  gap: 0.5rem;
+  /* room for the numeral's cap height above the bottom edge, so a short chapter never beheads it */
+  min-block-size: calc(var(--num) * 0.9 + 1rem);
+  padding: 1rem;
+  border: var(--rule);
+  overflow: hidden;
+  isolation: isolate;
+}
+.chapter__no {
+  position: relative;
+  z-index: 1;
+  font: 400 1rem/1 var(--font-display);
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+.chapter__num {
+  position: absolute;
+  inset-inline-end: -0.05em;
+  inset-block-end: -0.2em;
+  z-index: 0;
+  font: 400 var(--num) / 1 var(--font-display);
+  color: transparent;
+  -webkit-text-stroke: 3px var(--ink);
+  opacity: 0.9;
+  pointer-events: none;
+  user-select: none;
+}
+.chapter__text {
+  grid-column: span 12;
+  display: grid;
+  align-content: start;
+  gap: 1rem;
+  padding: clamp(1rem, 3vw, 2rem);
+  border: var(--rule);
+  background: var(--paper);
+  box-shadow: var(--shadow-ink);
+}
+[dir='rtl'] .chapter__text {
+  box-shadow: var(--shadow-ink-rtl);
+}
+.chapter__date {
+  color: var(--tone);
+  font-size: 0.9rem;
+}
+.chapter__portrait {
+  grid-column: span 12;
+}
+@media (min-width: 48rem) {
+  .chapter__side {
+    grid-column: 1 / span 4;
+  }
+  .chapter__text {
+    grid-column: 5 / -1;
+  }
+  .chapter--alt .chapter__side,
+  .chapter__portrait {
+    grid-column: 9 / -1;
+  }
+  .chapter--alt .chapter__text,
+  .chapter:has(.chapter__portrait) .chapter__text {
+    grid-column: 1 / span 8;
+    grid-row: 1;
+  }
+  /* label on the start edge, numeral on the end edge: they never collide */
+  .chapter__no {
+    justify-self: start;
+    writing-mode: vertical-rl;
+  }
+}
+
+/* phone: the copy button takes the row; facts as a two-column grid; chapter numerals as a short band */
+@media (max-width: 47.99rem) {
+  .email > button.btn {
+    inline-size: 100%;
+    justify-content: center;
+  }
+  .facts {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+  .facts > div {
+    flex-wrap: wrap;
+  }
+  .facts > div:has(.facts__links) {
+    grid-column: 1 / -1;
+  }
+  .chapter__side {
+    --num: 6rem;
+    min-block-size: 7rem;
+  }
+}

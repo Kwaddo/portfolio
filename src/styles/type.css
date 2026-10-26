@@ -1,0 +1,141 @@
+/* ---------- display scale ---------- */
+h1 {
+  font-size: clamp(3rem, 11vw, 7.5rem);
+  line-height: 0.92;
+}
+h2 {
+  font-size: clamp(2.25rem, 6vw, 4rem);
+  line-height: 0.95;
+}
+h3 {
+  font-size: clamp(1.5rem, 2.4vw, 2.1rem);
+}
+
+/* ---------- SFX word: decorative, stroked, clipped to its own box so it can never overflow the page ---------- */
+.sfx {
+  position: absolute;
+  inset-inline: 0;
+  inset-block-start: -0.25em;
+  z-index: 0;
+  overflow: hidden;
+  font: 400 clamp(5rem, 20vw, 15rem) / 1 var(--font-display);
+  letter-spacing: 0.02em;
+  text-align: end;
+  text-transform: uppercase;
+  white-space: nowrap;
+  pointer-events: none;
+  user-select: none;
+}
+.sfx {
+  --sfx-stroke: var(--ink);
+  --sfx-fill: var(--paper);
+}
+.sfx--paper {
+  --sfx-stroke: var(--paper);
+  --sfx-fill: var(--ink);
+}
+/* stroked lettering with a hard drop shadow: paint-order keeps the stroke outside the fill */
+.sfx > span {
+  display: inline-block;
+  color: var(--sfx-fill);
+  -webkit-text-stroke: 4px var(--sfx-stroke);
+  paint-order: stroke fill;
+  rotate: var(--sfx-rotate, -6deg);
+  translate: 0.08em 0;
+}
+[dir='rtl'] .sfx > span {
+  translate: -0.08em 0;
+}
+@media (min-width: 48rem) {
+  .sfx > span {
+    filter: drop-shadow(0.04em 0.04em 0 var(--sfx-stroke));
+  }
+  [dir='rtl'] .sfx > span {
+    filter: drop-shadow(-0.04em 0.04em 0 var(--sfx-stroke));
+  }
+}
+@media (max-width: 47.99rem) {
+  .sfx {
+    font-size: clamp(3.5rem, 15vw, 6rem);
+  }
+}
+
+/* ---------- vertical labels ---------- */
+.vlabel {
+  font: 400 1rem/1 var(--font-display);
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--tone);
+  writing-mode: vertical-rl;
+}
+/* spread labels are inked tabs; a horizontal strip on phones, a hanging tab beside the spread above 48rem */
+.spread__label .vlabel {
+  display: inline-block;
+  padding: 0.6rem 0.3rem;
+  background: var(--ink);
+  color: var(--paper);
+  letter-spacing: 0.3em;
+}
+@media (max-width: 47.99rem) {
+  .spread__label .vlabel {
+    padding: 0.3rem 0.6rem 0.3rem 0.8rem;
+    writing-mode: horizontal-tb;
+  }
+}
+
+/* ---------- drop caps: a small inked panel two body lines tall (2 x 1.6rem = 3.2rem), the glyph filling it, with air around it:
+   0.2rem above, 0.85rem beside and 0.35rem below so the shadow (4px) never touches the third line, which returns to the margin ---------- */
+.dropcap > p:first-of-type {
+  min-block-size: 3.2rem; /* a one-line opener still clears the box */
+}
+.dropcap > p:first-of-type ~ * {
+  clear: both; /* only the opening paragraph wraps around the letter */
+}
+.dropcap > p:first-of-type::first-letter {
+  float: inline-start;
+  margin-block: 0.2rem 0.35rem; /* the float's margin box (3.2 + 41 + 5.6 = 49.8px) stays under two lines */
+  margin-inline-end: 0.85rem;
+  padding: 0.06em 0.16em 0;
+  border: 3px solid var(--ink);
+  background: var(--paper);
+  color: var(--ink);
+  box-shadow: 4px 4px 0 var(--ink);
+  font: 400 2.6rem/0.78 var(--font-display);
+}
+/* narrow openers (I, J, L, 1) get a wider box so they frame like an S; ::first-letter ignores inline-size */
+.dropcap--narrow > p:first-of-type::first-letter {
+  padding: 0.06em 0.42em 0; /* the shorthand: ::first-letter ignores padding-inline */
+}
+[dir='rtl'] .dropcap > p:first-of-type::first-letter {
+  box-shadow: -4px 4px 0 var(--ink);
+}
+
+/* ---------- chips (stack tags etc.) ---------- */
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-block-end: 0;
+  margin-inline: 0;
+  padding: 0;
+  list-style: none;
+}
+.chips li {
+  padding: 0.15rem 0.6rem;
+  border: 2px solid var(--ink);
+  box-shadow: 3px 3px 0 var(--ink);
+  font: 600 0.8rem/1.5 var(--font-body);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+[dir='rtl'] .chips li {
+  box-shadow: -3px 3px 0 var(--ink);
+}
+
+.page-head {
+  display: grid;
+  gap: 1rem;
+}
+h2 > .ink-draw {
+  margin-block-start: 0.2em;
+}

@@ -1,0 +1,67 @@
+---
+import { render, type CollectionEntry } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import type { DevlogItem } from '../lib/journal';
+import Devlog from './Devlog.astro';
+import InkRule from './InkRule.astro';
+import Panel from './Panel.astro';
+import Sfx from './Sfx.astro';
+import Icon from './Icon.astro';
+import { dropcap } from '../lib/content';
+
+interface Props {
+  title: string;
+  chapters: CollectionEntry<'journeys'>[];
+  backHref: string;
+  next?: { title: string; href: string };
+  devlog?: DevlogItem[];
+}
+const { title, chapters, backHref, next, devlog = [] } = Astro.props;
+const rendered = await Promise.all(
+  chapters.map(async (chapter) => ({ chapter, Content: (await render(chapter)).Content })),
+);
+const month = (d: Date) => d.toLocaleDateString('en-US', { month: 'long', year: 'numeric', timeZone: 'UTC' });
+// between chapters: brush, diagonal ink bar, tone strip, in turn
+const rules = ['strip', 'bar', 'splat-c'] as const;
+---
+<Base title={`${title}: the journey`} description={`The story behind ${title}, told in chapters.`}>
+  <div class="wrap stack">
+    <p><a class="btn btn--back" href={backHref}><Icon name="arrow-left" />About {title}</a></p>
+    <header class="page-head has-tone">
+      <Sfx word="LOG" rotate="-5deg" />
+      <h1>{title}: the journey</h1>
+    </header>
+    {
+      rendered.map(({ chapter, Content }, i) => (
+        <>
+          {i > 0 && <InkRule variant={rules[i % 3]} />}
+          <article class:list={['chapter', i % 2 === 1 && 'chapter--alt']} data-reveal>
+            <div class="chapter__side">
+              <span class={i % 2 === 0 ? 'tone-mid' : 'tone-fine'} aria-hidden="true"></span>
+              <p class="chapter__no">Chapter {i + 1}</p>
+              <span class="chapter__num" aria-hidden="true">{i + 1}</span>
+            </div>
+            <div class="chapter__text">
+              <h2>{chapter.data.title}</h2>
+              {chapter.data.date && <p class="chapter__date">{month(chapter.data.date)}</p>}
+              <div class={dropcap(chapter.body)}><Content /></div>
+            </div>
+          </article>
+        </>
+      ))
+    }
+    <Devlog items={devlog} />
+    {
+      next && (
+        <Panel href={next.href} weight={4} tone="fine" class="next-panel has-tone">
+          <Sfx word="NEXT" rotate="-3deg" />
+          <div class="panel__body">
+            <p class="panel__meta">Next journey</p>
+            <p class="panel__title">{next.title}</p>
+            <span class="panel__more" aria-hidden="true">Read on</span>
+          </div>
+        </Panel>
+      )
+    }
+  </div>
+</Base>

@@ -1,0 +1,408 @@
+/* ---------- frames ---------- */
+.frame {
+  position: relative;
+  align-self: start;
+  border: var(--rule);
+  background: var(--ink);
+  box-shadow: var(--shadow-ink);
+}
+[dir='rtl'] .frame {
+  box-shadow: var(--shadow-ink-rtl);
+}
+/* on a black page the frame keeps its ink field but rules and shadow turn to paper */
+.spread--ink .frame {
+  border-color: var(--paper);
+}
+.spread--ink .frame button:focus-visible {
+  outline-color: var(--paper);
+}
+@media (min-width: 48rem) {
+  .frame--tilt {
+    rotate: -1.5deg;
+  }
+  [dir='rtl'] .frame--tilt {
+    rotate: 1.5deg;
+  }
+}
+/* zero specificity so .stack spacing still applies when a frame is a direct stack child */
+:where(.frame) {
+  margin: 0;
+}
+.frame button {
+  all: unset;
+  display: block;
+  inline-size: 100%;
+  cursor: pointer;
+}
+/* ink ring on the paper outside the border: visible whatever the image luminance */
+.frame button:focus-visible {
+  outline: 3px solid var(--ink);
+  outline-offset: 6px;
+}
+.frame img {
+  display: block;
+  inline-size: 100%;
+  filter: grayscale(1) contrast(1.05);
+  transition: filter var(--t-base);
+}
+.frame::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  mix-blend-mode: multiply;
+  opacity: 0.25;
+  background-image: radial-gradient(circle at center, var(--ink) 0.9px, transparent 1.3px);
+  background-size: 5px 5px;
+  transition: opacity var(--t-base);
+}
+.frame[data-dark='true']::after {
+  mix-blend-mode: screen;
+  opacity: 0.1;
+  background-image: radial-gradient(circle at center, var(--paper) 0.9px, transparent 1.3px);
+}
+.frame[data-color='true'] img,
+.frame:hover img,
+.frame:focus-within img {
+  filter: none;
+}
+.frame[data-color='true']::after,
+.frame:hover::after,
+.frame:focus-within::after {
+  opacity: 0;
+}
+.frame__cap {
+  position: absolute;
+  inset-block-end: -0.9rem;
+  inset-inline-start: -0.6rem;
+  z-index: 1;
+  max-inline-size: 85%;
+  padding: 0.3rem 0.65rem;
+  border: var(--rule);
+  background: var(--paper);
+  color: var(--ink);
+  font: 600 0.8rem/1.35 var(--font-body);
+}
+
+/* gallery: every row fills its twelve columns. Portraits take three columns over two rows, landscapes six
+   columns over one, so two phones beside two stacked desktop shots tile; a pair of landscape + portrait is
+   9 + 3; an odd trailing landscape takes the row; a lone landscape takes eight with its caption beside it. */
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  grid-auto-flow: dense;
+  gap: calc(var(--gutter-panel) + 0.75rem);
+  padding-block-end: 1rem;
+}
+.gallery > * {
+  grid-column: span 12;
+}
+.gallery__cap {
+  justify-self: start;
+  align-self: end;
+  max-inline-size: 32ch;
+  font-size: 0.8rem;
+}
+/* large phone: two portraits side by side, landscapes still one per row */
+@media (min-width: 36rem) and (max-width: 47.99rem) {
+  .gallery > .frame--portrait {
+    grid-column: span 6;
+  }
+}
+@media (min-width: 48rem) {
+  .gallery > .frame--portrait {
+    grid-column: span 3;
+    grid-row: span 2;
+  }
+  .gallery > .frame--square {
+    grid-column: span 4;
+  }
+  .gallery > .frame--landscape {
+    grid-column: span 6;
+  }
+  .gallery > .frame--landscape:last-child:nth-child(odd) {
+    grid-column: span 12;
+  }
+  .gallery > .frame--landscape:first-child:nth-last-child(2):has(+ .frame--portrait) {
+    grid-column: span 9;
+  }
+  .gallery > .frame--landscape:has(+ .gallery__cap) {
+    grid-column: span 8;
+  }
+  .gallery > .gallery__cap {
+    grid-column: span 4;
+  }
+}
+
+/* project hero */
+.hero-spread {
+  align-items: center;
+  row-gap: 1.5rem;
+}
+/* the hero word sits whole above the cover with full headroom, rising only into the back-link row on the end side */
+.hero-spread > .sfx {
+  inset-block-start: -0.7em;
+  padding-block-start: 0.35em;
+  block-size: 1.5em;
+  font-size: clamp(4rem, 12vw, 9rem);
+}
+.hero-spread:has(> .sfx) {
+  padding-block-start: clamp(2.5rem, 6vw, 5rem);
+}
+.hero-spread__text {
+  grid-column: span 12;
+  display: grid;
+  gap: 1rem;
+}
+.hero-spread__media {
+  grid-column: span 12;
+}
+@media (min-width: 48rem) {
+  .hero-spread__text {
+    grid-column: 1 / span 7;
+  }
+  .hero-spread__media {
+    grid-column: 8 / -1;
+  }
+}
+
+/* phone: the word rises less (the back button above it is a 44px target now); a portrait cover sits centred under the lede */
+@media (max-width: 47.99rem) {
+  .hero-spread > .sfx {
+    inset-block-start: -0.4em;
+  }
+  .hero-spread__media > .frame--portrait {
+    margin-inline: auto;
+  }
+}
+
+/* ---------- project body: prose beside a sticky facts panel at desktop ---------- */
+.project {
+  display: grid;
+  gap: var(--gutter);
+}
+/* the facts sit on paper inside a toned ring, so no text lands on tone */
+.facts-panel {
+  min-block-size: 0;
+  padding: 0.6rem;
+}
+.facts-panel .panel__body {
+  gap: 0.9rem;
+  border: 2px solid var(--ink);
+  background: var(--paper);
+}
+.facts-panel .credits {
+  font-size: 0.95rem;
+}
+/* below desktop the facts are a full-width panel under the hero: a compact two-column grid, actions across both */
+@media (max-width: 63.99rem) {
+  .facts-panel .panel__body {
+    grid-template-columns: 1fr 1fr;
+    align-items: start;
+  }
+  .facts-panel .panel__body > :is(.btn--play, .cta-row, .credits) {
+    grid-column: 1 / -1;
+  }
+}
+@media (min-width: 64rem) {
+  .project {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    align-items: start;
+  }
+  .project__main {
+    grid-column: 1 / span 8;
+    grid-row: 1;
+  }
+  .project__aside {
+    position: sticky;
+    inset-block-start: calc(var(--nav-h) + 1rem);
+    grid-column: 9 / -1;
+    grid-row: 1;
+  }
+}
+.cta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem 1.25rem;
+  align-items: center;
+}
+.credits {
+  color: var(--tone);
+}
+.next-panel {
+  margin-block-start: 2rem;
+  overflow: hidden;
+}
+.next-panel .panel__body {
+  margin: 0.75rem;
+  padding: 1rem 1.25rem;
+  max-inline-size: fit-content;
+  border: 2px solid var(--ink);
+  background: var(--paper);
+}
+.next-panel .panel__meta {
+  color: var(--ink);
+}
+/* on hover the inner paper box inverts with the panel: ink fill, paper rule, paper text */
+a.next-panel:hover .panel__body,
+a.next-panel:focus-visible .panel__body {
+  border-color: var(--paper);
+  background: var(--ink);
+}
+a.next-panel:hover .panel__meta,
+a.next-panel:focus-visible .panel__meta {
+  color: var(--paper);
+}
+/* the NEXT word sits on the end side of the panel, clipped by the panel's drawn edge, never behind the text */
+.next-panel > .sfx {
+  inset-block-start: 50%;
+  translate: 0 -50%;
+  padding-block: 0.15em;
+  padding-inline-end: 0.3em;
+  block-size: 1.3em;
+  font-size: clamp(4rem, 12vw, 9rem);
+}
+a.next-panel:hover > .sfx,
+a.next-panel:focus-visible > .sfx {
+  --sfx-stroke: var(--paper);
+  --sfx-fill: var(--ink);
+}
+
+/* the note shown while the fixed frame is scaled under 60 % */
+.player__note {
+  color: var(--tone);
+  font-size: 0.8rem;
+}
+.player__note[hidden] {
+  display: none;
+}
+
+/* ---------- game player ---------- */
+.player {
+  border: var(--rule);
+  background: var(--ink);
+  color: var(--paper);
+}
+.player :focus-visible {
+  outline-color: var(--paper);
+}
+.player__bar :focus-visible {
+  outline-color: var(--ink);
+}
+.player__stage {
+  position: relative;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  aspect-ratio: 16 / 9;
+  background: var(--ink);
+}
+/* play page: header and player share one block sized to the viewport, so the whole game is visible without scrolling
+   and the title, the back link and the frame share the same start and end edges */
+.play {
+  inline-size: min(100%, calc((100svh - 16rem) * var(--play-ratio, 1.7778)));
+  margin-inline: auto;
+}
+.play__head {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.5rem 1rem;
+  margin-block-end: clamp(0.875rem, 2vw, 1.5rem);
+  padding-block-end: 0.5rem;
+  border-block-end: var(--rule);
+}
+.play__head h1 {
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+}
+@media (max-width: 47.99rem) {
+  .play {
+    inline-size: 100%;
+  }
+  .play__head {
+    flex-direction: column;
+    align-items: start;
+  }
+}
+/* landscape phone: the stage fits under the sticky nav; the bar may sit below the fold */
+@media (max-height: 30rem) {
+  .play {
+    inline-size: min(100%, calc((100svh - 7.5rem) * var(--play-ratio, 1.7778)));
+  }
+}
+.play__panel .player {
+  border: 0;
+}
+/* the player holds the keys: a paper ring on the stage while the frame has focus, and the page stays put */
+.player__stage:focus-within {
+  outline: 3px solid var(--paper);
+  outline-offset: -3px;
+}
+html.is-playing {
+  overflow: hidden;
+}
+.player__poster {
+  position: absolute;
+  inset: 0;
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+  opacity: 0.45;
+  filter: grayscale(1);
+}
+.player__start {
+  position: relative;
+  inline-size: auto;
+  min-inline-size: 14rem;
+  padding-inline: 2rem;
+  border-color: var(--paper);
+  box-shadow: 6px 6px 0 var(--paper);
+}
+.player__start:hover,
+.player__start:focus-visible {
+  border-color: var(--paper);
+  box-shadow: 2px 2px 0 var(--paper);
+}
+[dir='rtl'] .player__start {
+  box-shadow: -6px 6px 0 var(--paper);
+}
+[dir='rtl'] .player__start:hover,
+[dir='rtl'] .player__start:focus-visible {
+  box-shadow: -2px 2px 0 var(--paper);
+}
+.player__start:focus-visible {
+  outline: 3px solid var(--paper);
+  outline-offset: 6px;
+}
+.player__frame {
+  position: absolute;
+  inset: 0;
+  inline-size: 100%;
+  block-size: 100%;
+  border: 0;
+  background: #000;
+}
+.player__frame.player__frame--fixed {
+  inset: 50% auto auto 50%;
+  inline-size: auto;
+  block-size: auto;
+  max-inline-size: none;
+  translate: -50% -50%;
+  transform-origin: center;
+}
+.player__bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+  padding: 0.75rem;
+  border-block-start: var(--rule);
+  background: var(--paper);
+  color: var(--ink);
+}
+.player__hint {
+  margin-inline-start: auto;
+  color: var(--tone);
+  font-size: 0.8rem;
+}

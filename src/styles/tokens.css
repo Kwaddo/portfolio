@@ -1,0 +1,38 @@
+:root {
+  --paper: #fafafa;
+  --ink: #0a0a0a;
+  --tone: #5c5c5c; /* secondary text, 6.4:1 on paper */
+  --tone-fill: #e6e6e6; /* flat screentone fill, never behind small text */
+  --font-display: 'Anton', 'Arial Narrow', Impact, sans-serif;
+  --font-body: 'Inter Variable', system-ui, -apple-system, 'Segoe UI', 'Geeza Pro', 'Noto Sans Arabic', sans-serif;
+  --rule: 3px solid var(--ink);
+  --rule-4: 4px solid var(--ink);
+  --rule-5: 5px solid var(--ink);
+  --shadow-x: 6px;
+  --shadow-ink: var(--shadow-x) var(--shadow-x) 0 var(--ink);
+  --shadow-ink-rtl: calc(-1 * var(--shadow-x)) var(--shadow-x) 0 var(--ink);
+  --gutter: clamp(0.75rem, 3vw, 1.75rem); /* page padding */
+  --gutter-panel: clamp(0.5rem, 1.2vw, 0.875rem); /* between panels: manga gutters are thin */
+  --measure: 68ch;
+  --wrap: 72rem;
+  --nav-h: 3.5rem;
+  /* distance from the wrap's content edge to the viewport edge; 100cqi is main's width, so no scrollbar error */
+  --bleed: calc(max(0px, (100cqi - var(--wrap)) / 2) + var(--gutter));
+  --t-fast: 160ms;
+  --t-base: 280ms;
+  --t-slow: 520ms;
+  --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --ease-snap: cubic-bezier(0.3, 1.4, 0.4, 1);
+  color-scheme: light;
+}
+@media (min-width: 48rem) {
+  :root {
+    --shadow-x: 8px;
+  }
+}
+/* phone: the nav is two rows (name + CTA, then the link row) */
+@media (max-width: 47.99rem) {
+  :root {
+    --nav-h: 6rem;
+  }
+}

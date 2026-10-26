@@ -1,0 +1,37 @@
+---
+import CopyEmail from './CopyEmail.astro';
+import Spread from './Spread.astro';
+import Panel from './Panel.astro';
+import Sfx from './Sfx.astro';
+import { site } from '../data/site';
+---
+<section class="wwm wrap stack" aria-labelledby="wwm-title">
+  <h2 id="wwm-title">Work with me</h2>
+  <Spread layout="3up">
+    <Panel shadow index={0}>
+      <div class="panel__body">
+        <h3 class="panel__title">What I take on</h3>
+        <ul class="wwm__list">
+          <li>Full-stack web: React, TypeScript, Laravel and Go.</li>
+          <li>Mobile apps with React Native.</li>
+          <li>Backend services in Go, Laravel and NestJS.</li>
+          <li>Game prototypes and small multiplayer games.</li>
+        </ul>
+      </div>
+    </Panel>
+    <Panel shadow index={1}>
+      <div class="panel__body">
+        <h3 class="panel__title">How to start</h3>
+        <p>{site.availability}</p>
+        <p>Send a short brief: what you're building, your timeline and a budget range. {site.responseTime}</p>
+      </div>
+    </Panel>
+    <Panel shadow index={2} class="wwm__ink on-ink">
+      <div class="panel__body">
+        <h3 class="panel__title">Say hello</h3>
+        <CopyEmail />
+      </div>
+      <Sfx word="HUH?" rotate="-8deg" paper />
+    </Panel>
+  </Spread>
+</section>

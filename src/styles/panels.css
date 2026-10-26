@@ -1,0 +1,465 @@
+/* ---------- spreads: a page is a sequence of 12-column grids ---------- */
+.spread {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  grid-auto-flow: dense;
+  gap: var(--gutter-panel);
+  align-items: start;
+}
+.spread > * {
+  grid-column: span 12;
+}
+/* panels in a row share a height; frames keep sizing to their image */
+.spread > .panel {
+  align-self: stretch;
+}
+.spread__label {
+  grid-column: span 12;
+}
+@media (min-width: 48rem) {
+  .spread > .panel--w1 {
+    grid-column: span 4;
+  }
+  .spread > .panel--w2 {
+    grid-column: span 8;
+  }
+  .spread > .panel--w3 {
+    grid-column: span 12;
+  }
+  .spread > .panel--tall {
+    grid-row: span 2;
+  }
+  .spread--3up > :not(.spread__label):not(.sfx) {
+    grid-column: span 4;
+  }
+  .spread--feature-start > :not(.spread__label):not(.sfx) {
+    grid-column: span 4;
+  }
+  .spread--feature-start > :not(.spread__label):not(.sfx):first-of-type {
+    grid-column: span 8;
+    grid-row: span 2;
+    align-self: stretch;
+  }
+  .spread--feature-end > :not(.spread__label):not(.sfx) {
+    grid-column: span 4;
+  }
+  .spread--feature-end > :not(.spread__label):not(.sfx):first-of-type {
+    grid-column: 5 / -1;
+    grid-row: span 2;
+    align-self: stretch;
+  }
+  /* quad: one tall feature and four small panels in two rows; a strip over 2-up below 64rem */
+  .spread--feature-quad > :not(.spread__label):not(.sfx) {
+    grid-column: span 6;
+  }
+  .spread--feature-quad > :not(.spread__label):not(.sfx):first-of-type {
+    grid-column: span 12;
+  }
+  .spread--stack > :not(.spread__label):not(.sfx) {
+    grid-column: span 12;
+  }
+  .spread--strips {
+    grid-template-columns: repeat(auto-fill, minmax(9rem, 1fr));
+  }
+  .spread--strips > * {
+    grid-column: auto;
+  }
+  .spread--labelled {
+    padding-inline-start: 2.5rem;
+  }
+  .spread__label {
+    position: absolute;
+    inset-inline-start: 0; /* a tab inside the wrap, at the spread's start column */
+    inset-block: 0;
+    grid-column: auto;
+    padding-inline-end: 0.75rem;
+    border-inline-end: var(--rule);
+  }
+}
+/* the clip edge sits 0.15em above the spread so the rotated glyph tops survive; the word itself stays put.
+   The box is the wrap's width and the word is sized to fit inside it with its rotation and shadow
+   (the longest word is 2.5em wide, so 34cqi always fits): nothing crosses the wrap's edges */
+.spread > .sfx,
+.page-head > .sfx {
+  inset-block-start: -0.15em;
+  padding-inline-end: 0.2em;
+  padding-block-start: 0.15em;
+  block-size: 1.3em;
+  font-size: min(clamp(5rem, 20vw, 15rem), 34cqi);
+}
+.spread:has(> .sfx),
+.page-head:has(> .sfx) {
+  padding-block-start: clamp(1.25rem, 3vw, 2.25rem);
+}
+/* after a heading row the word rises into it (headings are start-aligned, the word is end-aligned), so at least half of it shows above the panels */
+.stack > h2 + .spread > .sfx {
+  inset-block-start: -0.55em;
+  padding-block-start: 0.15em;
+}
+.stack > h2 + .spread:has(> .sfx) {
+  padding-block-start: clamp(1.5rem, 3.5vw, 2.5rem);
+}
+@media (min-width: 64rem) {
+  .spread--feature-quad > :not(.spread__label):not(.sfx) {
+    grid-column: span 3;
+  }
+  .spread--feature-quad > :not(.spread__label):not(.sfx):first-of-type {
+    grid-column: span 6;
+    grid-row: span 2;
+    align-self: stretch;
+  }
+}
+.spread--slant {
+  --slant: 5deg;
+}
+
+/* ---------- panel ---------- */
+.panel {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-inline-size: 0;
+  min-block-size: 10rem;
+  border: var(--rule);
+  background: var(--paper);
+  color: var(--ink);
+  text-decoration: none;
+  isolation: isolate;
+}
+/* a link panel clips its burst (the shadow is outside overflow and survives) */
+a.panel {
+  overflow: clip;
+}
+.panel--weight-4 {
+  border: var(--rule-4);
+}
+.panel--weight-5 {
+  border: var(--rule-5);
+}
+@media (min-width: 48rem) {
+  .panel {
+    border-width: 4px;
+  }
+  .panel--weight-5,
+  :is(.spread--feature-start, .spread--feature-end, .spread--feature-quad) > .panel:first-of-type {
+    border-width: 5px;
+  }
+}
+.panel--shadow {
+  box-shadow: var(--shadow-ink);
+}
+[dir='rtl'] .panel--shadow {
+  box-shadow: var(--shadow-ink-rtl);
+}
+.panel > .tone-fine,
+.panel > .tone-mid,
+.panel > .tone-coarse,
+.panel > .tone-grad,
+.panel > .hatch {
+  z-index: 0;
+}
+.panel__media {
+  position: relative;
+  z-index: 1;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border-block-end: inherit;
+  border-block-end-width: 3px;
+  background: var(--tone-fill);
+}
+.panel__media img {
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+  filter: grayscale(1) contrast(1.05);
+  transition: filter var(--t-base);
+}
+.panel__initial {
+  display: grid;
+  place-items: center;
+  background: var(--paper);
+}
+.panel__letter {
+  position: relative;
+  z-index: 1;
+  font: 400 clamp(7rem, 16vw, 11rem) / 1 var(--font-display);
+  color: transparent;
+  -webkit-text-stroke: 4px var(--ink);
+}
+/* the burst of a card is centred on its media, not the whole card */
+.panel__media > .speed {
+  inset: -30%;
+}
+/* the fallback reads as a drawn panel: a burst behind the letter, always on */
+.panel__initial > .speed {
+  opacity: 0.4;
+  background: repeating-conic-gradient(from 0deg at 50% 50%, currentColor 0deg 1deg, transparent 1deg 7deg);
+  mask-image: radial-gradient(circle at 50% 50%, transparent 18%, #000 70%);
+}
+.panel__body {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: 0.5rem;
+  padding: 1rem;
+}
+.panel__title {
+  font: 400 clamp(1.5rem, 2.4vw, 2.1rem) / 1 var(--font-display);
+  text-transform: uppercase;
+}
+.panel__meta,
+.panel__text {
+  color: var(--tone);
+  font-size: 0.95rem;
+}
+.panel__more {
+  font: 700 0.8rem/1 var(--font-body);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.panel__more::after {
+  content: ' \2192';
+}
+[dir='rtl'] .panel__more::after {
+  content: ' \2190';
+}
+.panel__caps {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+/* fill: a stretched panel grows its media to its box instead of leaving paper under the text (wherever cards share a row) */
+@media (min-width: 36rem) {
+  .panel--fill > .panel__media {
+    flex: 1 1 auto; /* grows into a stretched box, never below its ratio */
+  }
+  /* a wide shot in the quad's tall feature slot is framed over a drawn field instead of cropped to black */
+  .spread--feature-quad > .panel--fill:first-of-type > .panel__media--wide {
+    background: var(--paper);
+  }
+  .spread--feature-quad > .panel--fill:first-of-type > .panel__media--wide img {
+    position: relative;
+    z-index: 1;
+    object-fit: contain;
+  }
+  /* the feature never drives its rows: the panels beside it do */
+  :is(.spread--feature-start, .spread--feature-end, .spread--feature-quad) > .panel--fill:first-of-type > .panel__media {
+    flex-basis: 0;
+    aspect-ratio: auto;
+    min-block-size: 12rem;
+  }
+}
+/* ---------- phone and tablet decisions ---------- */
+@media (max-width: 47.99rem) {
+  .panel__meta,
+  .panel__text {
+    font-size: 1rem;
+  }
+}
+/* large phone (36-48rem): cards two up, the feature over both columns; a lone third panel takes the row */
+@media (min-width: 36rem) and (max-width: 47.99rem) {
+  .spread--feature-quad > :not(.spread__label):not(.sfx),
+  .spread--3up > :not(.spread__label):not(.sfx) {
+    grid-column: span 6;
+  }
+  .spread--feature-quad > :not(.spread__label):not(.sfx):first-of-type,
+  .spread--3up > .panel:last-of-type:nth-of-type(odd) {
+    grid-column: span 12;
+  }
+}
+/* tablet (48-64rem): 3up in two columns (a lone third panel takes the row), feature spreads 7/5 */
+@media (min-width: 48rem) and (max-width: 63.99rem) {
+  .spread--3up > :not(.spread__label):not(.sfx) {
+    grid-column: span 6;
+  }
+  .spread--3up > .panel:last-of-type:nth-of-type(odd) {
+    grid-column: span 12;
+  }
+  .spread--feature-start > :not(.spread__label):not(.sfx) {
+    grid-column: span 5;
+  }
+  .spread--feature-start > :not(.spread__label):not(.sfx):first-of-type {
+    grid-column: span 7;
+  }
+  .spread--feature-end > :not(.spread__label):not(.sfx) {
+    grid-column: span 5;
+  }
+  .spread--feature-end > :not(.spread__label):not(.sfx):first-of-type {
+    grid-column: 6 / -1;
+  }
+}
+@media (min-width: 48rem) {
+  .panel--tilt {
+    rotate: -1.2deg;
+  }
+  [dir='rtl'] .panel--tilt {
+    rotate: 1.2deg;
+  }
+}
+
+/* speed lines: radial burst shown on hover/focus of a link panel */
+.speed {
+  position: absolute;
+  inset: -20%;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0;
+  background: repeating-conic-gradient(from 0deg at 50% 50%, currentColor 0deg 0.5deg, transparent 0.5deg 6deg);
+  mask-image: radial-gradient(circle at 50% 50%, transparent 25%, #000 75%);
+  transition: opacity var(--t-fast);
+}
+a.panel:hover,
+a.panel:focus-visible {
+  background: var(--ink);
+  color: var(--paper);
+}
+a.panel:hover .speed,
+a.panel:focus-visible .speed {
+  opacity: 0.18;
+}
+a.panel:hover .panel__initial > .speed,
+a.panel:focus-visible .panel__initial > .speed {
+  opacity: 0.45;
+}
+a.panel:hover .panel__meta,
+a.panel:hover .panel__text,
+a.panel:focus-visible .panel__meta,
+a.panel:focus-visible .panel__text {
+  color: var(--paper);
+}
+/* badges invert with the card */
+a.panel:hover .badge,
+a.panel:focus-visible .badge {
+  border-color: var(--paper);
+  background: var(--paper);
+  color: var(--ink);
+}
+/* the fallback media inverts as one unit with the body: ink field, paper dots, paper letter, paper burst */
+a.panel:hover .panel__initial,
+a.panel:focus-visible .panel__initial {
+  background: var(--ink);
+}
+a.panel:hover .panel__initial > .tone-coarse,
+a.panel:focus-visible .panel__initial > .tone-coarse {
+  background-image: radial-gradient(circle at center, var(--paper) 1.6px, transparent 2.1px);
+}
+a.panel:hover .panel__initial > .hatch,
+a.panel:focus-visible .panel__initial > .hatch {
+  background-image: repeating-linear-gradient(45deg, var(--paper) 0 1px, transparent 1px 6px);
+}
+a.panel:hover .panel__letter,
+a.panel:focus-visible .panel__letter {
+  -webkit-text-stroke-color: var(--paper);
+}
+a.panel:hover .panel__media img,
+a.panel:focus-visible .panel__media img {
+  filter: none;
+  scale: 1.03;
+}
+@media (hover: hover) {
+  .panel__more {
+    opacity: 0;
+    translate: 0 0.4rem;
+    transition:
+      opacity var(--t-fast),
+      translate var(--t-fast);
+  }
+  a.panel:hover .panel__more,
+  a.panel:focus-visible .panel__more {
+    opacity: 1;
+    translate: 0 0;
+  }
+  a.panel {
+    transition:
+      translate var(--t-base) var(--ease-out),
+      box-shadow var(--t-base) var(--ease-out),
+      background var(--t-base),
+      color var(--t-base);
+  }
+  a.panel:hover {
+    translate: 0 -4px;
+    box-shadow: calc(var(--shadow-x) + 4px) calc(var(--shadow-x) + 4px) 0 var(--ink);
+  }
+  [dir='rtl'] a.panel:hover {
+    box-shadow: calc(-1 * (var(--shadow-x) + 4px)) calc(var(--shadow-x) + 4px) 0 var(--ink);
+  }
+}
+/* the parts that invert follow the card over the same beat; the image un-greys and grows a touch inside its box */
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  a.panel .panel__meta,
+  a.panel .panel__text,
+  a.panel .panel__initial {
+    transition:
+      color var(--t-base),
+      background var(--t-base);
+  }
+  a.panel .badge {
+    transition:
+      background var(--t-base),
+      color var(--t-base),
+      border-color var(--t-base);
+  }
+  a.panel .panel__letter {
+    transition: -webkit-text-stroke-color var(--t-base);
+  }
+  a.panel .panel__media img {
+    transition:
+      filter var(--t-base),
+      scale var(--t-base) var(--ease-out);
+  }
+}
+
+
+
+/* reveal rules (motion.css) outrank the plain hover rules; restore the lift under html.js, motion allowed only */
+@media (prefers-reduced-motion: no-preference) {
+  html.js a.panel.is-in {
+    transition:
+      opacity var(--t-slow) var(--ease-out),
+      translate var(--t-base) var(--ease-out),
+      box-shadow var(--t-base) var(--ease-out),
+      background var(--t-base),
+      color var(--t-base);
+  }
+  html.js a.panel.is-in:hover,
+  html.js a.panel.is-in:focus-visible {
+    translate: 0 -4px;
+  }
+}
+
+/* ---------- black page: a full-bleed ink background; panels, tab and word stay on the wrap's columns ---------- */
+.spread--ink > .sfx {
+  inset-inline: var(--bleed);
+}
+.spread--ink {
+  --shadow-ink: var(--shadow-x) var(--shadow-x) 0 var(--paper);
+  --shadow-ink-rtl: calc(-1 * var(--shadow-x)) var(--shadow-x) 0 var(--paper);
+  margin-inline: calc(-1 * var(--bleed));
+  padding: clamp(1.5rem, 4vw, 3rem) var(--bleed); /* art.css re-states this through --ink-pad */
+  background: var(--ink);
+  color: var(--paper);
+}
+.spread--ink .spread__label .vlabel {
+  background: var(--paper);
+  color: var(--ink);
+}
+.spread--ink a.panel:hover,
+.spread--ink a.panel:focus-visible {
+  border-color: var(--paper);
+  box-shadow: calc(var(--shadow-x) + 4px) calc(var(--shadow-x) + 4px) 0 var(--paper);
+}
+[dir='rtl'] .spread--ink a.panel:hover,
+[dir='rtl'] .spread--ink a.panel:focus-visible {
+  box-shadow: calc(-1 * (var(--shadow-x) + 4px)) calc(var(--shadow-x) + 4px) 0 var(--paper);
+}
+@media (min-width: 48rem) {
+  .spread--ink.spread--labelled {
+    padding-inline-start: calc(var(--bleed) + 2.5rem);
+  }
+  .spread--ink .spread__label {
+    inset-inline-start: var(--bleed);
+    border-color: var(--paper);
+  }
+}

@@ -1,0 +1,110 @@
+/* ---------- reveal (only when JS runs; without JS everything is simply visible) ---------- */
+html.js [data-reveal] {
+  opacity: 0;
+  translate: 0 1.25rem;
+  transition:
+    opacity var(--t-slow) var(--ease-out),
+    translate var(--t-slow) var(--ease-out);
+  transition-delay: calc(var(--i, 0) * 60ms);
+}
+html.js [data-reveal].is-in {
+  opacity: 1;
+  translate: 0 0;
+}
+
+html.js .ink-draw[data-reveal] {
+  opacity: 1;
+  translate: none;
+}
+
+/* ---------- pop (bubbles on first paint) ---------- */
+@keyframes pop {
+  from {
+    scale: 0.92;
+    opacity: 0;
+  }
+  70% {
+    scale: 1.02;
+    opacity: 1;
+  }
+  to {
+    scale: 1;
+  }
+}
+html.js .pop {
+  animation: pop var(--t-base) var(--ease-snap) both;
+}
+
+/* ---------- ink draw (heading underline): the brush stroke wipes in from the start edge ---------- */
+.ink-draw {
+  clip-path: inset(-20% 100% -20% 0);
+  transition: clip-path 400ms var(--ease-out) 120ms;
+}
+[dir='rtl'] .ink-draw {
+  clip-path: inset(-20% 0 -20% 100%);
+}
+html:not(.js) .ink-draw,
+.is-in .ink-draw,
+.ink-draw.is-in {
+  clip-path: inset(-20% 0);
+}
+
+/* ---------- page wipe between routes (Astro ClientRouter view transitions) ---------- */
+/* the wipe's leading edge is a jagged brush edge (21 points, 4% teeth, leaning 15%), not a straight line */
+@keyframes wipe-start {
+  from {
+    clip-path: polygon(0 0, -5% 0%, -9.75% 5%, -6.5% 10%, -11.25% 15%, -8% 20%, -12.75% 25%, -9.5% 30%, -14.25% 35%, -11% 40%, -15.75% 45%, -12.5% 50%, -17.25% 55%, -14% 60%, -18.75% 65%, -15.5% 70%, -20.25% 75%, -17% 80%, -21.75% 85%, -18.5% 90%, -23.25% 95%, -20% 100%, 0 100%);
+  }
+  to {
+    clip-path: polygon(0 0, 119% 0%, 114.25% 5%, 117.5% 10%, 112.75% 15%, 116% 20%, 111.25% 25%, 114.5% 30%, 109.75% 35%, 113% 40%, 108.25% 45%, 111.5% 50%, 106.75% 55%, 110% 60%, 105.25% 65%, 108.5% 70%, 103.75% 75%, 107% 80%, 102.25% 85%, 105.5% 90%, 100.75% 95%, 104% 100%, 0 100%);
+  }
+}
+@keyframes wipe-end {
+  from {
+    clip-path: polygon(100% 0, 105% 0%, 109.75% 5%, 106.5% 10%, 111.25% 15%, 108% 20%, 112.75% 25%, 109.5% 30%, 114.25% 35%, 111% 40%, 115.75% 45%, 112.5% 50%, 117.25% 55%, 114% 60%, 118.75% 65%, 115.5% 70%, 120.25% 75%, 117% 80%, 121.75% 85%, 118.5% 90%, 123.25% 95%, 120% 100%, 100% 100%);
+  }
+  to {
+    clip-path: polygon(100% 0, -19% 0%, -14.25% 5%, -17.5% 10%, -12.75% 15%, -16% 20%, -11.25% 25%, -14.5% 30%, -9.75% 35%, -13% 40%, -8.25% 45%, -11.5% 50%, -6.75% 55%, -10% 60%, -5.25% 65%, -8.5% 70%, -3.75% 75%, -7% 80%, -2.25% 85%, -5.5% 90%, -0.75% 95%, -4% 100%, 100% 100%);
+  }
+}
+@keyframes rm-fade {
+  from {
+    opacity: 0;
+  }
+}
+:root::view-transition-old(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+:root::view-transition-new(root) {
+  animation: wipe-start 420ms var(--ease-out) both;
+  mix-blend-mode: normal;
+}
+:root[data-astro-transition='back']::view-transition-new(root),
+:root[dir='rtl']::view-transition-new(root) {
+  animation-name: wipe-end;
+}
+:root[dir='rtl'][data-astro-transition='back']::view-transition-new(root) {
+  animation-name: wipe-start;
+}
+
+/* ---------- reduced motion: everything static, everything visible ---------- */
+@media (prefers-reduced-motion: reduce) {
+  html.js [data-reveal] {
+    opacity: 1;
+    translate: none;
+    transition: none;
+  }
+  html.js .pop {
+    animation: none;
+  }
+  html .ink-draw,
+  [dir='rtl'] .ink-draw {
+    clip-path: none;
+    transition: none;
+  }
+  :root::view-transition-old(root),
+  :root::view-transition-new(root) {
+    animation: rm-fade 120ms linear both;
+  }
+}

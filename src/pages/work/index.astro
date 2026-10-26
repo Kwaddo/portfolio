@@ -1,0 +1,45 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Spread from '../../components/Spread.astro';
+import Bubble from '../../components/Bubble.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
+import Timeline from '../../components/Timeline.astro';
+import InkRule from '../../components/InkRule.astro';
+import { byOrder, published } from '../../lib/content';
+
+const timeline = published(await getCollection('timeline'));
+const work = byOrder(published(await getCollection('work')));
+---
+<Base title="Work" description="Roles and systems Ali Khalaf has worked on. Some of it is confidential, so those pages say little on purpose.">
+  <div class="wrap stack">
+    <header class="page-head">
+      <h1>Work</h1>
+      <Bubble shape="round" as="p" class="lede bubble--up">Roles and the systems behind them. Some of it is confidential, so those pages say little on purpose.</Bubble>
+    </header>
+    <Spread layout="feature-start" label="Roles">
+      {
+        work.map((entry, i) => (
+          <ProjectCard
+            level={2}
+            href={`/work/${entry.id}/`}
+            title={entry.data.title}
+            summary={entry.data.summary}
+            meta={`${entry.data.role} · ${entry.data.period}`}
+            cover={entry.data.cover}
+            coverAlt={entry.data.coverAlt}
+            confidential={entry.data.confidential}
+            index={i}
+          />
+        ))
+      }
+    </Spread>
+    <InkRule variant="bar" />
+    <section class="stack" aria-labelledby="timeline-title">
+      <h2 id="timeline-title">Timeline<InkRule variant="draw" /></h2>
+      <Spread layout="stack" as="div" ink sfx="WORK">
+        <Timeline entries={timeline} alternate />
+      </Spread>
+    </section>
+  </div>
+</Base>

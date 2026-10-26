@@ -1,0 +1,454 @@
+/* Manga page grammar: inked frames, slanted cuts, tone fields, lettering, page frame, section devices.
+   Loaded last so it can refine the base rules. */
+
+/* ---------- inked frames: a hand-drawn stroke drawn as a border image at desktop ----------
+   One 60 x 60 stroke (band centred on the border, 1 border-width thick, bowing +-0.3 of it, tapered overshoots at two corners),
+   sliced at 15 so the edges stretch and the corners keep their shape; scaled by the border width (3/4/5 px). */
+:root {
+  --frame-ink: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60' viewBox='0 0 60 60'%3E%3Cpath fill='%230a0a0a' d='M1 5.5L55.5 4.8 55.5 10Q30 11.6 5 10L1 7.6Z M50 5L55.5 4.8Q56.6 30 55.2 59L52.4 59.4 50 55Q51.2 30 50 5Z M5 50Q30 48.4 55 50.2 55 55 5 55.2Z M5 5L10 5Q11.4 30 10 55L5 55.2Z'/%3E%3C/svg%3E");
+  --frame-paper: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60' viewBox='0 0 60 60'%3E%3Cpath fill='%23fafafa' d='M1 5.5L55.5 4.8 55.5 10Q30 11.6 5 10L1 7.6Z M50 5L55.5 4.8Q56.6 30 55.2 59L52.4 59.4 50 55Q51.2 30 50 5Z M5 50Q30 48.4 55 50.2 55 55 5 55.2Z M5 5L10 5Q11.4 30 10 55L5 55.2Z'/%3E%3C/svg%3E");
+}
+@media (forced-colors: none) {
+  .panel,
+  .frame,
+  .notice,
+  .chapter__text,
+  .chapter__side,
+  .entry__link,
+  .timeline--alt .timeline__item {
+    border-image: var(--frame-ink) 15 / 3 / 1 stretch; /* the band is three border widths: one outside, one on, one inside */
+  }
+  .spread--ink .frame,
+  a.panel:hover,
+  a.panel:focus-visible,
+  .entry__link:hover,
+  .entry__link:focus-visible {
+    border-image-source: var(--frame-paper);
+  }
+  /* an ink panel on paper keeps its ink frame invisible, as before */
+  .wwm__ink,
+  .hero__end,
+  .player {
+    border-image: none;
+  }
+}
+
+/* ---------- card media: a tall shot is cropped from its top at every width; a wide one in a tall slot is framed over the field (panels.css) ---------- */
+.panel__media--tall img {
+  object-position: 50% 0;
+}
+/* a portrait cover in the project hero stays a phone-sized frame at the end of its column instead of a full-height tower */
+.hero-spread__media > .frame--portrait {
+  max-inline-size: min(100%, 15rem);
+  margin-inline-start: auto;
+}
+
+/* ---------- slanted cuts: one panel per spread loses a corner so the gutter beside it runs diagonally ----------
+   The clip keeps the hard shadow on the straight sides (it reaches --shadow-x past the box) and the frame band (6px);
+   the slanted edge itself is an ink bar drawn inside the clip; content pads past the cut so no text is ever clipped. */
+@media (min-width: 48rem) {
+  .spread--feature-start > .panel:first-of-type,
+  .spread--feature-quad > .panel:first-of-type,
+  .spread--3up > .panel:first-of-type,
+  .timeline--alt .timeline__item:nth-child(odd),
+  .spread--feature-end > .panel:first-of-type,
+  .spread--3up > .panel:last-of-type,
+  .timeline--alt .timeline__item:nth-child(even) {
+    --cut: 2.5rem;
+    --bar: 5px;
+    position: relative;
+  }
+  .timeline--alt .timeline__item {
+    --cut: 1.5rem;
+    --bar: 3px;
+  }
+  /* end-side cut: the top end corner stays, the bottom end corner moves in by --cut */
+  .spread--feature-start > .panel:first-of-type,
+  .spread--feature-quad > .panel:first-of-type,
+  .spread--3up > .panel:first-of-type,
+  .timeline--alt .timeline__item:nth-child(odd) {
+    clip-path: polygon(-6px -6px, 100% -6px, 100% 0, calc(100% - var(--cut)) 100%, calc(100% - var(--cut)) calc(100% + var(--shadow-x)), -6px calc(100% + var(--shadow-x)));
+  }
+  [dir='rtl'] .spread--feature-start > .panel:first-of-type,
+  [dir='rtl'] .spread--feature-quad > .panel:first-of-type,
+  [dir='rtl'] .spread--3up > .panel:first-of-type,
+  [dir='rtl'] .timeline--alt .timeline__item:nth-child(odd) {
+    clip-path: polygon(0 -6px, calc(100% + 6px) -6px, calc(100% + 6px) calc(100% + var(--shadow-x)), var(--cut) calc(100% + var(--shadow-x)), var(--cut) 100%, 0 0);
+  }
+  /* start-side cut: the top start corner moves in by --cut */
+  .spread--feature-end > .panel:first-of-type,
+  .spread--3up > .panel:last-of-type,
+  .timeline--alt .timeline__item:nth-child(even) {
+    clip-path: polygon(var(--cut) -6px, calc(100% + var(--shadow-x)) -6px, calc(100% + var(--shadow-x)) calc(100% + var(--shadow-x)), -6px calc(100% + var(--shadow-x)), -6px 100%, var(--cut) 0);
+  }
+  [dir='rtl'] .spread--feature-end > .panel:first-of-type,
+  [dir='rtl'] .spread--3up > .panel:last-of-type,
+  [dir='rtl'] .timeline--alt .timeline__item:nth-child(even) {
+    clip-path: polygon(calc(-1 * var(--shadow-x)) -6px, calc(100% - var(--cut)) -6px, calc(100% - var(--cut)) 0, calc(100% + 6px) 100%, calc(100% + 6px) calc(100% + var(--shadow-x)), calc(-1 * var(--shadow-x)) calc(100% + var(--shadow-x)));
+  }
+  /* the inked slant: a bar along the cut, 6px past the box so the clip trims it flush */
+  :is(.spread--feature-start, .spread--feature-quad, .spread--feature-end) > .panel:first-of-type::after,
+  .spread--3up > .panel:is(:first-of-type, :last-of-type)::after,
+  .timeline--alt .timeline__item::after {
+    content: '';
+    position: absolute;
+    inset: -8px;
+    z-index: 3;
+    background: var(--ink);
+    pointer-events: none;
+  }
+  .spread--feature-start > .panel:first-of-type::after,
+  .spread--feature-quad > .panel:first-of-type::after,
+  .spread--3up > .panel:first-of-type::after,
+  .timeline--alt .timeline__item:nth-child(odd)::after {
+    clip-path: polygon(calc(100% - 6px) 0, calc(100% - 6px - var(--cut)) 100%, calc(100% - 6px - var(--cut) - var(--bar)) 100%, calc(100% - 6px - var(--bar)) 0);
+  }
+  [dir='rtl'] .spread--feature-start > .panel:first-of-type::after,
+  [dir='rtl'] .spread--feature-quad > .panel:first-of-type::after,
+  [dir='rtl'] .spread--3up > .panel:first-of-type::after,
+  [dir='rtl'] .timeline--alt .timeline__item:nth-child(odd)::after {
+    clip-path: polygon(6px 0, calc(6px + var(--cut)) 100%, calc(6px + var(--cut) + var(--bar)) 100%, calc(6px + var(--bar)) 0);
+  }
+  .spread--feature-end > .panel:first-of-type::after,
+  .spread--3up > .panel:last-of-type::after,
+  .timeline--alt .timeline__item:nth-child(even)::after {
+    clip-path: polygon(calc(6px + var(--cut)) 0, 6px 100%, calc(6px + var(--bar)) 100%, calc(6px + var(--cut) + var(--bar)) 0);
+  }
+  [dir='rtl'] .spread--feature-end > .panel:first-of-type::after,
+  [dir='rtl'] .spread--3up > .panel:last-of-type::after,
+  [dir='rtl'] .timeline--alt .timeline__item:nth-child(even)::after {
+    clip-path: polygon(calc(100% - 6px - var(--cut)) 0, calc(100% - 6px) 100%, calc(100% - 6px - var(--bar)) 100%, calc(100% - 6px - var(--cut) - var(--bar)) 0);
+  }
+  /* the slanted edge and its paper hover copy on link panels */
+  a.panel:hover::after,
+  a.panel:focus-visible::after {
+    background: var(--paper);
+  }
+  /* a link panel clips at its padding box; let the bar reach the border */
+  a.panel {
+    overflow-clip-margin: 8px;
+  }
+  /* content never under the cut */
+  :is(.spread--feature-start, .spread--feature-quad, .spread--3up) > .panel:first-of-type > .panel__body,
+  .timeline--alt .timeline__item:nth-child(odd) {
+    padding-inline-end: calc(1rem + var(--cut));
+  }
+  :is(.spread--feature-end, .spread--3up) > .panel:last-of-type > .panel__body,
+  .spread--feature-end > .panel:first-of-type > .panel__body,
+  .timeline--alt .timeline__item:nth-child(even) {
+    padding-inline-start: calc(1rem + var(--cut));
+  }
+}
+
+/* phone: the timeline keeps its slanted boxes in one column (the zigzag starts at 48rem, the first width with two 18rem columns);
+   a lone third panel of a two-column 3up takes the row and loses its cut. */
+@media (max-width: 47.99rem) {
+  .timeline--alt .timeline__item {
+    --cut: 1.5rem;
+    --bar: 3px;
+    position: relative;
+  }
+  .timeline--alt .timeline__item:nth-child(odd) {
+    padding-inline-end: calc(1rem + var(--cut));
+    clip-path: polygon(-6px -6px, 100% -6px, 100% 0, calc(100% - var(--cut)) 100%, calc(100% - var(--cut)) calc(100% + var(--shadow-x)), -6px calc(100% + var(--shadow-x)));
+  }
+  [dir='rtl'] .timeline--alt .timeline__item:nth-child(odd) {
+    clip-path: polygon(0 -6px, calc(100% + 6px) -6px, calc(100% + 6px) calc(100% + var(--shadow-x)), var(--cut) calc(100% + var(--shadow-x)), var(--cut) 100%, 0 0);
+  }
+  .timeline--alt .timeline__item:nth-child(even) {
+    padding-inline-start: calc(1rem + var(--cut));
+    clip-path: polygon(var(--cut) -6px, calc(100% + var(--shadow-x)) -6px, calc(100% + var(--shadow-x)) calc(100% + var(--shadow-x)), -6px calc(100% + var(--shadow-x)), -6px 100%, var(--cut) 0);
+  }
+  [dir='rtl'] .timeline--alt .timeline__item:nth-child(even) {
+    clip-path: polygon(calc(-1 * var(--shadow-x)) -6px, calc(100% - var(--cut)) -6px, calc(100% - var(--cut)) 0, calc(100% + 6px) 100%, calc(100% + 6px) calc(100% + var(--shadow-x)), calc(-1 * var(--shadow-x)) calc(100% + var(--shadow-x)));
+  }
+  .timeline--alt .timeline__item::after {
+    content: '';
+    position: absolute;
+    inset: -8px;
+    z-index: 3;
+    background: var(--ink);
+    pointer-events: none;
+  }
+  .timeline--alt .timeline__item:nth-child(odd)::after {
+    clip-path: polygon(calc(100% - 6px) 0, calc(100% - 6px - var(--cut)) 100%, calc(100% - 6px - var(--cut) - var(--bar)) 100%, calc(100% - 6px - var(--bar)) 0);
+  }
+  [dir='rtl'] .timeline--alt .timeline__item:nth-child(odd)::after {
+    clip-path: polygon(6px 0, calc(6px + var(--cut)) 100%, calc(6px + var(--cut) + var(--bar)) 100%, calc(6px + var(--bar)) 0);
+  }
+  .timeline--alt .timeline__item:nth-child(even)::after {
+    clip-path: polygon(calc(6px + var(--cut)) 0, 6px 100%, calc(6px + var(--bar)) 100%, calc(6px + var(--cut) + var(--bar)) 0);
+  }
+  [dir='rtl'] .timeline--alt .timeline__item:nth-child(even)::after {
+    clip-path: polygon(calc(100% - 6px - var(--cut)) 0, calc(100% - 6px) 100%, calc(100% - 6px - var(--bar)) 100%, calc(100% - 6px - var(--cut) - var(--bar)) 0);
+  }
+}
+@media (min-width: 48rem) and (max-width: 63.99rem) {
+  .spread--3up > .panel:last-of-type:nth-of-type(odd) {
+    clip-path: none;
+  }
+  .spread--3up > .panel:last-of-type:nth-of-type(odd)::after {
+    content: none;
+  }
+  .spread--3up > .panel:last-of-type:nth-of-type(odd) > .panel__body {
+    padding-inline-start: 1rem;
+  }
+}
+
+/* ---------- tone fields: a dotted backing page in the gutters behind every spread, never under text ----------
+   The spread isolates so its field (z -1) sits above the page and below every panel; it reaches one panel gutter past the panels. */
+.spread {
+  isolation: isolate;
+}
+.spread::before {
+  content: '';
+  position: absolute;
+  inset: calc(-1 * var(--gutter-panel));
+  z-index: -1;
+  background-image: radial-gradient(circle at center, var(--ink) 1.3px, transparent 1.7px); /* ~35 % coverage */
+  background-size: 4px 4px;
+  opacity: 0.55;
+  pointer-events: none;
+}
+/* the black page: paper dots around its panels only; on phones its padding is the page gutter */
+.spread--ink {
+  --ink-pad: clamp(1.5rem, 4vw, 3rem);
+  padding: var(--ink-pad) var(--bleed);
+}
+@media (max-width: 47.99rem) {
+  .spread--ink {
+    --ink-pad: var(--gutter);
+  }
+}
+.spread--ink::before {
+  inset: calc(var(--ink-pad) - var(--gutter-panel)) calc(var(--bleed) - var(--gutter-panel));
+  background-image: radial-gradient(circle at center, var(--paper) 1.1px, transparent 1.5px);
+  opacity: 0.4;
+}
+.stack > h2 + .spread--ink:has(> .sfx) {
+  --ink-pad: clamp(1.5rem, 3.5vw, 2.5rem); /* the same inset above the first row and below the last */
+}
+/* a black page that ends the main column sits flush on the footer */
+main:has(> .wrap > .spread--ink:last-child),
+main:has(> .wrap > .stack:last-child > .spread--ink:last-child) {
+  padding-block-end: 0;
+}
+/* a black page followed by the NEXT panel: one panel gutter between them */
+.stack:has(> .spread--ink:last-child) + .next-panel {
+  margin-block-start: var(--gutter-panel);
+}
+
+/* ---------- speed burst behind every section heading row, anchored at the heading's start ---------- */
+.stack > h2 {
+  position: relative;
+  isolation: isolate;
+  overflow: clip;
+}
+.stack > h2::before {
+  content: '';
+  position: absolute;
+  inset-block: -1em;
+  inset-inline: -1em 0;
+  z-index: -1;
+  opacity: 0.2;
+  background: repeating-conic-gradient(from 0deg at 0% 50%, var(--ink) 0deg 0.6deg, transparent 0.6deg 6deg);
+  mask-image: radial-gradient(circle at 0% 50%, transparent 1.2em, #000 2em, transparent 9em);
+  rotate: -6deg;
+  pointer-events: none;
+}
+[dir='rtl'] .stack > h2::before {
+  background: repeating-conic-gradient(from 0deg at 100% 50%, var(--ink) 0deg 0.6deg, transparent 0.6deg 6deg);
+  mask-image: radial-gradient(circle at 100% 50%, transparent 1.2em, #000 2em, transparent 9em);
+  rotate: 6deg;
+}
+
+/* ---------- page heads: a tone field at the end side fading to paper ----------
+   The four-value `inset` is physical (a listed exception, like the mask directions); the [dir='rtl'] rule mirrors it. */
+.page-head {
+  position: relative;
+  isolation: isolate;
+}
+.page-head::before {
+  content: '';
+  position: absolute;
+  inset: calc(-1 * var(--gutter-panel)) calc(-1 * var(--gutter-panel)) 0 40%;
+  z-index: -1;
+  opacity: 0.45;
+  background-image: radial-gradient(circle at center, var(--ink) 1.1px, transparent 1.5px);
+  background-size: 6px 6px;
+  mask-image: radial-gradient(ellipse 100% 120% at 100% 40%, #000 25%, transparent 72%);
+  pointer-events: none;
+}
+[dir='rtl'] .page-head::before {
+  inset: calc(-1 * var(--gutter-panel)) 40% 0 calc(-1 * var(--gutter-panel));
+  mask-image: radial-gradient(ellipse 100% 120% at 0% 40%, #000 25%, transparent 72%);
+}
+
+/* ---------- lettering: section and page headings as inked manga type ----------
+   Ink fill over a 3px paper stroke (the halo that lifts the letters off bursts and tone) with a hard offset shadow, leaning 6deg.
+   The lean is on the heading box: these boxes hold only the text and its brush underline, so nothing else moves. */
+:is(.stack, .page-head, .hero-spread__text) > :is(h1, h2),
+.chapter__text > h2 {
+  -webkit-text-stroke: 3px var(--paper);
+  paint-order: stroke fill;
+  text-shadow: 0.06em 0.06em 0 var(--ink);
+  transform: skewX(-6deg);
+  transform-origin: 0 100%;
+}
+[dir='rtl'] :is(.stack, .page-head, .hero-spread__text) > :is(h1, h2),
+[dir='rtl'] .chapter__text > h2 {
+  text-shadow: -0.06em 0.06em 0 var(--ink);
+  transform: skewX(6deg);
+  transform-origin: 100% 100%;
+}
+/* the heading's burst and underline are not lettering */
+.stack > h2::before {
+  transform: skewX(6deg);
+}
+:is(.stack, .page-head) > :is(h1, h2) {
+  padding-inline-end: 0.12em; /* room for the shadow at the end of the box */
+}
+
+/* ---------- ledes as dialogue: a round balloon whose tail points up at the heading ---------- */
+.page-head > .bubble--round {
+  justify-self: start;
+  max-inline-size: min(100%, 44rem);
+  margin-block-start: 1.4rem;
+  color: var(--ink);
+}
+.bubble--up .bubble__tail {
+  inset-block-start: auto;
+  inset-block-end: calc(100% - 2px);
+  scale: 1 -1;
+}
+
+/* ---------- narration boxes: captions, chips and periods are rectangles with one cut corner and a 2px frame ----------
+   The box is ink, clipped with a 10px chamfer at the top start; a paper inset 2px inside carries the text.
+   Contrast audits that read ancestor backgrounds see ink on ink (1:1); the text sits on the ::before paper inset (19:1). */
+.bubble--caption,
+.frame__cap {
+  border: 0;
+  padding: calc(0.3rem + 2px) calc(0.65rem + 2px);
+  background: var(--ink);
+  clip-path: polygon(10px 0, 100% 0, 100% 100%, 0 100%, 0 10px);
+}
+.bubble--caption::before,
+.frame__cap::before {
+  content: '';
+  position: absolute;
+  inset: 2px;
+  z-index: -1;
+  background: var(--paper);
+  clip-path: polygon(8.8px 0, 100% 0, 100% 100%, 0 100%, 0 8.8px);
+  pointer-events: none;
+}
+.bubble--caption {
+  isolation: isolate;
+}
+.bubble--caption > .bubble__body {
+  z-index: 1;
+}
+[dir='rtl'] .bubble--caption,
+[dir='rtl'] .frame__cap {
+  clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 0 100%);
+}
+[dir='rtl'] .bubble--caption::before,
+[dir='rtl'] .frame__cap::before {
+  clip-path: polygon(0 0, calc(100% - 8.8px) 0, 100% 8.8px, 100% 100%, 0 100%);
+}
+/* the current timeline entry stays stamped in ink */
+.timeline__item:first-child .bubble--caption.timeline__period::before {
+  background: var(--ink);
+}
+
+/* ---------- live and released badges on an eight-point burst ---------- */
+.badge--live,
+.badge--released {
+  border: 0;
+  padding: 0.5rem 1.1rem;
+  clip-path: polygon(100% 50%, 88.8% 66.1%, 85.4% 85.4%, 66.1% 88.8%, 50% 100%, 33.9% 88.8%, 14.6% 85.4%, 11.2% 66.1%, 0 50%, 11.2% 33.9%, 14.6% 14.6%, 33.9% 11.2%, 50% 0, 66.1% 11.2%, 85.4% 14.6%, 88.8% 33.9%);
+}
+
+/* ---------- page frame: a 3px ink frame inset half a gutter from the viewport at desktop, fixed, under the nav ----------
+   The nav keeps its paper band; its rule is drawn between the frame's sides so it becomes the frame's top edge. */
+@media (min-width: 64rem) {
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0 calc(var(--gutter) / 2) calc(var(--gutter) / 2);
+    z-index: 40;
+    border: 3px solid var(--ink);
+    border-block-start: 0;
+    pointer-events: none;
+  }
+  .nav {
+    border-block-end: 0;
+  }
+  .nav::after {
+    content: '';
+    position: absolute;
+    inset: auto calc(var(--gutter) / 2) 0;
+    block-size: 3px;
+    background: var(--ink);
+  }
+}
+@media print {
+  body::before {
+    content: none;
+  }
+}
+
+/* ---------- section devices: a diagonal ink bar and a tone strip alternate with the brush rules ----------
+   The bar is a 1.25rem band crossing the whole wrap; its box height sets the slant (about 6deg at 1280, 12deg would cost 230px). */
+.ink-bar {
+  block-size: clamp(3rem, 10vw, 8rem);
+  background: var(--ink);
+  clip-path: polygon(0 100%, 0 calc(100% - 1.25rem), 100% 0, 100% 1.25rem);
+}
+[dir='rtl'] .ink-bar {
+  clip-path: polygon(0 0, 0 1.25rem, 100% 100%, 100% calc(100% - 1.25rem));
+}
+.tone-strip {
+  block-size: 1rem;
+  background-image: radial-gradient(circle at center, var(--ink) 1.3px, transparent 1.7px);
+  background-size: 5px 5px;
+  opacity: 0.7;
+}
+
+/* ---------- figures elsewhere: the About head and the 404 carry the hero's inked figure panel, figure inset at 90 % ---------- */
+.page-head--figure {
+  align-items: stretch;
+}
+.page-head__text {
+  display: grid;
+  gap: 1rem;
+  align-content: start;
+}
+.hero__end-cell--inset {
+  min-block-size: 16rem;
+}
+.hero__end-cell--inset .hero__figure img {
+  block-size: 90%;
+}
+.lost {
+  display: grid;
+  gap: var(--gutter-panel);
+  align-items: center;
+}
+@media (min-width: 48rem) {
+  .page-head--figure,
+  .lost {
+    grid-template-columns: 7fr 5fr;
+  }
+  .hero__end-cell--inset .hero__figure img {
+    block-size: 90%;
+  }
+}
+
+/* a project hero is text beside a frame: no backing field under its lede; the 404 balloon's outline stays inside the wrap */
+.hero-spread::before {
+  content: none;
+}
+.lost > .bubble--thought {
+  margin-inline: 7%;
+}

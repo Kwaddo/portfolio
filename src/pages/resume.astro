@@ -1,0 +1,123 @@
+---
+import '../styles/print.css';
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import CopyEmail from '../components/CopyEmail.astro';
+import Icon from '../components/Icon.astro';
+import StatusBadge from '../components/StatusBadge.astro';
+import { byOrder, published } from '../lib/content';
+import { periodLabel, sortTimeline } from '../lib/timeline';
+import { site } from '../data/site';
+import { skills } from '../data/skills';
+import { resume } from '../data/resume';
+
+const entries = sortTimeline(published(await getCollection('timeline')));
+const work = entries.filter((e) => e.data.kind === 'work');
+const education = entries.filter((e) => e.data.kind === 'education');
+
+// Projects come from the collections: games, then lab, then non-confidential work, each by its order.
+const [games, lab, works] = await Promise.all([getCollection('games'), getCollection('lab'), getCollection('work')]);
+const labelled = new Set(['released', 'live', 'showcase']);
+const projects = [
+  ...byOrder(published(games)).map((e) => ({ id: e.id, href: `/personal/games/${e.id}/`, title: e.data.title, stack: e.data.stack, line: e.data.summary, status: e.data.status })),
+  ...byOrder(published(lab)).map((e) => ({ id: e.id, href: `/personal/lab/${e.id}/`, title: e.data.title, stack: e.data.stack, line: e.data.summary, status: e.data.status })),
+  ...byOrder(published(works))
+    .filter((e) => !e.data.confidential)
+    .map((e) => ({ id: e.id, href: `/work/${e.id}/`, title: e.data.title, stack: e.data.stack, line: e.data.summary, status: undefined })),
+].map((p) => ({ ...p, line: resume.lines[p.id] ?? p.line }));
+---
+<Base title="Resume" description="Resume of Ali Khalaf, software engineer in Bahrain.">
+  <article class="wrap stack resume">
+    <header class="stack">
+      <h1>{site.name}</h1>
+      <p class="lede">{site.role}</p>
+      <div class="resume__contact">
+        <span>{site.location}</span>
+        <CopyEmail />
+        <a class="btn" href={site.links.github} rel="me noopener"><Icon name="github" />GitHub</a>
+        <a class="btn" href={site.links.linkedin} rel="me noopener"><Icon name="linkedin" />LinkedIn</a>
+      </div>
+      <p class="no-print"><a class="btn btn--solid" href="/Ali-Khalaf-CV.pdf" download><Icon name="download" />Download PDF</a></p>
+    </header>
+
+    <section class="stack" aria-labelledby="r-profile"><h2 id="r-profile">Profile</h2><p>{resume.profile}</p></section>
+
+    <section class="stack" aria-labelledby="r-exp">
+      <h2 id="r-exp">Experience</h2>
+      <ol class="timeline">
+        {
+          work.map((e) => (
+            <li class="timeline__item">
+              <p class="timeline__period">{periodLabel(e.data.start, e.data.end)}</p>
+              <div>
+                <p class="timeline__title">{e.data.title} <span class="timeline__org">· {e.data.org}</span></p>
+                {e.data.summary && <p class="timeline__summary">{e.data.summary}</p>}
+              </div>
+            </li>
+          ))
+        }
+      </ol>
+    </section>
+
+    <section class="stack" aria-labelledby="r-edu">
+      <h2 id="r-edu">Education</h2>
+      <ol class="timeline">
+        {
+          education.map((e) => (
+            <li class="timeline__item">
+              <p class="timeline__period">{periodLabel(e.data.start, e.data.end)}</p>
+              <div>
+                <p class="timeline__title">{e.data.title} <span class="timeline__org">· {e.data.org}</span></p>
+                {e.data.summary && <p class="timeline__summary">{e.data.summary}</p>}
+              </div>
+            </li>
+          ))
+        }
+      </ol>
+    </section>
+
+    <section class="stack" aria-labelledby="r-inv">
+      <h2 id="r-inv">Involvement</h2>
+      <ul class="timeline">
+        {
+          resume.involvement.map((i) => (
+            <li class="timeline__item">
+              <p class="timeline__title">{i.title} <span class="timeline__org">· {i.org}</span></p>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    <section class="stack" aria-labelledby="r-proj">
+      <h2 id="r-proj">Projects</h2>
+      {
+        projects.map((p) => (
+          <div class="resume__project">
+            <p class="timeline__title">
+              <a href={p.href}>{p.title}</a>
+              {p.stack.length > 0 && <span class="timeline__org"> · {p.stack.join(' · ')}</span>}
+              {p.status && labelled.has(p.status) && (
+                <>
+                  {' '}
+                  <StatusBadge status={p.status} />
+                </>
+              )}
+            </p>
+            <p class="timeline__summary">{p.line}</p>
+          </div>
+        ))
+      }
+    </section>
+
+    <section class="stack" aria-labelledby="r-skills">
+      <h2 id="r-skills">Skills</h2>
+      <ul class="chips">{skills.stack.map((s) => <li>{s}</li>)}</ul>
+    </section>
+
+    <section class="stack" aria-labelledby="r-lang">
+      <h2 id="r-lang">Languages</h2>
+      <p>{skills.languages.join(', ')}</p>
+    </section>
+  </article>
+</Base>

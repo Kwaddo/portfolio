@@ -1,0 +1,60 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Spread from '../../components/Spread.astro';
+import Bubble from '../../components/Bubble.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
+import InkRule from '../../components/InkRule.astro';
+import { byOrder, published } from '../../lib/content';
+import { formatMonth } from '../../lib/dates';
+
+const games = byOrder(published(await getCollection('games')));
+const lab = byOrder(published(await getCollection('lab')));
+---
+<Base title="Personal" description="Games and experiments by Ali Khalaf, built for the love of it.">
+  <div class="wrap stack">
+    <header class="page-head">
+      <h1>Personal</h1>
+      <Bubble shape="round" as="p" class="lede bubble--up">Games and experiments, built for the love of it. Each has a short overview, and some have a longer story behind them.</Bubble>
+    </header>
+
+    <h2 id="games">Games<InkRule variant="draw" /></h2>
+    <Spread layout="feature-quad" label="Games" sfx="PLAY" ariaLabelledby="games">
+      {
+        games.map((g, i) => (
+          <ProjectCard
+            href={`/personal/games/${g.id}/`}
+            title={g.data.title}
+            summary={g.data.summary}
+            status={g.data.status}
+            cover={g.data.cover}
+            coverAlt={g.data.coverAlt}
+            meta={`Last worked ${formatMonth(g.data.lastWorked)}`}
+            tilt={i === 0}
+            index={i}
+          />
+        ))
+      }
+    </Spread>
+
+    <InkRule variant="strip" />
+
+    <h2 id="lab">Lab<InkRule variant="draw" /></h2>
+    <Spread layout="3up" label="Lab" sfx="LAB" ink ariaLabelledby="lab">
+      {
+        lab.map((l, i) => (
+          <ProjectCard
+            href={`/personal/lab/${l.id}/`}
+            title={l.data.title}
+            summary={l.data.summary}
+            status={l.data.status}
+            cover={l.data.cover}
+            coverAlt={l.data.coverAlt}
+            meta={`Last worked ${formatMonth(l.data.lastWorked)}`}
+            index={i}
+          />
+        ))
+      }
+    </Spread>
+  </div>
+</Base>

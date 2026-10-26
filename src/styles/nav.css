@@ -1,0 +1,143 @@
+/* ---------- nav and footer ---------- */
+.nav {
+  position: sticky;
+  inset-block-start: 0;
+  z-index: 50;
+  background: var(--paper);
+  border-block-end: var(--rule);
+}
+.nav__inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem 1.25rem;
+  padding-block: 0.6rem;
+}
+.nav__brand {
+  font: 400 1.5rem/1 var(--font-display);
+  letter-spacing: 0.02em;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+.nav__list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1.1rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-weight: 600;
+}
+.nav__list a {
+  text-decoration: none;
+}
+.nav__list a[aria-current='page'] {
+  text-decoration: underline;
+  text-decoration-thickness: 3px;
+}
+.nav__cta {
+  margin-inline-start: auto;
+}
+/* touch widths: every nav link is a 44px target (padding, pulled back by the margin so the spacing reads the same) */
+@media (max-width: 63.99rem), (pointer: coarse) {
+  .nav__brand {
+    padding-block: 0.625rem;
+  }
+  .nav__list a {
+    display: inline-block;
+    padding: 0.75rem 0.35rem;
+    margin-inline: -0.35rem;
+  }
+}
+/* phone: name and a mail-icon CTA on one row, the five links as a scroll-snapping row beneath with faded edges (no JS, no menu) */
+@media (max-width: 47.99rem) {
+  .nav__inner {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 0 0.75rem;
+    padding-block: 0.25rem 0;
+  }
+  .nav__cta {
+    grid-column: 2;
+    grid-row: 1;
+  }
+  .nav__inner > nav {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    /* the row runs edge to edge so its fades sit on the screen edges; the links start at the gutter */
+    margin-inline: calc(-1 * var(--gutter));
+  }
+  .nav__list {
+    flex-wrap: nowrap;
+    gap: 0.25rem;
+    padding-inline: calc(var(--gutter) - 0.5rem); /* the first label starts on the gutter */
+    overflow-x: auto;
+    scroll-snap-type: x proximity;
+    scroll-padding-inline: var(--gutter);
+    scrollbar-width: none;
+    /* symmetric fade on both edges, so no RTL mirror is needed (gradient directions are physical by spec) */
+    mask-image: linear-gradient(to right, transparent, #000 var(--gutter), #000 calc(100% - var(--gutter)), transparent);
+  }
+  .nav__list::-webkit-scrollbar {
+    display: none;
+  }
+  .nav__list a {
+    margin-inline: 0;
+    padding-inline: 0.5rem;
+    line-height: 1.25; /* 20px text in a 44px row */
+    scroll-snap-align: start;
+    white-space: nowrap;
+  }
+  .nav__cta {
+    padding: 0.6rem;
+    min-inline-size: 2.75rem;
+    min-block-size: 2.75rem;
+    justify-content: center;
+  }
+  .nav__cta .icon {
+    inline-size: 1.25em;
+    block-size: 1.25em;
+  }
+  .nav__cta-text {
+    display: none;
+  }
+}
+
+.footer {
+  padding-block: 2rem;
+  background: var(--ink);
+  color: var(--paper);
+}
+.footer__inner {
+  display: grid;
+  gap: 1rem 2rem;
+  align-items: center;
+}
+.footer ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+/* paper-ruled buttons on the ink band */
+.footer .btn {
+  border-color: var(--paper);
+  background: var(--ink);
+  color: var(--paper);
+}
+.footer .btn:hover,
+.footer .btn:focus-visible {
+  background: var(--paper);
+  color: var(--ink);
+}
+@media (min-width: 48rem) {
+  .footer__inner {
+    grid-template-columns: auto 1fr auto;
+  }
+  .footer ul {
+    justify-content: center;
+  }
+}
+

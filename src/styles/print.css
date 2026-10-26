@@ -1,0 +1,113 @@
+@media print {
+  @page {
+    size: A4;
+    margin: 14mm;
+  }
+  body {
+    font-size: 10pt;
+    line-height: 1.45;
+  }
+  .nav,
+  .footer,
+  .skip,
+  .btn,
+  .no-print,
+  .tone-fine,
+  .tone-mid,
+  .tone-coarse,
+  .tone-grad,
+  .hatch,
+  .sfx {
+    display: none !important;
+  }
+  main {
+    padding: 0;
+  }
+  .wrap {
+    max-inline-size: none;
+    padding-inline: 0;
+  }
+  a {
+    text-decoration: none;
+  }
+  /* no manga lettering or bursts on paper: outranks the art.css heading rules */
+  .resume :is(.stack, header) > :is(h1, h2) {
+    padding-inline-end: 0;
+    transform: none;
+    text-shadow: none;
+    -webkit-text-stroke: 0;
+  }
+  .resume .stack > h2 {
+    overflow: visible;
+  }
+  .resume .stack > h2::before {
+    content: none;
+  }
+  h1 {
+    font-size: 24pt;
+  }
+  h2 {
+    break-after: avoid;
+    margin-block-start: 6mm;
+    padding-block-end: 1mm;
+    border-block-end: 1.5pt solid var(--ink);
+    font-size: 13pt;
+  }
+  .resume .timeline {
+    border-inline-start: 0;
+    padding-inline-start: 0;
+  }
+  .resume .timeline::before {
+    display: none; /* the spine would print over the first letters */
+  }
+  /* long sections flow across pages; entries never split */
+  .resume section {
+    break-inside: auto;
+  }
+  .timeline__item,
+  .resume__project {
+    break-inside: avoid;
+  }
+  /* the contact buttons print as their plain URLs (drawn from the href, so no handle text sits in the markup) */
+  .resume__contact {
+    gap: 2mm 6mm;
+  }
+  .resume__contact .btn {
+    display: inline !important;
+    padding: 0;
+    border: 0;
+    font-size: 0;
+  }
+  .resume__contact .btn .icon {
+    display: none;
+  }
+  .resume__contact .btn::after {
+    content: attr(href);
+    font: 10pt/1.45 var(--font-body);
+    letter-spacing: 0;
+    text-transform: none;
+  }
+  /* badges print as plain ruled labels: no backgrounds, no star clip (the star badges' art.css rules outrank a bare .badge) */
+  .resume .badge,
+  .resume .badge--live,
+  .resume .badge--released {
+    padding: 0 0.4em;
+    border: 1pt solid var(--ink);
+    background: none;
+    color: inherit;
+    clip-path: none;
+  }
+  .timeline__item:first-child .timeline__period {
+    background: none;
+    color: inherit;
+  }
+}
+.resume__contact {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.25rem;
+  align-items: center;
+}
+.resume .badge {
+  vertical-align: middle;
+}

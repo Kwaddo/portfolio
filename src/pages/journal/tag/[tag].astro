@@ -1,0 +1,36 @@
+---
+import Icon from '../../../components/Icon.astro';
+import { getCollection } from 'astro:content';
+import Base from '../../../layouts/Base.astro';
+import DateStamp from '../../../components/DateStamp.astro';
+import { excerpt, newestFirst, tagSlug, tagsOf } from '../../../lib/journal';
+import { published } from '../../../lib/content';
+
+export async function getStaticPaths() {
+  const entries = newestFirst(published(await getCollection('journal')));
+  return tagsOf(entries).map((tag) => ({
+    params: { tag: tagSlug(tag) },
+    props: { tag, entries: entries.filter((e) => e.data.tags.includes(tag)) },
+  }));
+}
+
+const { tag, entries } = Astro.props;
+---
+<Base title={`Journal: ${tag}`} description={`Journal entries tagged ${tag}.`}>
+  <div class="wrap stack">
+    <p><a class="btn btn--back" href="/journal/"><Icon name="arrow-left" />Journal</a></p>
+    <h1>{tag}</h1>
+    <ol class="entries">
+      {
+        entries.map((e) => (
+          <li class="entry">
+            <a class="entry__link" href={`/journal/${e.id}/`}>
+              <DateStamp date={e.data.date} />
+              <p>{excerpt(e.body ?? '', 200)}</p>
+            </a>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</Base>

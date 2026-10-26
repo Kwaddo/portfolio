@@ -1,0 +1,147 @@
+---
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import StatusBadge from './StatusBadge.astro';
+import Frame from './Frame.astro';
+import Bubble from './Bubble.astro';
+import Panel from './Panel.astro';
+import Spread from './Spread.astro';
+import Sfx from './Sfx.astro';
+import InkRule from './InkRule.astro';
+import Devlog from './Devlog.astro';
+import Icon from './Icon.astro';
+import { formatMonth } from '../lib/dates';
+import { forProject, newestFirst, toDevlog } from '../lib/journal';
+import { byOrder, dropcap, nextProject, published, type JourneyRef } from '../lib/content';
+
+interface Props {
+  kind: 'games' | 'lab';
+  entry: CollectionEntry<'games'> | CollectionEntry<'lab'>;
+}
+const { kind, entry } = Astro.props;
+const { data } = entry;
+const { Content } = await render(entry);
+const [journal, games, lab] = await Promise.all([getCollection('journal'), getCollection('games'), getCollection('lab')]);
+const devlog = toDevlog(forProject(newestFirst(published(journal)), entry.id));
+const refs: JourneyRef[] = [
+  ...byOrder(published(games)).map((e) => ({ kind: 'games' as const, id: e.id, title: e.data.title, journey: e.data.journey })),
+  ...byOrder(published(lab)).map((e) => ({ kind: 'lab' as const, id: e.id, title: e.data.title, journey: e.data.journey })),
+];
+const next = nextProject(refs, kind, entry.id);
+
+const base = `/personal/${kind}/${entry.id}/`;
+const playable = 'playable' in data ? data.playable : 'none';
+const playUrl = 'playUrl' in data ? data.playUrl : undefined;
+const downloadUrl = 'downloadUrl' in data ? data.downloadUrl : undefined;
+const liveUrl = 'liveUrl' in data ? data.liveUrl : undefined;
+const external = { target: '_blank', rel: 'noopener noreferrer' } as const;
+const letter = data.title.trim().charAt(0).toUpperCase();
+// a lone landscape shot spans eight columns with its caption as a bubble in the remaining four
+const solo = data.gallery.length === 1 && data.gallery[0].caption && data.gallery[0].src.width / data.gallery[0].src.height > 1.2 ? data.gallery[0] : undefined;
+---
+<Base title={data.title} description={data.summary}>
+  <article class="wrap stack">
+    <p><a class="btn btn--back" href="/personal/"><Icon name="arrow-left" />All personal projects</a></p>
+
+    <header class="spread hero-spread has-tone">
+      <Sfx word={kind === 'games' ? 'PLAY' : 'LAB'} rotate="-5deg" />
+      <div class="hero-spread__text">
+        <h1>{data.title}</h1>
+        <p class="lede">{data.summary}</p>
+      </div>
+      <div class="hero-spread__media">
+        {
+          data.cover ? (
+            <Frame src={data.cover} alt={data.coverAlt!} eager sizes="(min-width: 48rem) 42vw, 100vw" />
+          ) : (
+            <Panel weight={4} shadow>
+              <div class="panel__media panel__initial" aria-hidden="true">
+                <span class="tone-coarse"></span>
+                <span class="speed" aria-hidden="true"></span>
+                <span class="panel__letter">{letter}</span>
+              </div>
+            </Panel>
+          )
+        }
+      </div>
+    </header>
+
+    <div class="project">
+      <aside class="project__aside">
+        <Panel weight={4} tone="fine" shadow class="facts-panel">
+          <div class="panel__body">
+            <div class="panel__caps">
+              <StatusBadge status={data.status} />
+              <Bubble shape="caption" as="span">Last worked {formatMonth(data.lastWorked)}</Bubble>
+            </div>
+            {data.stack.length > 0 && <ul class="chips" aria-label="Stack">{data.stack.map((s) => <li>{s}</li>)}</ul>}
+            {
+              data.collaborators.length > 0 && (
+                <p class="credits">
+                  Built with{' '}
+                  {data.collaborators.map((c, i) => (
+                    <>
+                      {i > 0 && ', '}
+                      {c.url ? <a href={c.url} {...external}>{c.name}</a> : c.name}
+                    </>
+                  ))}
+                  .
+                </p>
+              )
+            }
+            {playable === 'embed' && <a class="btn btn--play" href={`${base}play/`}>Play</a>}
+            {playable === 'external' && playUrl && <a class="btn btn--play" href={playUrl} {...external}>Play</a>}
+            {
+              (liveUrl || downloadUrl || data.repoUrl || data.journey) && (
+                <div class="cta-row">
+                  {liveUrl && <a class="btn btn--solid" href={liveUrl} {...external}><Icon name="external" />Open live site</a>}
+                  {downloadUrl && <a class="btn" href={downloadUrl} {...external}><Icon name="download" />Download</a>}
+                  {data.repoUrl && <a class="btn" href={data.repoUrl} {...external}><Icon name="code" />Source</a>}
+                  {data.journey && <a class="btn" href={`${base}journey/`}><Icon name="arrow-right" />Read the journey</a>}
+                </div>
+              )
+            }
+          </div>
+        </Panel>
+      </aside>
+      <div class:list={['project__main', dropcap(entry.body)]}><Content /></div>
+    </div>
+
+    {
+      data.gallery.length > 0 && (
+        <section aria-labelledby="gallery" class="stack">
+          <h2 id="gallery">Gallery<InkRule variant="draw" /></h2>
+          <Spread layout="stack" as="div" ink>
+            <div class="gallery">
+              {
+                solo ? (
+                  <>
+                    <Frame src={solo.src} alt={solo.alt} />
+                    <Bubble shape="caption" as="div" class="gallery__cap">{solo.caption}</Bubble>
+                  </>
+                ) : (
+                  data.gallery.map((g, i) => <Frame src={g.src} alt={g.alt} caption={g.caption} tilt={i % 3 === 1} />)
+                )
+              }
+            </div>
+          </Spread>
+        </section>
+      )
+    }
+
+    <Devlog items={devlog} />
+
+    {
+      next && (
+        <Panel href={`/personal/${next.kind}/${next.id}/`} weight={4} tone="fine" class="next-panel has-tone">
+          <Sfx word="NEXT" rotate="-3deg" />
+          <div class="panel__body">
+            <p class="panel__meta">Next {next.kind === 'games' ? 'game' : 'experiment'}</p>
+            <p class="panel__title">{next.title}</p>
+            <span class="panel__more" aria-hidden="true">Read more</span>
+          </div>
+        </Panel>
+      )
+    }
+  </article>
+</Base>
