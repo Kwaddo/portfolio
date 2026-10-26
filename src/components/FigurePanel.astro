@@ -50,7 +50,7 @@ const alt = 'Ali Khalaf, drawn in ink';
         var root = document.currentScript.parentNode;
         if (root.hasAttribute('data-alternate')) pick = pick === 'a' ? 'b' : 'a';
         var img = document.createElement('img');
-        img.loading = 'lazy';
+        img.fetchPriority = 'high';
         img.decoding = 'async';
         img.width = Number(root.getAttribute('data-' + pick + '-width'));
         img.height = Number(root.getAttribute('data-' + pick + '-height'));

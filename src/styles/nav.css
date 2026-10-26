@@ -76,7 +76,7 @@
     scroll-padding-inline: var(--gutter);
     scrollbar-width: none;
     /* symmetric fade on both edges, so no RTL mirror is needed (gradient directions are physical by spec) */
-    mask-image: linear-gradient(to right, transparent, #000 var(--gutter), #000 calc(100% - var(--gutter)), transparent);
+    mask-image: linear-gradient(to right, transparent, var(--ink) var(--gutter), var(--ink) calc(100% - var(--gutter)), transparent);
   }
   .nav__list::-webkit-scrollbar {
     display: none;
