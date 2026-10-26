@@ -47,7 +47,9 @@ h3 {
   text-transform: uppercase;
 }
 h1 {
+  max-inline-size: 100%;
   font-size: clamp(2.5rem, 9vw, 5rem);
+  overflow-wrap: anywhere; /* a long title never widens the wrap */
 }
 h2 {
   font-size: clamp(1.75rem, 5vw, 2.75rem);
@@ -90,6 +92,11 @@ main {
 /* sections separate by their heading row, not by void */
 .stack > h2 {
   margin-block-start: clamp(2rem, 4vw, 3rem);
+}
+@media (max-width: 47.99rem) {
+  .stack > h2 {
+    margin-block-start: 1.5rem; /* one step tighter on phones */
+  }
 }
 .prose {
   max-inline-size: var(--measure);
