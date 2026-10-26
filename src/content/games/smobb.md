@@ -12,6 +12,8 @@ journey: false
 order: 1
 cover: ../../assets/media/smobb/01-journal-and-hex.png
 coverAlt: The game after a few commands, with the Journal sidebar open showing an Asked entry, and a character's message written in red hexadecimal.
+card: ../../assets/media/smobb/02-phone.png
+cardAlt: The S.M.O.B.B. browser build on a phone-sized screen, with the hex message wrapped and a touch control bar of Tab, Skip, Inst and FX buttons below.
 gallery:
   - src: ../../assets/media/smobb/cover.png
     alt: The S.M.O.B.B. terminal-style web game at its start, with a greeting in the story pane and an Options sidebar listing characters to talk to.
