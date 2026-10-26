@@ -289,15 +289,17 @@ main:has(> .wrap > .stack:last-child > .spread--ink:last-child) {
    The lean is on the heading box: these boxes hold only the text and its brush underline, so nothing else moves. */
 :is(.stack, .page-head, .hero-spread__text) > :is(h1, h2),
 .chapter__text > h2 {
-  -webkit-text-stroke: 3px var(--paper);
+  -webkit-text-stroke: 2px var(--paper);
   paint-order: stroke fill;
-  text-shadow: 0.06em 0.06em 0 var(--ink);
+  letter-spacing: 0.05em;
+  word-spacing: 0.12em;
+  text-shadow: 0.04em 0.04em 0 var(--ink);
   transform: skewX(-6deg);
   transform-origin: 0 100%;
 }
 [dir='rtl'] :is(.stack, .page-head, .hero-spread__text) > :is(h1, h2),
 [dir='rtl'] .chapter__text > h2 {
-  text-shadow: -0.06em 0.06em 0 var(--ink);
+  text-shadow: -0.04em 0.04em 0 var(--ink);
   transform: skewX(6deg);
   transform-origin: 100% 100%;
 }
