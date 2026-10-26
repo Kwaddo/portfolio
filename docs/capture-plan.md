@@ -53,3 +53,7 @@ Per project, next round (follow `/private/tmp/claude-501/capture/rules.md` for n
 4. overworld (clone `Kwaddo/overworld`, Expo): the mapping screen and the mappings list; use the Expo web target or an iOS simulator window if the feature allows, otherwise BLOCKED.
 5. dopher-alpha: the native build panicked ("Invalid window ID") last time; retry after `go mod tidy`; fall back to the existing GIF frames already used.
 6. 01-displayer (live URL, public sign-in page only) and lps (private repo; crops without username or hostname): one or two more shots each.
+
+## Status 2026-10-26 10:00
+
+Done: smart-road (3 shots, run from a scratch copy that auto-spawns cars, since synthetic key presses are blocked), go-byte (3 shots of public CHIP-8 test ROMs). Blocked: gridlock (the repo ships no `client/assets`, and the login screen shows a LAN IP; getting past it needs keystrokes, which need Accessibility permission for the terminal), overworld (the feature needs a device with WiFi and a music library).
