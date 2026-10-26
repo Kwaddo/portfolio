@@ -382,3 +382,11 @@ main:has(> .wrap > .stack:last-child > .spread--ink:last-child) {
     block-size: 90%;
   }
 }
+
+/* a project hero is text beside a frame: no backing field under its lede; the 404 balloon's outline stays inside the wrap */
+.hero-spread::before {
+  content: none;
+}
+.lost > .bubble--thought {
+  margin-inline: 7%;
+}
