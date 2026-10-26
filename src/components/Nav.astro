@@ -7,10 +7,13 @@ interface Props {
   pathname: string;
 }
 const { pathname } = Astro.props;
+const [first, ...rest] = site.name.split(' ');
 ---
 <header class="nav">
   <div class="nav__inner wrap">
-    <a class="nav__brand" href="/">{site.name}</a>
+    <a class="nav__brand" href="/" aria-label={site.name}>
+      <span class="nav__brand-first" aria-hidden="true">{first}</span><span class="nav__brand-last" aria-hidden="true">{rest.join(' ')}</span>
+    </a>
     <nav aria-label="Main">
       <ul class="nav__list">
         {

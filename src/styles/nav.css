@@ -25,19 +25,67 @@
   padding-block: 0.6rem;
 }
 .nav__brand {
-  font: 400 1.5rem/1 var(--font-display);
-  letter-spacing: 0.02em;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  min-block-size: 2.75rem;
+  justify-self: start;
   text-decoration: none;
   text-transform: uppercase;
-  /* the name is a stamp: paper letters on an ink block, leaning with the headings */
-  padding-inline: 0.5rem;
+  isolation: isolate;
+}
+/* the title treatment of a volume cover: ALI is reversed out of a slanted ink slab, KHALAF is inked lettering that breaks out of it,
+   overlapping the slab with a paper halo and a hard shadow, the same way the SFX words and headings are drawn */
+.nav__brand-first {
+  position: relative;
+  z-index: 0;
+  padding: 0.4rem 1.3rem 0.35rem 0.85rem;
   background: var(--ink);
   color: var(--paper);
-  transform: skewX(-6deg);
-  justify-self: start;
+  font: 400 1.35rem/1 var(--font-display);
+  letter-spacing: 0.1em;
+  clip-path: polygon(0 0, 100% 0, calc(100% - 0.7rem) 100%, 0 100%);
 }
-[dir='rtl'] .nav__brand {
-  transform: skewX(6deg);
+.nav__brand-last {
+  position: relative;
+  z-index: 1;
+  margin-inline-start: -0.1rem;
+  color: var(--ink);
+  font: 400 1.95rem/1 var(--font-display);
+  letter-spacing: 0.05em;
+  -webkit-text-stroke: 2px var(--paper);
+  paint-order: stroke fill;
+  text-shadow: 0.05em 0.05em 0 var(--tone);
+  transform: skewX(-8deg) rotate(-2deg);
+}
+/* a four-point spark where the lettering ends, and a patch of screen tone fading off the slab */
+.nav__brand::after {
+  content: '';
+  position: absolute;
+  inset-block-start: 0.2rem;
+  inset-inline-end: -1rem;
+  inline-size: 0.8rem;
+  block-size: 0.8rem;
+  background: var(--ink);
+  clip-path: polygon(50% 0, 62% 38%, 100% 50%, 62% 62%, 50% 100%, 38% 62%, 0 50%, 38% 38%);
+}
+.nav__brand::before {
+  content: '';
+  position: absolute;
+  inset: 0 100% 0 auto;
+  inline-size: 1.1rem;
+  background-image: radial-gradient(circle at center, var(--ink) 1.2px, transparent 1.7px);
+  background-size: 5px 5px;
+  mask-image: linear-gradient(to left, var(--ink), transparent);
+  pointer-events: none;
+}
+[dir='rtl'] .nav__brand-first {
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0.7rem 100%);
+  padding-inline: 1.3rem 0.85rem;
+}
+[dir='rtl'] .nav__brand-last {
+  transform: skewX(8deg) rotate(2deg);
+  text-shadow: -0.05em 0.05em 0 var(--tone);
 }
 .nav__list {
   display: flex;
@@ -113,9 +161,6 @@
 }
 /* touch widths: every nav link is a 44px target (padding, pulled back by the margin so the spacing reads the same) */
 @media (max-width: 63.99rem), (pointer: coarse) {
-  .nav__brand {
-    padding-block: 0.625rem;
-  }
   .nav__list a {
     display: inline-block;
     padding: 0.75rem 0.35rem;
