@@ -92,7 +92,12 @@ p.timeline__period {
     grid-template-columns: max-content 1fr;
   }
 }
-/* alternating layout: spine down the middle, entries either side of it */
+/* alternating layout: boxed entries at every width; the spine runs down the middle from 48rem (two 21rem columns at 768) */
+.timeline--alt .timeline__item {
+  padding: 1rem;
+  border: var(--rule);
+  background: var(--paper);
+}
 @media (min-width: 48rem) {
   .timeline--alt {
     padding-inline-start: 0;
@@ -106,9 +111,6 @@ p.timeline__period {
     /* each entry spans two rows and starts one row after the previous: neighbours overlap by half a row, a tight zigzag */
     grid-row: calc(var(--i) + 1) / span 2;
     grid-template-columns: 1fr;
-    padding: 1rem;
-    border: var(--rule);
-    background: var(--paper);
   }
   .timeline--alt .timeline__item:nth-child(odd) {
     grid-column: 1;

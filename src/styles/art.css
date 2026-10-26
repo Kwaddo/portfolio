@@ -8,7 +8,7 @@
   --frame-ink: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60' viewBox='0 0 60 60'%3E%3Cpath fill='%230a0a0a' d='M1 5.5L55.5 4.8 55.5 10Q30 11.6 5 10L1 7.6Z M50 5L55.5 4.8Q56.6 30 55.2 59L52.4 59.4 50 55Q51.2 30 50 5Z M5 50Q30 48.4 55 50.2 55 55 5 55.2Z M5 5L10 5Q11.4 30 10 55L5 55.2Z'/%3E%3C/svg%3E");
   --frame-paper: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60' viewBox='0 0 60 60'%3E%3Cpath fill='%23fafafa' d='M1 5.5L55.5 4.8 55.5 10Q30 11.6 5 10L1 7.6Z M50 5L55.5 4.8Q56.6 30 55.2 59L52.4 59.4 50 55Q51.2 30 50 5Z M5 50Q30 48.4 55 50.2 55 55 5 55.2Z M5 5L10 5Q11.4 30 10 55L5 55.2Z'/%3E%3C/svg%3E");
 }
-@media (min-width: 48rem) and (forced-colors: none) {
+@media (forced-colors: none) {
   .panel,
   .frame,
   .notice,
@@ -140,6 +140,61 @@
   }
 }
 
+/* phone: the timeline keeps its slanted boxes in one column (the zigzag starts at 48rem, the first width with two 18rem columns);
+   a lone third panel of a two-column 3up takes the row and loses its cut. */
+@media (max-width: 47.99rem) {
+  .timeline--alt .timeline__item {
+    --cut: 1.5rem;
+    --bar: 3px;
+    position: relative;
+  }
+  .timeline--alt .timeline__item:nth-child(odd) {
+    padding-inline-end: calc(1rem + var(--cut));
+    clip-path: polygon(-6px -6px, 100% -6px, 100% 0, calc(100% - var(--cut)) 100%, calc(100% - var(--cut)) calc(100% + var(--shadow-x)), -6px calc(100% + var(--shadow-x)));
+  }
+  [dir='rtl'] .timeline--alt .timeline__item:nth-child(odd) {
+    clip-path: polygon(0 -6px, calc(100% + 6px) -6px, calc(100% + 6px) calc(100% + var(--shadow-x)), var(--cut) calc(100% + var(--shadow-x)), var(--cut) 100%, 0 0);
+  }
+  .timeline--alt .timeline__item:nth-child(even) {
+    padding-inline-start: calc(1rem + var(--cut));
+    clip-path: polygon(var(--cut) -6px, calc(100% + var(--shadow-x)) -6px, calc(100% + var(--shadow-x)) calc(100% + var(--shadow-x)), -6px calc(100% + var(--shadow-x)), -6px 100%, var(--cut) 0);
+  }
+  [dir='rtl'] .timeline--alt .timeline__item:nth-child(even) {
+    clip-path: polygon(calc(-1 * var(--shadow-x)) -6px, calc(100% - var(--cut)) -6px, calc(100% - var(--cut)) 0, calc(100% + 6px) 100%, calc(100% + 6px) calc(100% + var(--shadow-x)), calc(-1 * var(--shadow-x)) calc(100% + var(--shadow-x)));
+  }
+  .timeline--alt .timeline__item::after {
+    content: '';
+    position: absolute;
+    inset: -8px;
+    z-index: 3;
+    background: var(--ink);
+    pointer-events: none;
+  }
+  .timeline--alt .timeline__item:nth-child(odd)::after {
+    clip-path: polygon(calc(100% - 6px) 0, calc(100% - 6px - var(--cut)) 100%, calc(100% - 6px - var(--cut) - var(--bar)) 100%, calc(100% - 6px - var(--bar)) 0);
+  }
+  [dir='rtl'] .timeline--alt .timeline__item:nth-child(odd)::after {
+    clip-path: polygon(6px 0, calc(6px + var(--cut)) 100%, calc(6px + var(--cut) + var(--bar)) 100%, calc(6px + var(--bar)) 0);
+  }
+  .timeline--alt .timeline__item:nth-child(even)::after {
+    clip-path: polygon(calc(6px + var(--cut)) 0, 6px 100%, calc(6px + var(--bar)) 100%, calc(6px + var(--cut) + var(--bar)) 0);
+  }
+  [dir='rtl'] .timeline--alt .timeline__item:nth-child(even)::after {
+    clip-path: polygon(calc(100% - 6px - var(--cut)) 0, calc(100% - 6px) 100%, calc(100% - 6px - var(--bar)) 100%, calc(100% - 6px - var(--cut) - var(--bar)) 0);
+  }
+}
+@media (min-width: 48rem) and (max-width: 63.99rem) {
+  .spread--3up > .panel:last-of-type:nth-of-type(odd) {
+    clip-path: none;
+  }
+  .spread--3up > .panel:last-of-type:nth-of-type(odd)::after {
+    content: none;
+  }
+  .spread--3up > .panel:last-of-type:nth-of-type(odd) > .panel__body {
+    padding-inline-start: 1rem;
+  }
+}
+
 /* ---------- tone fields: a dotted backing page in the gutters behind every spread, never under text ----------
    The spread isolates so its field (z -1) sits above the page and below every panel; it reaches one panel gutter past the panels. */
 .spread {
@@ -155,10 +210,15 @@
   opacity: 0.55;
   pointer-events: none;
 }
-/* the black page: paper dots around its panels only */
+/* the black page: paper dots around its panels only; on phones its padding is the page gutter */
 .spread--ink {
   --ink-pad: clamp(1.5rem, 4vw, 3rem);
   padding: var(--ink-pad) var(--bleed);
+}
+@media (max-width: 47.99rem) {
+  .spread--ink {
+    --ink-pad: var(--gutter);
+  }
 }
 .spread--ink::before {
   inset: calc(var(--ink-pad) - var(--gutter-panel)) calc(var(--bleed) - var(--gutter-panel));

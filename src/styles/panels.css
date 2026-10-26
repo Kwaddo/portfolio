@@ -230,8 +230,8 @@ a.panel {
   gap: 0.5rem;
 }
 
-/* fill: a stretched panel grows its media to its box instead of leaving paper under the text */
-@media (min-width: 48rem) {
+/* fill: a stretched panel grows its media to its box instead of leaving paper under the text (wherever cards share a row) */
+@media (min-width: 36rem) {
   .panel--fill > .panel__media {
     flex: 1 1 auto; /* grows into a stretched box, never below its ratio */
   }
@@ -249,6 +249,45 @@ a.panel {
     flex-basis: 0;
     aspect-ratio: auto;
     min-block-size: 12rem;
+  }
+}
+/* ---------- phone and tablet decisions ---------- */
+@media (max-width: 47.99rem) {
+  .panel__meta,
+  .panel__text {
+    font-size: 1rem;
+  }
+}
+/* large phone (36-48rem): cards two up, the feature over both columns; a lone third panel takes the row */
+@media (min-width: 36rem) and (max-width: 47.99rem) {
+  .spread--feature-quad > :not(.spread__label):not(.sfx),
+  .spread--3up > :not(.spread__label):not(.sfx) {
+    grid-column: span 6;
+  }
+  .spread--feature-quad > :not(.spread__label):not(.sfx):first-of-type,
+  .spread--3up > .panel:last-of-type:nth-of-type(odd) {
+    grid-column: span 12;
+  }
+}
+/* tablet (48-64rem): 3up in two columns (a lone third panel takes the row), feature spreads 7/5 */
+@media (min-width: 48rem) and (max-width: 63.99rem) {
+  .spread--3up > :not(.spread__label):not(.sfx) {
+    grid-column: span 6;
+  }
+  .spread--3up > .panel:last-of-type:nth-of-type(odd) {
+    grid-column: span 12;
+  }
+  .spread--feature-start > :not(.spread__label):not(.sfx) {
+    grid-column: span 5;
+  }
+  .spread--feature-start > :not(.spread__label):not(.sfx):first-of-type {
+    grid-column: span 7;
+  }
+  .spread--feature-end > :not(.spread__label):not(.sfx) {
+    grid-column: span 5;
+  }
+  .spread--feature-end > :not(.spread__label):not(.sfx):first-of-type {
+    grid-column: 6 / -1;
   }
 }
 @media (min-width: 48rem) {
