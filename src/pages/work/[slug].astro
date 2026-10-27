@@ -23,7 +23,7 @@ const { Content } = await render(entry);
   <article class="wrap stack">
     <p><a class="btn btn--back" href="/work/"><Icon name="arrow-left" />All work</a></p>
     <header class="spread hero-spread has-tone">
-      <Sfx word="WORK" rotate="-5deg" />
+      <Sfx word="WORK" rotate="-5deg" look="motion" />
       <div class="hero-spread__text">
         <h1 style={`--w: ${Math.max(...data.title.split(/\s+/).map((w) => w.length))}`}>{data.title}</h1>
         <p class="lede">{data.summary}</p>

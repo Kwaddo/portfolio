@@ -19,7 +19,7 @@ const lab = byOrder(published(await getCollection('lab')));
     </header>
 
     <h2 id="games">Games<InkRule variant="draw" /></h2>
-    <Spread layout="feature-quad" label="Games" sfx="PLAY" ariaLabelledby="games">
+    <Spread layout="feature-quad" label="Games" sfx="PLAY" sfxLook="rough" ariaLabelledby="games">
       {
         games.map((g, i) => (
           <ProjectCard
@@ -40,7 +40,7 @@ const lab = byOrder(published(await getCollection('lab')));
     <InkRule variant="strip" />
 
     <h2 id="lab">Lab<InkRule variant="draw" /></h2>
-    <Spread layout="3up" label="Lab" sfx="LAB" ink ariaLabelledby="lab">
+    <Spread layout="3up" label="Lab" sfx="LAB" sfxLook="motion" ink ariaLabelledby="lab">
       {
         lab.map((l, i) => (
           <ProjectCard

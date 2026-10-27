@@ -56,3 +56,13 @@ test('the work timeline word clears every entry', async ({ page }, testInfo) => 
   });
   expect(hits).toBe(0);
 });
+
+test('SFX letter in more than one look', async ({ page }) => {
+  await page.goto('/personal/');
+  await expect(page.locator('.sfx.sfx--rough')).toHaveCount(1);
+  await expect(page.locator('.sfx.sfx--motion')).toHaveCount(1);
+  await page.goto('/');
+  await expect(page.locator('.wwm .sfx.sfx--burst')).toHaveCount(1);
+  await page.goto('/404.html');
+  await expect(page.locator('.sfx.sfx--rough')).toHaveCount(1);
+});
