@@ -165,9 +165,17 @@
 .bubble--round {
   max-inline-size: 34rem;
   padding: 1rem 1.5rem;
+}
+/* the balloon's drawn outline lives on its own layer so it can wobble without moving the words */
+.bubble--round::before {
+  content: '';
+  position: absolute;
+  inset: -3px; /* the old border box: the tail still crosses the whole rule */
+  z-index: -1;
   border: var(--rule);
   border-radius: 1.75rem;
   background: var(--paper);
+  pointer-events: none;
 }
 .bubble__tail {
   position: absolute;
@@ -302,6 +310,9 @@ a.bubble--ink:focus-visible {
   inline-size: 100%;
   block-size: 1.5rem;
   color: var(--ink);
+  translate: var(--dx, 0) 0;
+  rotate: var(--rot, 0deg);
+  scale: var(--flip, 1) var(--sy, 1);
 }
 .ink-draw {
   display: block;

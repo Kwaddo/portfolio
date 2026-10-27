@@ -555,3 +555,10 @@ a.card:focus-visible .panel__media img {
 .spread.hero::after {
   inset-block-end: 0;
 }
+/* a panel that only holds a few chips does not need the card height */
+.panel--fit {
+  min-block-size: 0;
+}
+.panel--fit .panel__body > .chips {
+  margin-block-start: 0;
+}

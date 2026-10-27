@@ -129,19 +129,23 @@ h3 {
   float: inline-start;
   margin-block: 0.2rem 0.35rem; /* the float's margin box (3.2 + 41 + 5.6 = 49.8px) stays under two lines */
   margin-inline-end: 0.85rem;
-  padding: 0.06em 0.16em 0;
-  border: 3px solid var(--ink);
-  background: var(--paper);
-  color: var(--ink);
-  box-shadow: 4px 4px 0 var(--ink);
-  font: 400 2.6rem/0.78 var(--font-display);
+  padding: 0.06em 0.1em 0 0;
+  color: var(--paper); /* hollow lettering like the PLAY SFX: paper fill, ink stroke, hard shadow */
+  text-shadow:
+    -2px -2px 0 var(--ink), 0 -2px 0 var(--ink), 2px -2px 0 var(--ink), -2px 0 0 var(--ink), 2px 0 0 var(--ink), -2px 2px 0 var(--ink), 0 2px 0 var(--ink), 2px 2px 0 var(--ink),
+    4px 4px 0 var(--ink),
+    5px 5px 0 var(--ink);
+  font: 400 3.4rem/0.78 var(--font-display);
 }
 /* narrow openers (I, J, L, 1) get a wider box so they frame like an S; ::first-letter ignores inline-size */
 .dropcap--narrow > p:first-of-type::first-letter {
-  padding: 0.06em 0.42em 0; /* the shorthand: ::first-letter ignores padding-inline */
+  padding: 0.06em 0.3em 0; /* the shorthand: ::first-letter ignores padding-inline */
 }
 [dir='rtl'] .dropcap > p:first-of-type::first-letter {
-  box-shadow: -4px 4px 0 var(--ink);
+  text-shadow:
+    -2px -2px 0 var(--ink), 0 -2px 0 var(--ink), 2px -2px 0 var(--ink), -2px 0 0 var(--ink), 2px 0 0 var(--ink), -2px 2px 0 var(--ink), 0 2px 0 var(--ink), 2px 2px 0 var(--ink),
+    -4px 4px 0 var(--ink),
+    -5px 5px 0 var(--ink);
 }
 
 /* ---------- chips (stack tags etc.) ---------- */
@@ -182,4 +186,12 @@ h2 > .ink-draw {
 }
 .kicker + h1 {
   margin-block-start: 0.35rem;
+}
+/* a quiet subtitle under a page title: small, spaced, not part of the lettering */
+.page-sub {
+  margin-block: 0.25rem 0;
+  color: var(--tone);
+  font: 700 0.95rem/1.2 var(--font-body);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
 }

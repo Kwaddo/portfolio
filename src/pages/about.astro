@@ -76,7 +76,7 @@ const portrait = Object.values(portraits)[0]?.default;
     <InkRule variant="splat-b" />
     <section class="stack" aria-labelledby="stack">
       <h2 id="stack">Stack<InkRule variant="draw" /></h2>
-      <Panel tone="fine" weight={4}>
+      <Panel tone="fine" weight={4} class="panel--fit">
         <div class="panel__body"><ul class="chips" aria-label="Stack">{skills.stack.map((s) => <li>{s}</li>)}</ul></div>
       </Panel>
     </section>

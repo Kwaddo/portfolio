@@ -88,6 +88,74 @@ html:not(.js) .ink-draw,
   animation-name: wipe-start;
 }
 
+/* ---------- ambient life: lettering boils, badges beat, sparkles sway (no-preference only; the SVG filters desktop only) ---------- */
+@media (prefers-reduced-motion: no-preference) {
+  .badge--live,
+  .badge--released {
+    animation: beat 2.4s ease-in-out infinite;
+  }
+  .badge__spark {
+    animation: sway 3.2s ease-in-out infinite;
+    transform-origin: center;
+  }
+  .tbc {
+    animation: beat 2.8s ease-in-out infinite;
+  }
+}
+@keyframes beat {
+  0%, 100% { scale: 1; }
+  12% { scale: 1.05; }
+  24% { scale: 1; }
+  36% { scale: 1.03; }
+  48% { scale: 1; }
+}
+@keyframes sway {
+  0%, 100% { rotate: -8deg; scale: 1; opacity: 1; }
+  50% { rotate: 10deg; scale: 1.15; opacity: 0.7; }
+}
+@keyframes boil {
+  0% { filter: url(#boil-a); }
+  33.3% { filter: url(#boil-b); }
+  66.6% { filter: url(#boil-c); }
+}
+@keyframes boil-rough {
+  0% { filter: url(#rough) drop-shadow(0.04em 0.04em 0 var(--sfx-stroke)); }
+  33.3% { filter: url(#rough-b) drop-shadow(0.04em 0.04em 0 var(--sfx-stroke)); }
+  66.6% { filter: url(#rough-c) drop-shadow(0.04em 0.04em 0 var(--sfx-stroke)); }
+}
+@keyframes boil-rough-rtl {
+  0% { filter: url(#rough) drop-shadow(-0.04em 0.04em 0 var(--sfx-stroke)); }
+  33.3% { filter: url(#rough-b) drop-shadow(-0.04em 0.04em 0 var(--sfx-stroke)); }
+  66.6% { filter: url(#rough-c) drop-shadow(-0.04em 0.04em 0 var(--sfx-stroke)); }
+}
+@media (min-width: 48rem) and (prefers-reduced-motion: no-preference) {
+  :is(.page-head, .hero-spread__text) > h1,
+  .panel__word {
+    animation: boil 0.45s steps(1) infinite;
+  }
+  .sfx--rough > span {
+    animation: boil-rough 0.45s steps(1) infinite;
+  }
+  [dir='rtl'] .sfx--rough > span {
+    animation-name: boil-rough-rtl;
+  }
+}
+
+/* speech balloons: the drawn outline (shout) boils with the ink filters; round balloon outlines boil, text stays put */
+@keyframes boil-bubble {
+  0% { filter: url(#boil-a) drop-shadow(var(--shadow-x) var(--shadow-x) 0 var(--ink)); }
+  33.3% { filter: url(#boil-b) drop-shadow(var(--shadow-x) var(--shadow-x) 0 var(--ink)); }
+  66.6% { filter: url(#boil-c) drop-shadow(var(--shadow-x) var(--shadow-x) 0 var(--ink)); }
+}
+@media (min-width: 48rem) and (prefers-reduced-motion: no-preference) {
+  .bubble--shout .bubble__bg {
+    animation: boil-bubble 0.5s steps(1) infinite;
+  }
+  .bubble--round::before {
+    animation: boil 0.5s steps(1) infinite;
+  }
+}
+
 /* ---------- reduced motion: everything static, everything visible ---------- */
 @media (prefers-reduced-motion: reduce) {
   html.js [data-reveal] {
