@@ -35,7 +35,6 @@ const playUrl = 'playUrl' in data ? data.playUrl : undefined;
 const downloadUrl = 'downloadUrl' in data ? data.downloadUrl : undefined;
 const liveUrl = 'liveUrl' in data ? data.liveUrl : undefined;
 const external = { target: '_blank', rel: 'noopener noreferrer' } as const;
-const letter = data.title.trim().charAt(0).toUpperCase();
 // a lone landscape shot spans eight columns with its caption as a bubble in the remaining four
 const solo = data.gallery.length === 1 && data.gallery[0].caption && data.gallery[0].src.width / data.gallery[0].src.height > 1.2 ? data.gallery[0] : undefined;
 ---
@@ -44,26 +43,18 @@ const solo = data.gallery.length === 1 && data.gallery[0].caption && data.galler
     <p><a class="btn btn--back" href="/personal/"><Icon name="arrow-left" />All personal projects</a></p>
 
     <header class="spread hero-spread has-tone">
-      <Sfx word={kind === 'games' ? 'PLAY' : 'LAB'} rotate="-5deg" />
+      <Sfx word={kind === 'games' ? 'PLAY' : 'LAB'} rotate="-5deg" look="motion" />
       <div class="hero-spread__text">
         <h1 style={`--w: ${Math.max(...data.title.split(/\s+/).map((w) => w.length))}`}>{data.title}</h1>
         <p class="lede">{data.summary}</p>
       </div>
-      <div class="hero-spread__media">
-        {
-          data.cover ? (
+      {
+        data.cover && (
+          <div class="hero-spread__media">
             <Frame src={data.cover} alt={data.coverAlt!} eager sizes="(min-width: 48rem) 42vw, 100vw" />
-          ) : (
-            <Panel weight={4} shadow>
-              <div class="panel__media panel__initial" aria-hidden="true">
-                <span class="tone-coarse"></span>
-                <span class="speed" aria-hidden="true"></span>
-                <span class="panel__letter">{letter}</span>
-              </div>
-            </Panel>
-          )
-        }
-      </div>
+          </div>
+        )
+      }
     </header>
 
     <div class="project">
@@ -134,7 +125,7 @@ const solo = data.gallery.length === 1 && data.gallery[0].caption && data.galler
     {
       next && (
         <Panel href={`/personal/${next.kind}/${next.id}/`} weight={4} tone="fine" class="next-panel has-tone">
-          <Sfx word="NEXT" rotate="-3deg" />
+          <span class="tbc" aria-hidden="true">To be continued</span>
           <div class="panel__body">
             <p class="panel__meta">Next {next.kind === 'games' ? 'game' : 'experiment'}</p>
             <p class="panel__title">{next.title}</p>

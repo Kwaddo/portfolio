@@ -34,6 +34,73 @@
   z-index: 2;
   max-inline-size: calc(100% - 2rem);
 }
+/* ---------- cover frame: volume badge, spine on the start gutter, publisher-style stamp ---------- */
+.cover__vol {
+  position: absolute;
+  inset-block-start: -0.9rem;
+  inset-inline-start: clamp(1rem, 3vw, 2rem);
+  z-index: 2;
+  padding: 0.3rem 0.7rem;
+  background: var(--ink);
+  color: var(--paper);
+  font: 400 clamp(0.85rem, 1.4vw, 1.05rem) / 1 var(--font-display);
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+}
+.cover__stamp {
+  position: absolute;
+  inset-block-start: -1.25rem; /* phones: the free top corner, clear of the availability caption */
+  inset-inline-end: 0.5rem;
+  z-index: 3;
+  display: grid;
+  place-content: center;
+  inline-size: 4.25rem;
+  aspect-ratio: 1;
+  border: 3px double var(--ink);
+  border-radius: 50%;
+  background: var(--paper);
+  font: 400 0.75rem/1 var(--font-display);
+  letter-spacing: 0.15em;
+  text-align: center;
+  rotate: -12deg;
+}
+.cover__stamp b {
+  font-size: 1.5rem;
+  font-weight: 400;
+  letter-spacing: 0.05em;
+}
+[dir='rtl'] .cover__stamp {
+  rotate: 12deg;
+}
+.cover__spine {
+  display: none;
+}
+@media (min-width: 48rem) {
+  .cover__stamp {
+    inset-block: auto -1rem;
+    inset-inline-end: -1rem;
+  }
+  /* the spine runs down the start gutter beside the panels, like the edge of a tankobon */
+  .cover__spine {
+    position: absolute;
+    inset-block: 2rem 1rem; /* the hero's own block padding */
+    inset-inline-start: 0;
+    display: grid;
+    place-items: center;
+    inline-size: calc(var(--gutter) - 0.25rem);
+    background: var(--ink);
+    color: var(--paper);
+    font: 400 0.7rem/1 var(--font-display);
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+  /* the text turns, not the band: logical insets on the band keep their horizontal meaning */
+  .cover__spine > span {
+    writing-mode: vertical-rl;
+  }
+}
 /* the end cell: the clipped HELLO panel plus a figure layer that may break the panel's top edge */
 .hero__end-cell {
   position: relative;
@@ -61,9 +128,13 @@
   object-fit: contain;
   object-position: bottom;
 }
+/* the word is lettered over the figure, as manga SFX overlap a character; clipped to the panel's box like before */
+.hero__end-cell > .sfx {
+  z-index: 3;
+}
 /* the seated figure is wider: a slightly smaller word and figure keep five letters readable */
 @media (min-width: 64rem) {
-  .hero__end-cell:has(img[data-figure='b']) > .hero__end > .sfx {
+  .hero__end-cell:has(img[data-figure='b']) > .sfx {
     font-size: clamp(3rem, 6.5vw, 5.25rem);
   }
   .hero__end-cell:has(img[data-figure='b']) .hero__figure img {
@@ -95,7 +166,7 @@
   background: repeating-conic-gradient(from 0deg at 24% 56%, currentColor 0deg 1deg, transparent 1deg 6deg);
   mask-image: radial-gradient(circle at 24% 56%, transparent 6%, #000 55%);
 }
-.hero__end > .sfx {
+.hero__end-cell > .sfx {
   inset: 0;
   display: grid;
   place-items: end start;
@@ -106,15 +177,15 @@
   text-align: start;
 }
 /* RTL: the figure stands on the left, where the word's K would be; the word takes the top of the panel, start-aligned (one step smaller at desktop) */
-[dir='rtl'] .hero__end > .sfx {
+[dir='rtl'] .hero__end-cell > .sfx {
   place-items: start start;
   padding-block-start: 4%;
 }
 @media (min-width: 64rem) {
-  [dir='rtl'] .hero__end > .sfx {
+  [dir='rtl'] .hero__end-cell > .sfx {
     font-size: clamp(3rem, 6.5vw, 5.5rem);
   }
-  [dir='rtl'] .hero__end-cell:has(img[data-figure='b']) > .hero__end > .sfx {
+  [dir='rtl'] .hero__end-cell:has(img[data-figure='b']) > .sfx {
     font-size: clamp(2.75rem, 5.5vw, 4.5rem);
   }
 }
@@ -141,7 +212,7 @@
     padding-inline: 1.75rem 2rem;
   }
   /* the five-column panel: a word at the very top start (only the head is up there), figure at 105% on the end */
-  .hero__end > .sfx {
+  .hero__end-cell > .sfx {
     place-items: start start;
     padding-block-start: 3%;
     font-size: clamp(2.75rem, 5.5vw, 4.5rem);
@@ -150,7 +221,7 @@
     block-size: min(105%, calc(100% + 2rem + clamp(1rem, 2.5vw, 1.75rem) - 0.25rem));
   }
   /* RTL: the head sits top-left, under the word's K; one step smaller keeps the K clear */
-  [dir='rtl'] .hero__end > .sfx {
+  [dir='rtl'] .hero__end-cell > .sfx {
     font-size: clamp(2rem, 4.2vw, 3.25rem);
   }
 }
@@ -158,6 +229,7 @@
 /* ---------- doors ---------- */
 .split {
   --cut: 4rem;
+  position: relative;
   display: grid;
   grid-template-columns: 1fr;
 }
@@ -176,6 +248,27 @@
 .split__door > :not(.tone-mid):not(.tone-coarse):not(.sfx):not(.speed):not(.split__lines) {
   position: relative;
   z-index: 1;
+}
+/* the doors are the volume's contents: one inked label on the seam above them */
+.split__contents {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-start: 50%;
+  z-index: 3;
+  translate: -50% -50%;
+  padding: 0.35rem 0.9rem;
+  border: 2px solid var(--paper);
+  background: var(--ink);
+  color: var(--paper);
+  font: 400 0.9rem/1 var(--font-display);
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+}
+[dir='rtl'] .split__contents {
+  translate: 50% -50%;
+}
+.split__door > .kicker {
+  margin-block-end: -0.5rem;
 }
 .split__door > .tone-mid,
 .split__door > .tone-coarse,
@@ -370,7 +463,7 @@
     block-size: 95%;
   }
   /* the seated figure is wide: on a phone the word moves to the top start, where only its head is (KWA read at 360 otherwise) */
-  .hero__end-cell:has(img[data-figure='b']) > .hero__end > .sfx {
+  .hero__end-cell:has(img[data-figure='b']) > .sfx {
     place-items: start start;
     padding-block-start: 4%;
   }

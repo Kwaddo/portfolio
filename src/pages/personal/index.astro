@@ -1,4 +1,5 @@
 ---
+import Kicker from '../../components/Kicker.astro';
 import { getCollection } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import Spread from '../../components/Spread.astro';
@@ -14,12 +15,13 @@ const lab = byOrder(published(await getCollection('lab')));
 <Base title="Personal" description="Games and experiments by Ali Khalaf, built for the love of it.">
   <div class="wrap stack">
     <header class="page-head">
+      <Kicker />
       <h1>Personal</h1>
       <Bubble shape="round" as="p" class="lede bubble--up">Games and experiments, built for the love of it. Each has a short overview, and some have a longer story behind them.</Bubble>
     </header>
 
     <h2 id="games">Games<InkRule variant="draw" /></h2>
-    <Spread layout="feature-quad" label="Games" sfx="PLAY" ariaLabelledby="games">
+    <Spread layout="feature-quad" label="Games" sfx="PLAY" sfxLook="rough" ariaLabelledby="games">
       {
         games.map((g, i) => (
           <ProjectCard
@@ -40,7 +42,7 @@ const lab = byOrder(published(await getCollection('lab')));
     <InkRule variant="strip" />
 
     <h2 id="lab">Lab<InkRule variant="draw" /></h2>
-    <Spread layout="3up" label="Lab" sfx="LAB" ink ariaLabelledby="lab">
+    <Spread layout="3up" label="Lab" sfx="LAB" sfxLook="motion" ink ariaLabelledby="lab">
       {
         lab.map((l, i) => (
           <ProjectCard

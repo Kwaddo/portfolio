@@ -28,8 +28,9 @@ const rules = ['strip', 'bar', 'splat-c'] as const;
   <div class="wrap stack">
     <p><a class="btn btn--back" href={backHref}><Icon name="arrow-left" />About {title}</a></p>
     <header class="page-head has-tone">
-      <Sfx word="LOG" rotate="-5deg" />
-      <h1>{title}: the journey</h1>
+      <Sfx word="LOG" rotate="-5deg" look="rough" />
+      <h1>{title}</h1>
+      <p class="page-sub">The journey</p>
     </header>
     {
       rendered.map(({ chapter, Content }, i) => (
@@ -54,7 +55,7 @@ const rules = ['strip', 'bar', 'splat-c'] as const;
     {
       next && (
         <Panel href={next.href} weight={4} tone="fine" class="next-panel has-tone">
-          <Sfx word="NEXT" rotate="-3deg" />
+          <span class="tbc" aria-hidden="true">To be continued</span>
           <div class="panel__body">
             <p class="panel__meta">Next journey</p>
             <p class="panel__title">{next.title}</p>

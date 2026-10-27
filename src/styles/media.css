@@ -258,19 +258,45 @@ a.next-panel:hover .panel__meta,
 a.next-panel:focus-visible .panel__meta {
   color: var(--paper);
 }
-/* the NEXT word sits on the end side of the panel, clipped by the panel's drawn edge, never behind the text */
-.next-panel > .sfx {
+/* the arrow tag: a pointed ink box on the end side reading TO BE CONTINUED, like the last panel of a chapter */
+.tbc {
+  position: absolute;
   inset-block-start: 50%;
+  inset-inline-end: clamp(0.75rem, 3vw, 2rem);
+  z-index: 1;
   translate: 0 -50%;
-  padding-block: 0.15em;
-  padding-inline-end: 0.3em;
-  block-size: 1.3em;
-  font-size: clamp(4rem, 12vw, 9rem);
+  padding: 0.6rem 2.6rem 0.6rem 1.2rem;
+  background: var(--ink);
+  color: var(--paper);
+  font: 400 clamp(1rem, 2.6vw, 1.75rem) / 1 var(--font-display);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  clip-path: polygon(0 0, calc(100% - 1.6rem) 0, 100% 50%, calc(100% - 1.6rem) 100%, 0 100%, 0.6rem 50%);
 }
-a.next-panel:hover > .sfx,
-a.next-panel:focus-visible > .sfx {
-  --sfx-stroke: var(--paper);
-  --sfx-fill: var(--ink);
+[dir='rtl'] .tbc {
+  padding: 0.6rem 1.2rem 0.6rem 2.6rem;
+  clip-path: polygon(1.6rem 0, 100% 0, calc(100% - 0.6rem) 50%, 100% 100%, 1.6rem 100%, 0 50%);
+}
+a.next-panel:hover > .tbc,
+a.next-panel:focus-visible > .tbc {
+  background: var(--paper);
+  color: var(--ink);
+}
+/* phones: the tag drops under the title box instead of covering it */
+@media (max-width: 47.99rem) {
+  .tbc {
+    position: relative;
+    inset: auto;
+    translate: none;
+    display: block;
+    inline-size: fit-content;
+    order: 2;
+    margin: 0 0.75rem 0.75rem auto;
+  }
+  [dir='rtl'] .tbc {
+    margin: 0 auto 0.75rem 0.75rem;
+  }
 }
 
 /* the note shown while the fixed frame is scaled under 60 % */
@@ -410,4 +436,15 @@ html.is-playing {
   margin-inline-start: auto;
   color: var(--tone);
   font-size: 0.8rem;
+}
+/* facts panel actions: one equal-width column under Play */
+.facts-panel .cta-row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.75rem;
+}
+.facts-panel .cta-row .btn {
+  justify-content: center;
+  text-align: center;
+  white-space: nowrap;
 }

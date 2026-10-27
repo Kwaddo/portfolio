@@ -1,20 +1,22 @@
 ---
 import Sfx from './Sfx.astro';
+import type { SfxLook, SfxWord } from '../lib/sfx';
 
 interface Props {
   layout?: '3up' | 'feature-start' | 'feature-end' | 'feature-quad' | 'stack' | 'strips';
   label?: string;
-  sfx?: 'WORK' | 'PLAY' | 'LAB' | 'LOG' | 'HELLO' | 'NEXT' | 'HUH?' | 'KWADDO';
+  sfx?: SfxWord;
+  sfxLook?: SfxLook;
   sfxPaper?: boolean;
   ink?: boolean;
   class?: string;
   as?: 'section' | 'div' | 'header' | 'ol' | 'ul';
   ariaLabelledby?: string;
 }
-const { layout = '3up', label, sfx, sfxPaper = false, ink = false, class: cls, as: Tag = 'section', ariaLabelledby } = Astro.props;
+const { layout = '3up', label, sfx, sfxLook, sfxPaper = false, ink = false, class: cls, as: Tag = 'section', ariaLabelledby } = Astro.props;
 ---
 <Tag class:list={['spread', `spread--${layout}`, label && 'spread--labelled', sfx && 'has-tone', ink && 'spread--ink on-ink', cls]} aria-labelledby={ariaLabelledby}>
   {label && <span class="spread__label" aria-hidden="true"><span class="vlabel">{label}</span></span>}
-  {sfx && <Sfx word={sfx} paper={sfxPaper || ink} />}
+  {sfx && <Sfx word={sfx} paper={sfxPaper || ink} look={sfxLook} />}
   <slot />
 </Tag>

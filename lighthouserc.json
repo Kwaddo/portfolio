@@ -6,7 +6,9 @@
         "/index.html",
         "/work/tanami/index.html",
         "/personal/games/smobb/index.html",
-        "/journal/index.html"
+        "/journal/index.html",
+        "/work/index.html",
+        "/personal/index.html"
       ],
       "numberOfRuns": 3
     },

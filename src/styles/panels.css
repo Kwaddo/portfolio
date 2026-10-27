@@ -182,24 +182,39 @@ a.panel {
   filter: grayscale(1) contrast(1.05);
   transition: filter var(--t-base);
 }
-.panel__initial {
+.panel__titlecard {
   display: grid;
+  grid-template-columns: minmax(0, 1fr); /* an auto track would grow to the name's one-line width and never wrap it */
   place-items: center;
+  container-type: inline-size;
   background: var(--paper);
 }
-.panel__letter {
+/* the name itself is the panel's art: huge, skewed, stroked, sized to the panel's width so long names stay whole */
+.panel__word {
   position: relative;
   z-index: 1;
-  font: 400 clamp(7rem, 16vw, 11rem) / 1 var(--font-display);
-  color: transparent;
-  -webkit-text-stroke: 4px var(--ink);
+  max-inline-size: 80%; /* room for the stroke, the lean and the shadow past the glyph box */
+  padding-block-end: 3rem; /* clear of the caption box laid over the foot */
+  font: 400 clamp(1.75rem, 11cqi, 5rem) / 0.86 var(--font-display);
+  text-align: center;
+  text-transform: uppercase;
+  text-wrap: balance;
+  color: var(--paper);
+  -webkit-text-stroke: 3px var(--ink);
+  paint-order: stroke fill;
+  rotate: -4deg;
+  filter: drop-shadow(0.05em 0.05em 0 var(--ink));
+}
+[dir='rtl'] .panel__word {
+  rotate: 4deg;
+  filter: drop-shadow(-0.05em 0.05em 0 var(--ink));
 }
 /* the burst of a card is centred on its media, not the whole card */
 .panel__media > .speed {
   inset: -30%;
 }
-/* the fallback reads as a drawn panel: a burst behind the letter, always on */
-.panel__initial > .speed {
+/* the title card reads as a drawn panel: a burst behind the name, always on */
+.panel__titlecard > .speed {
   opacity: 0.4;
   background: repeating-conic-gradient(from 0deg at 50% 50%, currentColor 0deg 1deg, transparent 1deg 7deg);
   mask-image: radial-gradient(circle at 50% 50%, transparent 18%, #000 70%);
@@ -326,8 +341,8 @@ a.panel:hover .speed,
 a.panel:focus-visible .speed {
   opacity: 0.18;
 }
-a.panel:hover .panel__initial > .speed,
-a.panel:focus-visible .panel__initial > .speed {
+a.panel:hover .panel__titlecard > .speed,
+a.panel:focus-visible .panel__titlecard > .speed {
   opacity: 0.45;
 }
 a.panel:hover .panel__meta,
@@ -336,29 +351,24 @@ a.panel:focus-visible .panel__meta,
 a.panel:focus-visible .panel__text {
   color: var(--paper);
 }
-/* badges invert with the card */
-a.panel:hover .badge,
-a.panel:focus-visible .badge {
-  border-color: var(--paper);
-  background: var(--paper);
-  color: var(--ink);
-}
-/* the fallback media inverts as one unit with the body: ink field, paper dots, paper letter, paper burst */
-a.panel:hover .panel__initial,
-a.panel:focus-visible .panel__initial {
+/* the title card inverts as one unit with the body: ink field, paper dots, ink name edged in paper, paper burst */
+a.panel:hover .panel__titlecard,
+a.panel:focus-visible .panel__titlecard {
   background: var(--ink);
 }
-a.panel:hover .panel__initial > .tone-coarse,
-a.panel:focus-visible .panel__initial > .tone-coarse {
+a.panel:hover .panel__titlecard > .tone-coarse,
+a.panel:focus-visible .panel__titlecard > .tone-coarse {
   background-image: radial-gradient(circle at center, var(--paper) 1.6px, transparent 2.1px);
 }
-a.panel:hover .panel__initial > .hatch,
-a.panel:focus-visible .panel__initial > .hatch {
+a.panel:hover .panel__titlecard > .hatch,
+a.panel:focus-visible .panel__titlecard > .hatch {
   background-image: repeating-linear-gradient(45deg, var(--paper) 0 1px, transparent 1px 6px);
 }
-a.panel:hover .panel__letter,
-a.panel:focus-visible .panel__letter {
+a.panel:hover .panel__word,
+a.panel:focus-visible .panel__word {
   -webkit-text-stroke-color: var(--paper);
+  color: var(--ink);
+  filter: drop-shadow(0.05em 0.05em 0 var(--paper));
 }
 a.panel:hover .panel__media img,
 a.panel:focus-visible .panel__media img {
@@ -397,18 +407,12 @@ a.panel:focus-visible .panel__media img {
 @media (hover: hover) and (prefers-reduced-motion: no-preference) {
   a.panel .panel__meta,
   a.panel .panel__text,
-  a.panel .panel__initial {
+  a.panel .panel__titlecard {
     transition:
       color var(--t-base),
       background var(--t-base);
   }
-  a.panel .badge {
-    transition:
-      background var(--t-base),
-      color var(--t-base),
-      border-color var(--t-base);
-  }
-  a.panel .panel__letter {
+  a.panel .panel__word {
     transition: -webkit-text-stroke-color var(--t-base);
   }
   a.panel .panel__media img {
@@ -469,4 +473,92 @@ a.panel:focus-visible .panel__media img {
     inset-inline-start: var(--bleed);
     border-color: var(--paper);
   }
+}
+
+/* ---------- page numbers: each spread is a page; its number hangs on the bottom outer corner.
+   The empty alternative text keeps it out of the accessibility tree; a browser without that syntax drops the rule and shows none. */
+main {
+  counter-reset: folio;
+}
+.spread {
+  counter-increment: folio;
+}
+.spread::after {
+  content: counter(folio, decimal-leading-zero) / '';
+  position: absolute;
+  inset-block-end: -0.7rem;
+  inset-inline-end: 0.5rem;
+  z-index: 4;
+  padding: 0.15rem 0.45rem;
+  border: 2px solid var(--ink);
+  background: var(--paper);
+  color: var(--ink);
+  font: 400 0.75rem/1 var(--font-display);
+  letter-spacing: 0.15em;
+  pointer-events: none;
+}
+.spread--ink::after {
+  border-color: var(--paper);
+  background: var(--ink);
+  color: var(--paper);
+}
+
+/* ---------- art-first cards: the art fills the panel; badge and title sit in a paper caption box over the art's foot ---------- */
+.card > .panel__body {
+  margin-block-start: -3.25rem;
+}
+.panel__cap {
+  justify-self: start;
+  display: grid;
+  gap: 0.4rem;
+  max-inline-size: 100%;
+  padding: 0.6rem 0.85rem 0.7rem;
+  border: 3px solid var(--ink);
+  background: var(--paper);
+  color: var(--ink);
+  box-shadow: 4px 4px 0 var(--ink);
+}
+[dir='rtl'] .panel__cap {
+  box-shadow: -4px 4px 0 var(--ink);
+}
+/* on hover the card goes to ink around a caption box that stays paper, edged in paper so it still reads as a box */
+a.card:hover .panel__cap,
+a.card:focus-visible .panel__cap {
+  box-shadow: 4px 4px 0 var(--paper);
+}
+[dir='rtl'] a.card:hover .panel__cap,
+[dir='rtl'] a.card:focus-visible .panel__cap {
+  box-shadow: -4px 4px 0 var(--paper);
+}
+/* phones: enough art above the box that it never covers more than about half */
+@media (max-width: 35.99rem) {
+  .card > .panel__media {
+    min-block-size: 11rem;
+  }
+}
+/* impact frame: the art pushes in a touch more; none of it moves under reduced motion */
+a.card:hover .panel__media img,
+a.card:focus-visible .panel__media img {
+  scale: 1.04;
+}
+@media (prefers-reduced-motion: reduce) {
+  a.panel:hover,
+  a.panel:focus-visible {
+    translate: none;
+  }
+  a.panel:hover .panel__media img,
+  a.panel:focus-visible .panel__media img {
+    scale: none;
+  }
+}
+/* the landing hero is followed by the doors, which paint over anything hanging below it: its number sits in its own foot */
+.spread.hero::after {
+  inset-block-end: 0;
+}
+/* a panel that only holds a few chips does not need the card height */
+.panel--fit {
+  min-block-size: 0;
+}
+.panel--fit .panel__body > .chips {
+  margin-block-start: 0;
 }

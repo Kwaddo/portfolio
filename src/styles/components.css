@@ -165,9 +165,17 @@
 .bubble--round {
   max-inline-size: 34rem;
   padding: 1rem 1.5rem;
+}
+/* the balloon's drawn outline lives on its own layer so it can wobble without moving the words */
+.bubble--round::before {
+  content: '';
+  position: absolute;
+  inset: -3px; /* the old border box: the tail still crosses the whole rule */
+  z-index: -1;
   border: var(--rule);
   border-radius: 1.75rem;
   background: var(--paper);
+  pointer-events: none;
 }
 .bubble__tail {
   position: absolute;
@@ -302,6 +310,9 @@ a.bubble--ink:focus-visible {
   inline-size: 100%;
   block-size: 1.5rem;
   color: var(--ink);
+  translate: var(--dx, 0) 0;
+  rotate: var(--rot, 0deg);
+  scale: var(--flip, 1) var(--sy, 1);
 }
 .ink-draw {
   display: block;
@@ -390,6 +401,20 @@ a.bubble--ink:focus-visible {
   pointer-events: none;
   user-select: none;
 }
+/* the side panel is the chapter's title card: a solid numeral over a fixed speed burst */
+.chapter__side > .speed {
+  inset: -10%;
+  opacity: 0.35;
+  background: repeating-conic-gradient(from 0deg at 65% 75%, currentColor 0deg 1deg, transparent 1deg 7deg);
+  mask-image: radial-gradient(circle at 65% 75%, transparent 14%, #000 70%);
+}
+.chapter__num {
+  z-index: 1;
+  color: var(--ink);
+  -webkit-text-stroke: 0;
+  opacity: 1;
+  filter: drop-shadow(0.04em 0.04em 0 var(--paper)) drop-shadow(0.025em 0.025em 0 var(--ink));
+}
 .chapter__text {
   grid-column: span 12;
   display: grid;
@@ -453,4 +478,60 @@ a.bubble--ink:focus-visible {
     --num: 6rem;
     min-block-size: 7rem;
   }
+}
+
+/* ---------- emanata: small drawn marks around a state ---------- */
+.badge-host {
+  position: relative;
+  display: inline-flex;
+}
+.badge__spark {
+  position: absolute;
+  inset-block-start: -0.55rem;
+  inset-inline-end: -0.55rem;
+  inline-size: 0.95rem;
+  fill: var(--paper);
+  stroke: var(--ink);
+  stroke-width: 1.5;
+  pointer-events: none;
+}
+/* COPIED!: a small burst on the end side of the button row inside a ring of shock lines, clear of the heading and the button label */
+.email {
+  position: relative;
+}
+.email__pop {
+  position: absolute;
+  inset-block-end: 0.25rem;
+  inset-inline-end: -0.5rem;
+  z-index: 3;
+  pointer-events: none;
+}
+.email__pop::before {
+  content: '';
+  position: absolute;
+  inset: -60%;
+  background: repeating-conic-gradient(from 0deg, currentColor 0deg 2deg, transparent 2deg 14deg);
+  mask-image: radial-gradient(circle, transparent 38%, #000 42%, transparent 70%);
+}
+.email__pop > .sfx {
+  position: relative;
+  inset: auto;
+  overflow: visible;
+  font-size: 1.5rem;
+}
+.on-ink .email__pop > .sfx {
+  --sfx-stroke: var(--paper);
+  --sfx-fill: var(--ink);
+}
+/* 404: one sweat drop beside the figure's head */
+.lost__sweat {
+  position: absolute;
+  inset-block-start: 10%;
+  inset-inline-end: 34%;
+  z-index: 4;
+  inline-size: 1.4rem;
+  fill: var(--paper);
+  stroke: var(--ink);
+  stroke-width: 2;
+  rotate: 18deg;
 }

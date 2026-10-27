@@ -1,4 +1,7 @@
 @media print {
+  .spread::after {
+    content: none;
+  }
   @page {
     size: A4;
     margin: 14mm;

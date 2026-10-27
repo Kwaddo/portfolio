@@ -60,6 +60,40 @@ h3 {
   }
 }
 
+/* ---------- SFX looks (outline is the default above) ---------- */
+/* rough: a coarser ink filter than the frames' so the glyph edges look brushed; desktop only like every SVG filter here */
+@media (min-width: 48rem) {
+  .sfx--rough > span {
+    filter: url(#rough) drop-shadow(0.04em 0.04em 0 var(--sfx-stroke));
+  }
+  [dir='rtl'] .sfx--rough > span {
+    filter: url(#rough) drop-shadow(-0.04em 0.04em 0 var(--sfx-stroke));
+  }
+}
+/* motion: fading ghosts trail the word against the reading direction */
+.sfx--motion > span {
+  text-shadow:
+    -0.08em 0.02em 0 color-mix(in srgb, var(--sfx-stroke) 45%, transparent),
+    -0.16em 0.04em 0 color-mix(in srgb, var(--sfx-stroke) 25%, transparent),
+    -0.24em 0.06em 0 color-mix(in srgb, var(--sfx-stroke) 12%, transparent);
+}
+[dir='rtl'] .sfx--motion > span {
+  text-shadow:
+    0.08em 0.02em 0 color-mix(in srgb, var(--sfx-stroke) 45%, transparent),
+    0.16em 0.04em 0 color-mix(in srgb, var(--sfx-stroke) 25%, transparent),
+    0.24em 0.06em 0 color-mix(in srgb, var(--sfx-stroke) 12%, transparent);
+}
+/* burst: the word on a sixteen-spike starburst; the stroke colour becomes the field, the fill colour the letters */
+.sfx--burst > span,
+[dir='rtl'] .sfx--burst > span {
+  padding: 0.45em 0.85em;
+  background: var(--sfx-stroke);
+  color: var(--sfx-fill);
+  -webkit-text-stroke: 0;
+  filter: none;
+  clip-path: polygon(50% 0%, 57% 13%, 69% 4%, 71% 18%, 85% 15%, 82% 29%, 96% 31%, 87% 43%, 100% 50%, 87% 57%, 96% 69%, 82% 71%, 85% 85%, 71% 82%, 69% 96%, 57% 87%, 50% 100%, 43% 87%, 31% 96%, 29% 82%, 15% 85%, 18% 71%, 4% 69%, 13% 57%, 0% 50%, 13% 43%, 4% 31%, 18% 29%, 15% 15%, 29% 18%, 31% 4%, 43% 13%);
+}
+
 /* ---------- vertical labels ---------- */
 .vlabel {
   font: 400 1rem/1 var(--font-display);
@@ -95,19 +129,23 @@ h3 {
   float: inline-start;
   margin-block: 0.2rem 0.35rem; /* the float's margin box (3.2 + 41 + 5.6 = 49.8px) stays under two lines */
   margin-inline-end: 0.85rem;
-  padding: 0.06em 0.16em 0;
-  border: 3px solid var(--ink);
-  background: var(--paper);
-  color: var(--ink);
-  box-shadow: 4px 4px 0 var(--ink);
-  font: 400 2.6rem/0.78 var(--font-display);
+  padding: 0.06em 0.1em 0 0;
+  color: var(--paper); /* hollow lettering like the PLAY SFX: paper fill, ink stroke, hard shadow */
+  text-shadow:
+    -2px -2px 0 var(--ink), 0 -2px 0 var(--ink), 2px -2px 0 var(--ink), -2px 0 0 var(--ink), 2px 0 0 var(--ink), -2px 2px 0 var(--ink), 0 2px 0 var(--ink), 2px 2px 0 var(--ink),
+    4px 4px 0 var(--ink),
+    5px 5px 0 var(--ink);
+  font: 400 3.4rem/0.78 var(--font-display);
 }
 /* narrow openers (I, J, L, 1) get a wider box so they frame like an S; ::first-letter ignores inline-size */
 .dropcap--narrow > p:first-of-type::first-letter {
-  padding: 0.06em 0.42em 0; /* the shorthand: ::first-letter ignores padding-inline */
+  padding: 0.06em 0.3em 0; /* the shorthand: ::first-letter ignores padding-inline */
 }
 [dir='rtl'] .dropcap > p:first-of-type::first-letter {
-  box-shadow: -4px 4px 0 var(--ink);
+  text-shadow:
+    -2px -2px 0 var(--ink), 0 -2px 0 var(--ink), 2px -2px 0 var(--ink), -2px 0 0 var(--ink), 2px 0 0 var(--ink), -2px 2px 0 var(--ink), 0 2px 0 var(--ink), 2px 2px 0 var(--ink),
+    -4px 4px 0 var(--ink),
+    -5px 5px 0 var(--ink);
 }
 
 /* ---------- chips (stack tags etc.) ---------- */
@@ -138,4 +176,22 @@ h3 {
 }
 h2 > .ink-draw {
   margin-block-start: 0.2em;
+}
+
+/* ---------- chapter kicker: the small numbered line over a chapter's title ---------- */
+.kicker {
+  font: 400 clamp(0.85rem, 1.4vw, 1rem) / 1 var(--font-display);
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+}
+.kicker + h1 {
+  margin-block-start: 0.35rem;
+}
+/* a quiet subtitle under a page title: small, spaced, not part of the lettering */
+.page-sub {
+  margin-block: 0.25rem 0;
+  color: var(--tone);
+  font: 700 0.95rem/1.2 var(--font-body);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
 }

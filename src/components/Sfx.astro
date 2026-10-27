@@ -1,9 +1,12 @@
 ---
+import type { SfxLook, SfxWord } from '../lib/sfx';
+
 interface Props {
-  word: 'WORK' | 'PLAY' | 'LAB' | 'LOG' | 'HELLO' | 'NEXT' | 'HUH?' | 'KWADDO';
+  word: SfxWord;
   rotate?: string;
   paper?: boolean;
+  look?: SfxLook;
 }
-const { word, rotate = '-6deg', paper = false } = Astro.props;
+const { word, rotate = '-6deg', paper = false, look = 'outline' } = Astro.props;
 ---
-<span class:list={['sfx', paper && 'sfx--paper']} aria-hidden="true" style={`--sfx-rotate: ${rotate}`}><span>{word}</span></span>
+<span class:list={['sfx', paper && 'sfx--paper', look !== 'outline' && `sfx--${look}`]} aria-hidden="true" style={`--sfx-rotate: ${rotate}`}><span>{word}</span></span>

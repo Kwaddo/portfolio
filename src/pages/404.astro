@@ -7,7 +7,9 @@ import FigurePanel from '../components/FigurePanel.astro';
   <div class="wrap stack">
     <div class="lost">
       <Bubble shape="thought" class="pop"><span class="lost__code">Error 404</span><h1>Page not found</h1><p>This panel is blank. The page you wanted is not here.</p></Bubble>
-      <FigurePanel word="HUH?" rotate="-8deg" inset />
+      <FigurePanel word="HUH?" rotate="-8deg" inset look="rough">
+        <svg class="lost__sweat" viewBox="0 0 20 30" aria-hidden="true" focusable="false"><path d="M10 0C10 0 0 14 0 20a10 10 0 0 0 20 0C20 14 10 0 10 0Z" /></svg>
+      </FigurePanel>
     </div>
   </div>
 </Base>

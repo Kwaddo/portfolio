@@ -8,7 +8,7 @@ repoUrl: https://github.com/Kwaddo/smobb
 playable: embed
 playUrl: https://kwaddo.github.io/smobb/
 downloadUrl: https://github.com/Kwaddo/smobb-releases/releases
-journey: false
+journey: true
 order: 1
 cover: ../../assets/media/smobb/01-journal-and-hex.png
 coverAlt: The game after a few commands, with the Journal sidebar open showing an Asked entry, and a character's message written in red hexadecimal.

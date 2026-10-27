@@ -228,12 +228,18 @@
 .stack > h2 + .spread--ink:has(> .sfx) {
   --ink-pad: clamp(1.5rem, 3.5vw, 2.5rem); /* the same inset above the first row and below the last */
 }
+/* the peeking word hangs over the black page's top band; at desktop the first row starts below it */
+@media (min-width: 48rem) {
+  .stack > h2 + .spread--ink:has(> .sfx) {
+    padding-block-start: calc(var(--ink-pad) + 7.5rem);
+  }
+}
 /* a black page that ends the main column sits flush on the footer */
 main:has(> .wrap > .spread--ink:last-child),
 main:has(> .wrap > .stack:last-child > .spread--ink:last-child) {
   padding-block-end: 0;
 }
-/* a black page followed by the NEXT panel: one panel gutter between them */
+/* a black page followed by the next panel: one panel gutter between them */
 .stack:has(> .spread--ink:last-child) + .next-panel {
   margin-block-start: var(--gutter-panel);
 }

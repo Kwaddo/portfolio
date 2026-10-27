@@ -1,10 +1,12 @@
 ---
 import { site } from '../data/site';
 import { toSpelledOut } from '../lib/email';
+import Sfx from './Sfx.astro';
 ---
 <div class="email" data-email data-user={site.emailParts.user} data-domain={site.emailParts.domain}>
   <a class="email__link" data-email-link href="/contact/">{toSpelledOut(site.emailParts)}</a>
   <button class="btn" type="button" data-email-copy hidden>Copy email</button>
+  <span class="email__pop pop" aria-hidden="true" hidden><Sfx word="COPIED!" look="burst" rotate="-8deg" /></span>
   <span class="visually-hidden" role="status" aria-live="polite" data-email-status></span>
 </div>
 
@@ -32,16 +34,24 @@ import { toSpelledOut } from '../lib/email';
     const link = root.querySelector<HTMLAnchorElement>('[data-email-link]')!;
     const button = root.querySelector<HTMLButtonElement>('[data-email-copy]')!;
     const status = root.querySelector<HTMLElement>('[data-email-status]')!;
+    const pop = root.querySelector<HTMLElement>('.email__pop')!;
     link.href = `mailto:${address}`;
     link.textContent = address;
     button.hidden = false;
     let timer: ReturnType<typeof setTimeout>;
+    let popTimer: ReturnType<typeof setTimeout>;
     button.addEventListener('click', async () => {
       const ok = await copy(address, link);
       const message = ok ? 'Copied' : 'Selected, press copy to finish';
       status.textContent = message;
       button.textContent = ok ? 'Copied' : 'Copy email';
+      // the burst is decoration on top of the spoken status; it shows only for a real copy and leaves first
+      pop.hidden = !ok;
       clearTimeout(timer);
+      clearTimeout(popTimer);
+      popTimer = setTimeout(() => {
+        pop.hidden = true;
+      }, 1200);
       timer = setTimeout(() => {
         status.textContent = '';
         button.textContent = 'Copy email';
