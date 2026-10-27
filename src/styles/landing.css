@@ -61,9 +61,13 @@
   object-fit: contain;
   object-position: bottom;
 }
+/* the word is lettered over the figure, as manga SFX overlap a character; clipped to the panel's box like before */
+.hero__end-cell > .sfx {
+  z-index: 3;
+}
 /* the seated figure is wider: a slightly smaller word and figure keep five letters readable */
 @media (min-width: 64rem) {
-  .hero__end-cell:has(img[data-figure='b']) > .hero__end > .sfx {
+  .hero__end-cell:has(img[data-figure='b']) > .sfx {
     font-size: clamp(3rem, 6.5vw, 5.25rem);
   }
   .hero__end-cell:has(img[data-figure='b']) .hero__figure img {
@@ -95,7 +99,7 @@
   background: repeating-conic-gradient(from 0deg at 24% 56%, currentColor 0deg 1deg, transparent 1deg 6deg);
   mask-image: radial-gradient(circle at 24% 56%, transparent 6%, #000 55%);
 }
-.hero__end > .sfx {
+.hero__end-cell > .sfx {
   inset: 0;
   display: grid;
   place-items: end start;
@@ -106,15 +110,15 @@
   text-align: start;
 }
 /* RTL: the figure stands on the left, where the word's K would be; the word takes the top of the panel, start-aligned (one step smaller at desktop) */
-[dir='rtl'] .hero__end > .sfx {
+[dir='rtl'] .hero__end-cell > .sfx {
   place-items: start start;
   padding-block-start: 4%;
 }
 @media (min-width: 64rem) {
-  [dir='rtl'] .hero__end > .sfx {
+  [dir='rtl'] .hero__end-cell > .sfx {
     font-size: clamp(3rem, 6.5vw, 5.5rem);
   }
-  [dir='rtl'] .hero__end-cell:has(img[data-figure='b']) > .hero__end > .sfx {
+  [dir='rtl'] .hero__end-cell:has(img[data-figure='b']) > .sfx {
     font-size: clamp(2.75rem, 5.5vw, 4.5rem);
   }
 }
@@ -141,7 +145,7 @@
     padding-inline: 1.75rem 2rem;
   }
   /* the five-column panel: a word at the very top start (only the head is up there), figure at 105% on the end */
-  .hero__end > .sfx {
+  .hero__end-cell > .sfx {
     place-items: start start;
     padding-block-start: 3%;
     font-size: clamp(2.75rem, 5.5vw, 4.5rem);
@@ -150,7 +154,7 @@
     block-size: min(105%, calc(100% + 2rem + clamp(1rem, 2.5vw, 1.75rem) - 0.25rem));
   }
   /* RTL: the head sits top-left, under the word's K; one step smaller keeps the K clear */
-  [dir='rtl'] .hero__end > .sfx {
+  [dir='rtl'] .hero__end-cell > .sfx {
     font-size: clamp(2rem, 4.2vw, 3.25rem);
   }
 }
@@ -370,7 +374,7 @@
     block-size: 95%;
   }
   /* the seated figure is wide: on a phone the word moves to the top start, where only its head is (KWA read at 360 otherwise) */
-  .hero__end-cell:has(img[data-figure='b']) > .hero__end > .sfx {
+  .hero__end-cell:has(img[data-figure='b']) > .sfx {
     place-items: start start;
     padding-block-start: 4%;
   }
