@@ -34,6 +34,73 @@
   z-index: 2;
   max-inline-size: calc(100% - 2rem);
 }
+/* ---------- cover frame: volume badge, spine on the start gutter, publisher-style stamp ---------- */
+.cover__vol {
+  position: absolute;
+  inset-block-start: -0.9rem;
+  inset-inline-start: clamp(1rem, 3vw, 2rem);
+  z-index: 2;
+  padding: 0.3rem 0.7rem;
+  background: var(--ink);
+  color: var(--paper);
+  font: 400 clamp(0.85rem, 1.4vw, 1.05rem) / 1 var(--font-display);
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+}
+.cover__stamp {
+  position: absolute;
+  inset-block-start: -1.25rem; /* phones: the free top corner, clear of the availability caption */
+  inset-inline-end: 0.5rem;
+  z-index: 3;
+  display: grid;
+  place-content: center;
+  inline-size: 4.25rem;
+  aspect-ratio: 1;
+  border: 3px double var(--ink);
+  border-radius: 50%;
+  background: var(--paper);
+  font: 400 0.75rem/1 var(--font-display);
+  letter-spacing: 0.15em;
+  text-align: center;
+  rotate: -12deg;
+}
+.cover__stamp b {
+  font-size: 1.5rem;
+  font-weight: 400;
+  letter-spacing: 0.05em;
+}
+[dir='rtl'] .cover__stamp {
+  rotate: 12deg;
+}
+.cover__spine {
+  display: none;
+}
+@media (min-width: 48rem) {
+  .cover__stamp {
+    inset-block: auto -1rem;
+    inset-inline-end: -1rem;
+  }
+  /* the spine runs down the start gutter beside the panels, like the edge of a tankobon */
+  .cover__spine {
+    position: absolute;
+    inset-block: 2rem 1rem; /* the hero's own block padding */
+    inset-inline-start: 0;
+    display: grid;
+    place-items: center;
+    inline-size: calc(var(--gutter) - 0.25rem);
+    background: var(--ink);
+    color: var(--paper);
+    font: 400 0.7rem/1 var(--font-display);
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+  /* the text turns, not the band: logical insets on the band keep their horizontal meaning */
+  .cover__spine > span {
+    writing-mode: vertical-rl;
+  }
+}
 /* the end cell: the clipped HELLO panel plus a figure layer that may break the panel's top edge */
 .hero__end-cell {
   position: relative;

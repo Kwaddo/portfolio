@@ -80,3 +80,13 @@ test('the landing doors read as a contents page', async ({ page }) => {
   await expect(page.locator('.split__door--work .kicker')).toHaveText('Ch. 01');
   await expect(page.locator('.split__door--personal .kicker')).toHaveText('Ch. 02');
 });
+
+test('the landing is framed as a volume cover', async ({ page }, testInfo) => {
+  const year = String(new Date().getFullYear());
+  await page.goto('/');
+  await expect(page.locator('.cover__vol')).toHaveText('Vol. 01');
+  await expect(page.locator('.cover__stamp')).toContainText('AK');
+  await expect(page.locator('.cover__stamp')).toContainText(year);
+  await expect(page.locator('.cover__spine')).toBeVisible({ visible: testInfo.project.name === 'desktop' });
+  await expect(page.locator('footer')).toContainText(`${year} Ali Khalaf · Vol. 01`);
+});
