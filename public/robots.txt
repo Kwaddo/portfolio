@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://kwaddo.github.io/sitemap-index.xml
+Sitemap: https://alikhalaf.fn.dilmune.app/sitemap-index.xml

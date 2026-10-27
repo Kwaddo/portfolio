@@ -9,6 +9,6 @@ describe('seo', () => {
     expect(pageTitle('Work')).toBe('Work | Ali Khalaf');
   });
   test('canonical resolves against the site url', () => {
-    expect(canonical('/work/')).toBe('https://kwaddo.github.io/work/');
+    expect(canonical('/work/')).toBe('https://alikhalaf.fn.dilmune.app/work/');
   });
 });
