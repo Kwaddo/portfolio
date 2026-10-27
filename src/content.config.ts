@@ -19,6 +19,9 @@ const project = ({ image }: SchemaContext) =>
     draft: z.boolean().default(false),
     cover: image().optional(),
     coverAlt: z.string().optional(),
+    // the project page shows `cover`; the index cards show `card` when set (e.g. a phone shot on the card, desktop inside)
+    card: image().optional(),
+    cardAlt: z.string().optional(),
     gallery: z
       .array(z.object({ src: image(), alt: z.string(), caption: z.string().optional() }))
       .default([]),
@@ -36,6 +39,7 @@ const work = defineCollection({
         period: z.string(),
         stack: z.array(z.string()).default([]),
         summary: z.string(),
+        kind: z.enum(['role', 'system']).default('role'),
         confidential: z.boolean().default(false),
         order: z.number(),
         draft: z.boolean().default(false),

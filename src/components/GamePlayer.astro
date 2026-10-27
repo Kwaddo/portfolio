@@ -36,7 +36,14 @@ const ratio = frameWidth && frameHeight ? `${frameWidth} / ${frameHeight}` : '16
     const hint = root.querySelector<HTMLElement>('[data-hint]')!;
     const note = root.querySelector<HTMLElement>('[data-note]')!;
     let pointerAt = 0;
-    document.addEventListener('pointerdown', () => { pointerAt = Date.now(); }, true);
+    // listeners on window/document die with the page: abort them and release the scroll lock before a client-side swap
+    const ac = new AbortController();
+    const { signal } = ac;
+    document.addEventListener('astro:before-swap', () => {
+      ac.abort();
+      document.documentElement.classList.remove('is-playing');
+    }, { once: true });
+    document.addEventListener('pointerdown', () => { pointerAt = Date.now(); }, { capture: true, signal });
     start.addEventListener('click', () => {
       const frame = document.createElement('iframe');
       frame.className = 'player__frame';
@@ -52,10 +59,10 @@ const ratio = frameWidth && frameHeight ? `${frameWidth} / ${frameHeight}` : '16
       // frame entered by sequential navigation (Shift+Tab out, Tab back in), so every focus change re-reads it.
       const lock = (on: boolean) => document.documentElement.classList.toggle('is-playing', on);
       const sync = () => { if (frame.isConnected) lock(document.activeElement === frame); };
-      addEventListener('focus', sync);
-      addEventListener('blur', sync);
-      document.addEventListener('focusin', sync);
-      document.addEventListener('focusout', () => setTimeout(sync));
+      addEventListener('focus', sync, { signal });
+      addEventListener('blur', sync, { signal });
+      document.addEventListener('focusin', sync, { signal });
+      document.addEventListener('focusout', () => setTimeout(sync), { signal });
       frame.addEventListener('blur', () => {
         sync();
         // The game is cross-origin, so a Tab it does not consume walks out of the frame to the next control (or to the document).
@@ -74,6 +81,13 @@ const ratio = frameWidth && frameHeight ? `${frameWidth} / ${frameHeight}` : '16
       });
       stage.addEventListener('pointerdown', () => frame.focus());
       stage.replaceChildren(frame);
+      // A focus guard right after the player: Tab out of the game (or out of its last control) lands here and goes straight back,
+      // so it can never walk on to the page or the browser's own controls. Shift+Tab still leaves, as the hint says.
+      const guard = document.createElement('span');
+      guard.tabIndex = 0;
+      guard.setAttribute('aria-hidden', 'true');
+      guard.addEventListener('focus', () => frame.focus());
+      stage.after(guard);
       stage.scrollIntoView({ block: 'nearest' }); // a landscape phone shows the whole stage before the page locks
       frame.focus();
       sync();

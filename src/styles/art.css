@@ -14,15 +14,15 @@
   .notice,
   .chapter__text,
   .chapter__side,
-  .entry__link,
+  .strip__link,
   .timeline--alt .timeline__item {
     border-image: var(--frame-ink) 15 / 3 / 1 stretch; /* the band is three border widths: one outside, one on, one inside */
   }
   .spread--ink .frame,
   a.panel:hover,
   a.panel:focus-visible,
-  .entry__link:hover,
-  .entry__link:focus-visible {
+  .strip__link:hover,
+  .strip__link:focus-visible {
     border-image-source: var(--frame-paper);
   }
   /* an ink panel on paper keeps its ink frame invisible, as before */
@@ -131,12 +131,12 @@
   /* content never under the cut */
   :is(.spread--feature-start, .spread--feature-quad, .spread--3up) > .panel:first-of-type > .panel__body,
   .timeline--alt .timeline__item:nth-child(odd) {
-    padding-inline-end: calc(1rem + var(--cut));
+    padding-inline-end: calc(1rem + var(--cut, 0px));
   }
   :is(.spread--feature-end, .spread--3up) > .panel:last-of-type > .panel__body,
   .spread--feature-end > .panel:first-of-type > .panel__body,
   .timeline--alt .timeline__item:nth-child(even) {
-    padding-inline-start: calc(1rem + var(--cut));
+    padding-inline-start: calc(1rem + var(--cut, 0px));
   }
 }
 
@@ -149,14 +149,14 @@
     position: relative;
   }
   .timeline--alt .timeline__item:nth-child(odd) {
-    padding-inline-end: calc(1rem + var(--cut));
+    padding-inline-end: calc(1rem + var(--cut, 0px));
     clip-path: polygon(-6px -6px, 100% -6px, 100% 0, calc(100% - var(--cut)) 100%, calc(100% - var(--cut)) calc(100% + var(--shadow-x)), -6px calc(100% + var(--shadow-x)));
   }
   [dir='rtl'] .timeline--alt .timeline__item:nth-child(odd) {
     clip-path: polygon(0 -6px, calc(100% + 6px) -6px, calc(100% + 6px) calc(100% + var(--shadow-x)), var(--cut) calc(100% + var(--shadow-x)), var(--cut) 100%, 0 0);
   }
   .timeline--alt .timeline__item:nth-child(even) {
-    padding-inline-start: calc(1rem + var(--cut));
+    padding-inline-start: calc(1rem + var(--cut, 0px));
     clip-path: polygon(var(--cut) -6px, calc(100% + var(--shadow-x)) -6px, calc(100% + var(--shadow-x)) calc(100% + var(--shadow-x)), -6px calc(100% + var(--shadow-x)), -6px 100%, var(--cut) 0);
   }
   [dir='rtl'] .timeline--alt .timeline__item:nth-child(even) {
@@ -289,15 +289,17 @@ main:has(> .wrap > .stack:last-child > .spread--ink:last-child) {
    The lean is on the heading box: these boxes hold only the text and its brush underline, so nothing else moves. */
 :is(.stack, .page-head, .hero-spread__text) > :is(h1, h2),
 .chapter__text > h2 {
-  -webkit-text-stroke: 3px var(--paper);
+  -webkit-text-stroke: 2px var(--paper);
   paint-order: stroke fill;
-  text-shadow: 0.06em 0.06em 0 var(--ink);
+  letter-spacing: 0.05em;
+  word-spacing: 0.12em;
+  text-shadow: 0.04em 0.04em 0 var(--ink);
   transform: skewX(-6deg);
   transform-origin: 0 100%;
 }
 [dir='rtl'] :is(.stack, .page-head, .hero-spread__text) > :is(h1, h2),
 [dir='rtl'] .chapter__text > h2 {
-  text-shadow: -0.06em 0.06em 0 var(--ink);
+  text-shadow: -0.04em 0.04em 0 var(--ink);
   transform: skewX(6deg);
   transform-origin: 100% 100%;
 }
@@ -369,35 +371,6 @@ main:has(> .wrap > .stack:last-child > .spread--ink:last-child) {
   clip-path: polygon(100% 50%, 88.8% 66.1%, 85.4% 85.4%, 66.1% 88.8%, 50% 100%, 33.9% 88.8%, 14.6% 85.4%, 11.2% 66.1%, 0 50%, 11.2% 33.9%, 14.6% 14.6%, 33.9% 11.2%, 50% 0, 66.1% 11.2%, 85.4% 14.6%, 88.8% 33.9%);
 }
 
-/* ---------- page frame: a 3px ink frame inset half a gutter from the viewport at desktop, fixed, under the nav ----------
-   The nav keeps its paper band; its rule is drawn between the frame's sides so it becomes the frame's top edge. */
-@media (min-width: 64rem) {
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0 calc(var(--gutter) / 2) calc(var(--gutter) / 2);
-    z-index: 40;
-    border: 3px solid var(--ink);
-    border-block-start: 0;
-    pointer-events: none;
-  }
-  .nav {
-    border-block-end: 0;
-  }
-  .nav::after {
-    content: '';
-    position: absolute;
-    inset: auto calc(var(--gutter) / 2) 0;
-    block-size: 3px;
-    background: var(--ink);
-  }
-}
-@media print {
-  body::before {
-    content: none;
-  }
-}
-
 /* ---------- section devices: a diagonal ink bar and a tone strip alternate with the brush rules ----------
    The bar is a 1.25rem band crossing the whole wrap; its box height sets the slant (about 6deg at 1280, 12deg would cost 230px). */
 .ink-bar {
@@ -432,12 +405,26 @@ main:has(> .wrap > .stack:last-child > .spread--ink:last-child) {
 }
 .lost {
   display: grid;
-  gap: var(--gutter-panel);
-  align-items: center;
+  gap: 3.5rem;
+  justify-items: center;
+  padding-block: 2rem 4rem;
+  inline-size: min(100%, 38rem);
+  margin-inline: auto;
+  text-align: center;
+}
+.lost > * {
+  inline-size: 100%;
+}
+.lost__code {
+  display: block;
+  font: 700 0.8rem / 1 var(--font-body);
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  margin-block-end: 0.6rem;
+  color: var(--tone);
 }
 @media (min-width: 48rem) {
-  .page-head--figure,
-  .lost {
+  .page-head--figure {
     grid-template-columns: 7fr 5fr;
   }
   .hero__end-cell--inset .hero__figure img {
@@ -450,5 +437,5 @@ main:has(> .wrap > .stack:last-child > .spread--ink:last-child) {
   content: none;
 }
 .lost > .bubble--thought {
-  margin-inline: 7%;
+  margin-inline: 0;
 }

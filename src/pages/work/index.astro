@@ -9,17 +9,36 @@ import InkRule from '../../components/InkRule.astro';
 import { byOrder, published } from '../../lib/content';
 
 const timeline = published(await getCollection('timeline'));
-const work = byOrder(published(await getCollection('work')));
+const all = byOrder(published(await getCollection('work')));
+const roles = all.filter((e) => e.data.kind === 'role');
+const systems = all.filter((e) => e.data.kind === 'system');
 ---
 <Base title="Work" description="Roles and systems Ali Khalaf has worked on. Some of it is confidential, so those pages say little on purpose.">
   <div class="wrap stack">
     <header class="page-head">
       <h1>Work</h1>
-      <Bubble shape="round" as="p" class="lede bubble--up">Roles and the systems behind them. Some of it is confidential, so those pages say little on purpose.</Bubble>
+      <Bubble shape="round" as="p" class="lede bubble--up">Four roles and two contracted systems. Some of it is confidential, so those pages say little on purpose.</Bubble>
     </header>
-    <Spread layout="feature-start" label="Roles">
+    <Spread layout="feature-start" label="Roles" class="spread--fill">
       {
-        work.map((entry, i) => (
+        roles.map((entry, i) => (
+          <ProjectCard
+            level={2}
+            href={`/work/${entry.id}/`}
+            title={entry.data.title}
+            summary={entry.data.summary}
+            meta={`${entry.data.role} · ${entry.data.period}`}
+            cover={entry.data.cover}
+            coverAlt={entry.data.coverAlt}
+            confidential={entry.data.confidential}
+            index={i}
+          />
+        ))
+      }
+    </Spread>
+    <Spread layout="feature-end" label="Systems">
+      {
+        systems.map((entry, i) => (
           <ProjectCard
             level={2}
             href={`/work/${entry.id}/`}

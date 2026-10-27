@@ -4,7 +4,18 @@
   inset-block-start: 0;
   z-index: 50;
   background: var(--paper);
-  border-block-end: var(--rule);
+  border-block-end: 4px solid var(--ink);
+}
+/* the bar fades into the page through a strip of screen tone, the way a manga panel edge does */
+.nav::after {
+  content: '';
+  position: absolute;
+  inset: 100% 0 auto;
+  block-size: 0.75rem;
+  background-image: radial-gradient(circle at center, var(--ink) 1.1px, transparent 1.6px);
+  background-size: 5px 5px;
+  mask-image: linear-gradient(to bottom, var(--ink), transparent);
+  pointer-events: none;
 }
 .nav__inner {
   display: flex;
@@ -14,10 +25,62 @@
   padding-block: 0.6rem;
 }
 .nav__brand {
-  font: 400 1.5rem/1 var(--font-display);
-  letter-spacing: 0.02em;
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.2rem;
+  min-block-size: 2.75rem;
+  padding: 0.35rem 0.9rem 0.3rem 0.8rem;
+  justify-self: start;
+  background: var(--ink);
+  color: var(--paper);
   text-decoration: none;
   text-transform: uppercase;
+  /* a name plate, the way a volume's author credit is inked: one reversed plate with a paper keyline inside it,
+     the first name as a small ruled label over the family name in full display type, leaning and standing on a hard shadow */
+  transform: skewX(-6deg);
+  box-shadow:
+    inset 0 0 0 2px var(--ink),
+    inset 0 0 0 3.5px var(--paper),
+    4px 4px 0 var(--tone);
+  transition:
+    translate var(--t-fast),
+    box-shadow var(--t-fast);
+}
+.nav__brand-first {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding-inline-start: 0.15rem;
+  font: 400 0.95rem/1 var(--font-display);
+  letter-spacing: 0.5em;
+}
+.nav__brand-first::after {
+  content: '';
+  flex: 1;
+  block-size: 2px;
+  background: var(--paper);
+}
+.nav__brand-last {
+  padding-inline-start: 0.1rem;
+  font: 400 1.6rem/0.95 var(--font-display);
+  letter-spacing: 0.07em;
+}
+.nav__brand:hover,
+.nav__brand:focus-visible {
+  translate: 2px 2px;
+  box-shadow:
+    inset 0 0 0 2px var(--ink),
+    inset 0 0 0 3.5px var(--paper),
+    2px 2px 0 var(--tone);
+}
+[dir='rtl'] .nav__brand {
+  transform: skewX(6deg);
+  box-shadow:
+    inset 0 0 0 2px var(--ink),
+    inset 0 0 0 3.5px var(--paper),
+    -4px 4px 0 var(--tone);
 }
 .nav__list {
   display: flex;
@@ -34,15 +97,65 @@
 .nav__list a[aria-current='page'] {
   text-decoration: underline;
   text-decoration-thickness: 3px;
+  text-underline-offset: 0.3em;
+}
+.nav__list a:not([aria-current='page']):hover {
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.3em;
 }
 .nav__cta {
   margin-inline-start: auto;
 }
+/* desktop and tablet: the links are numbered chapters; the current one is an inked, leaning tab */
+@media (min-width: 48rem) {
+  .nav__list {
+    counter-reset: chapter;
+    gap: 0.25rem 0.5rem;
+    font: 400 1.05rem/1 var(--font-display);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .nav__list li {
+    counter-increment: chapter;
+  }
+  .nav__list a {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.4rem;
+    padding: 0.55rem 0.8rem;
+    margin-inline: 0;
+    border: 2px solid transparent;
+    transition:
+      background var(--t-fast),
+      color var(--t-fast);
+  }
+  .nav__list a::before {
+    content: counter(chapter, decimal-leading-zero);
+    font: 700 0.65rem/1 var(--font-body);
+    letter-spacing: 0.1em;
+    color: var(--tone);
+  }
+  .nav__list a:not([aria-current='page']):hover,
+  .nav__list a:not([aria-current='page']):focus-visible {
+    text-decoration: none;
+    border-color: var(--ink);
+  }
+  .nav__list a[aria-current='page'] {
+    background: var(--ink);
+    color: var(--paper);
+    text-decoration: none;
+    transform: skewX(-6deg);
+  }
+  [dir='rtl'] .nav__list a[aria-current='page'] {
+    transform: skewX(6deg);
+  }
+  .nav__list a[aria-current='page']::before {
+    color: var(--paper);
+  }
+}
 /* touch widths: every nav link is a 44px target (padding, pulled back by the margin so the spacing reads the same) */
 @media (max-width: 63.99rem), (pointer: coarse) {
-  .nav__brand {
-    padding-block: 0.625rem;
-  }
   .nav__list a {
     display: inline-block;
     padding: 0.75rem 0.35rem;
@@ -76,7 +189,7 @@
     scroll-padding-inline: var(--gutter);
     scrollbar-width: none;
     /* symmetric fade on both edges, so no RTL mirror is needed (gradient directions are physical by spec) */
-    mask-image: linear-gradient(to right, transparent, #000 var(--gutter), #000 calc(100% - var(--gutter)), transparent);
+    mask-image: linear-gradient(to right, transparent, var(--ink) var(--gutter), var(--ink) calc(100% - var(--gutter)), transparent);
   }
   .nav__list::-webkit-scrollbar {
     display: none;

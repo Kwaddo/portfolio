@@ -1,7 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
-import DateStamp from './DateStamp.astro';
 import Icon from './Icon.astro';
+import Strip from './Strip.astro';
 import { excerpt, newestFirst } from '../lib/journal';
 import { published } from '../lib/content';
 
@@ -11,17 +11,8 @@ const latest = newestFirst(published(await getCollection('journal'))).slice(0, 3
   latest.length > 0 && (
     <section class="wrap stack ticker" aria-labelledby="ticker-title">
       <h2 id="ticker-title">Latest from the journal</h2>
-      <ol class="entries">
-        {
-          latest.map((e) => (
-            <li class="entry">
-              <a class="entry__link" href={`/journal/${e.id}/`}>
-                <DateStamp date={e.data.date} />
-                <p>{excerpt(e.body ?? '', 140)}</p>
-              </a>
-            </li>
-          ))
-        }
+      <ol class="strips">
+        {latest.map((e, i) => <Strip href={`/journal/${e.id}/`} date={e.data.date} text={excerpt(e.body ?? '', 140)} index={i} />)}
       </ol>
       <p><a class="btn" href="/journal/"><Icon name="arrow-right" />All entries</a></p>
     </section>

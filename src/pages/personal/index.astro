@@ -27,8 +27,8 @@ const lab = byOrder(published(await getCollection('lab')));
             title={g.data.title}
             summary={g.data.summary}
             status={g.data.status}
-            cover={g.data.cover}
-            coverAlt={g.data.coverAlt}
+            cover={g.data.card ?? g.data.cover}
+            coverAlt={g.data.card ? g.data.cardAlt : g.data.coverAlt}
             meta={`Last worked ${formatMonth(g.data.lastWorked)}`}
             tilt={i === 0}
             index={i}
@@ -48,8 +48,8 @@ const lab = byOrder(published(await getCollection('lab')));
             title={l.data.title}
             summary={l.data.summary}
             status={l.data.status}
-            cover={l.data.cover}
-            coverAlt={l.data.coverAlt}
+            cover={l.data.card ?? l.data.cover}
+            coverAlt={l.data.card ? l.data.cardAlt : l.data.coverAlt}
             meta={`Last worked ${formatMonth(l.data.lastWorked)}`}
             index={i}
           />

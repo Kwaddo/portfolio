@@ -53,7 +53,7 @@ describe('findViolations', () => {
 
   test('flags the Kwaddo handle as visible text but not in attributes', () => {
     expect(findViolations('a/index.html', '<p>by Kwaddo</p>')).toHaveLength(1);
-    expect(findViolations('a/index.html', '<a href="https://kwaddo.github.io/">x</a>')).toEqual([]);
+    expect(findViolations('a/index.html', '<a href="https://alikhalaf.fn.dilmune.app/">x</a>')).toEqual([]);
   });
   test('allows the handle inside JSON-LD URLs', () => {
     const ld = '<script type="application/ld+json">{"url":"https://github.com/Kwaddo"}</script>';
@@ -66,10 +66,10 @@ describe('findViolations', () => {
 
 describe('findViolations on xml', () => {
   test('a sitemap with the site URL in <loc> passes', () => {
-    expect(findViolations('sitemap-0.xml', '<urlset><url><loc>https://kwaddo.github.io/x/</loc></url></urlset>')).toEqual([]);
+    expect(findViolations('sitemap-0.xml', '<urlset><url><loc>https://alikhalaf.fn.dilmune.app/x/</loc></url></urlset>')).toEqual([]);
   });
   test('RSS link and guid URLs pass, but the handle in a description is flagged', () => {
-    const item = (d: string) => `<item><link>https://kwaddo.github.io/j/</link><guid isPermaLink="true">https://kwaddo.github.io/j/</guid><description>${d}</description></item>`;
+    const item = (d: string) => `<item><link>https://alikhalaf.fn.dilmune.app/j/</link><guid isPermaLink="true">https://alikhalaf.fn.dilmune.app/j/</guid><description>${d}</description></item>`;
     expect(findViolations('rss.xml', item('hello'))).toEqual([]);
     expect(findViolations('rss.xml', item('by Kwaddo'))).toHaveLength(1);
   });
@@ -81,7 +81,7 @@ describe('findViolations on xml', () => {
 
 describe('ogImageOf', () => {
   test('reads the path of the og:image meta tag', () => {
-    const html = '<meta property="og:image" content="https://kwaddo.github.io/og/work.png" />';
+    const html = '<meta property="og:image" content="https://alikhalaf.fn.dilmune.app/og/work.png" />';
     expect(ogImageOf(html)).toBe('/og/work.png');
   });
   test('returns undefined when absent', () => {

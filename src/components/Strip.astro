@@ -1,0 +1,19 @@
+---
+// One journal strip: a tall narrow panel with the date running vertically; shared by the index, tag pages, the ticker and devlogs.
+import { formatDay } from '../lib/dates';
+
+interface Props {
+  href: string;
+  date: Date;
+  text: string;
+  index?: number;
+}
+const { href, date, text, index = 0 } = Astro.props;
+---
+<li class="strip" data-reveal style={`--i: ${Math.min(index, 1)}`}>
+  <a class="strip__link" href={href}>
+    <span class="speed" aria-hidden="true"></span>
+    <p class="strip__date"><time datetime={date.toISOString().slice(0, 10)}>{formatDay(date)}</time></p>
+    <p class="strip__text">{text}</p>
+  </a>
+</li>

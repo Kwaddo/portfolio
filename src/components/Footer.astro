@@ -40,6 +40,13 @@ const year = new Date().getFullYear();
       });
     });
   };
+  // Hidden when the page fits the viewport: nothing to go back to.
+  const fit = () => {
+    const short = document.documentElement.scrollHeight <= innerHeight * 1.25;
+    document.querySelectorAll<HTMLElement>('[data-top]').forEach((link) => { link.hidden = short; });
+  };
+  new ResizeObserver(fit).observe(document.documentElement);
+  addEventListener('resize', fit);
   bind();
-  document.addEventListener('astro:page-load', bind);
+  document.addEventListener('astro:page-load', () => { bind(); fit(); });
 </script>

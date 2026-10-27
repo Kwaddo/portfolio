@@ -1,6 +1,6 @@
 # Ali Khalaf: portfolio
 
-Source of [kwaddo.github.io](https://kwaddo.github.io): work, games and the stories behind them.
+Source of [alikhalaf.fn.dilmune.app](https://alikhalaf.fn.dilmune.app): work, games and the stories behind them.
 
 Built with [Astro](https://astro.build). All content is markdown in `src/content/`.
 

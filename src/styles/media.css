@@ -153,6 +153,11 @@
   grid-column: span 12;
   display: grid;
   gap: 1rem;
+  container-type: inline-size;
+}
+/* the title shrinks to keep its longest word on one line (--w is that word's length) instead of breaking it mid-word */
+.hero-spread__text > h1 {
+  font-size: clamp(2rem, calc(180cqi / var(--w, 8)), 7.5rem);
 }
 .hero-spread__media {
   grid-column: span 12;
