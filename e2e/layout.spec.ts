@@ -87,3 +87,11 @@ for (const dir of ['ltr', 'rtl'] as const) {
     });
   }
 }
+
+test('back to top hides on a page with nothing to scroll', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'desktop', 'desktop only: the empty journal outgrows a phone screen');
+  await page.goto('/journal/');
+  await expect(page.locator('[data-top]')).toBeHidden();
+  await page.goto('/about/');
+  await expect(page.locator('[data-top]')).toBeVisible();
+});
