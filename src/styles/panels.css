@@ -551,3 +551,7 @@ a.card:focus-visible .panel__media img {
     scale: none;
   }
 }
+/* the landing hero is followed by the doors, which paint over anything hanging below it: its number sits in its own foot */
+.spread.hero::after {
+  inset-block-end: 0;
+}
