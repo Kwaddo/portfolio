@@ -54,7 +54,7 @@ const rules = ['strip', 'bar', 'splat-c'] as const;
     {
       next && (
         <Panel href={next.href} weight={4} tone="fine" class="next-panel has-tone">
-          <Sfx word="NEXT" rotate="-3deg" />
+          <span class="tbc" aria-hidden="true">To be continued</span>
           <div class="panel__body">
             <p class="panel__meta">Next journey</p>
             <p class="panel__title">{next.title}</p>

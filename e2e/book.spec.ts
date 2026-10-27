@@ -90,3 +90,21 @@ test('the landing is framed as a volume cover', async ({ page }, testInfo) => {
   await expect(page.locator('.cover__spine')).toBeVisible({ visible: testInfo.project.name === 'desktop' });
   await expect(page.locator('footer')).toContainText(`${year} Ali Khalaf · Vol. 01`);
 });
+
+test('every spread carries a page number', async ({ page }) => {
+  for (const route of ['/', '/work/', '/personal/', '/personal/games/skoobl/']) {
+    await page.goto(route);
+    const missing = await page.evaluate(() =>
+      [...document.querySelectorAll('main .spread')].filter((el) => !getComputedStyle(el, '::after').content.includes('counter(folio')).length,
+    );
+    expect(missing, route).toBe(0);
+  }
+});
+
+test('the next panel reads TO BE CONTINUED', async ({ page }) => {
+  await page.goto('/personal/games/skoobl/');
+  const next = page.locator('a.next-panel');
+  await expect(next.locator('.tbc')).toHaveText('To be continued');
+  await expect(next.locator('.sfx')).toHaveCount(0);
+  await expect(next).toContainText('Smoke Break');
+});

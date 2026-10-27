@@ -470,3 +470,31 @@ a.panel:focus-visible .panel__media img {
     border-color: var(--paper);
   }
 }
+
+/* ---------- page numbers: each spread is a page; its number hangs on the bottom outer corner.
+   The empty alternative text keeps it out of the accessibility tree; a browser without that syntax drops the rule and shows none. */
+main {
+  counter-reset: folio;
+}
+.spread {
+  counter-increment: folio;
+}
+.spread::after {
+  content: counter(folio, decimal-leading-zero) / '';
+  position: absolute;
+  inset-block-end: -0.7rem;
+  inset-inline-end: 0.5rem;
+  z-index: 4;
+  padding: 0.15rem 0.45rem;
+  border: 2px solid var(--ink);
+  background: var(--paper);
+  color: var(--ink);
+  font: 400 0.75rem/1 var(--font-display);
+  letter-spacing: 0.15em;
+  pointer-events: none;
+}
+.spread--ink::after {
+  border-color: var(--paper);
+  background: var(--ink);
+  color: var(--paper);
+}
