@@ -9,7 +9,7 @@ collaborators:
   - name: Moa-01
     url: https://github.com/Moa-01
 playable: none
-journey: false
+journey: true
 order: 2
 cover: ../../assets/media/skoobl/cover.png
 coverAlt: The skoobl host screen in the lobby, showing the room code and join QR code, four players (Mina, Omar, Layla, Sami) and the game settings with Whose Doodle mode selected

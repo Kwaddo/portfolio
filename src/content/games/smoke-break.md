@@ -12,7 +12,7 @@ playable: embed
 playUrl: https://smoke-break.vercel.app/
 frameWidth: 1440
 frameHeight: 810
-journey: false
+journey: true
 order: 3
 cover: ../../assets/media/smoke-break/cover.png
 coverAlt: Smoke Break single-player maze from above, a top-down campus map with parked cars, coloured characters, and Score and Time Left counters
