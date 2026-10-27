@@ -390,6 +390,20 @@ a.bubble--ink:focus-visible {
   pointer-events: none;
   user-select: none;
 }
+/* the side panel is the chapter's title card: a solid numeral over a fixed speed burst */
+.chapter__side > .speed {
+  inset: -10%;
+  opacity: 0.35;
+  background: repeating-conic-gradient(from 0deg at 65% 75%, currentColor 0deg 1deg, transparent 1deg 7deg);
+  mask-image: radial-gradient(circle at 65% 75%, transparent 14%, #000 70%);
+}
+.chapter__num {
+  z-index: 1;
+  color: var(--ink);
+  -webkit-text-stroke: 0;
+  opacity: 1;
+  filter: drop-shadow(0.04em 0.04em 0 var(--paper)) drop-shadow(0.025em 0.025em 0 var(--ink));
+}
 .chapter__text {
   grid-column: span 12;
   display: grid;

@@ -35,7 +35,6 @@ const playUrl = 'playUrl' in data ? data.playUrl : undefined;
 const downloadUrl = 'downloadUrl' in data ? data.downloadUrl : undefined;
 const liveUrl = 'liveUrl' in data ? data.liveUrl : undefined;
 const external = { target: '_blank', rel: 'noopener noreferrer' } as const;
-const letter = data.title.trim().charAt(0).toUpperCase();
 // a lone landscape shot spans eight columns with its caption as a bubble in the remaining four
 const solo = data.gallery.length === 1 && data.gallery[0].caption && data.gallery[0].src.width / data.gallery[0].src.height > 1.2 ? data.gallery[0] : undefined;
 ---
@@ -49,21 +48,13 @@ const solo = data.gallery.length === 1 && data.gallery[0].caption && data.galler
         <h1 style={`--w: ${Math.max(...data.title.split(/\s+/).map((w) => w.length))}`}>{data.title}</h1>
         <p class="lede">{data.summary}</p>
       </div>
-      <div class="hero-spread__media">
-        {
-          data.cover ? (
+      {
+        data.cover && (
+          <div class="hero-spread__media">
             <Frame src={data.cover} alt={data.coverAlt!} eager sizes="(min-width: 48rem) 42vw, 100vw" />
-          ) : (
-            <Panel weight={4} shadow>
-              <div class="panel__media panel__initial" aria-hidden="true">
-                <span class="tone-coarse"></span>
-                <span class="speed" aria-hidden="true"></span>
-                <span class="panel__letter">{letter}</span>
-              </div>
-            </Panel>
-          )
-        }
-      </div>
+          </div>
+        )
+      }
     </header>
 
     <div class="project">

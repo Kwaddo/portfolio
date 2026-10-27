@@ -108,3 +108,35 @@ test('the next panel reads TO BE CONTINUED', async ({ page }) => {
   await expect(next.locator('.sfx')).toHaveCount(0);
   await expect(next).toContainText('Smoke Break');
 });
+
+test('cards are art first: no letter fillers, a caption box on every card', async ({ page }) => {
+  for (const route of ['/work/', '/personal/']) {
+    await page.goto(route);
+    await expect(page.locator('.panel__initial'), route).toHaveCount(0);
+    const cards = await page.locator('a.panel.card').count();
+    expect(cards, route).toBeGreaterThan(0);
+    await expect(page.locator('a.panel.card .panel__cap'), route).toHaveCount(cards);
+  }
+  await page.goto('/work/');
+  await expect(page.locator('.panel__titlecard .panel__word', { hasText: 'Tanami' })).toHaveCount(1);
+});
+
+test.describe('hover under reduced motion', () => {
+  test('a card inverts but does not move or zoom', async ({ page }, testInfo) => {
+    desktopOnly(testInfo);
+    await page.goto('/personal/');
+    const card = page.locator('a.panel.card').filter({ has: page.locator('.panel__media img') }).first();
+    await card.scrollIntoViewIfNeeded();
+    const before = await card.boundingBox();
+    await card.hover();
+    await page.waitForTimeout(400);
+    expect(await card.boundingBox()).toEqual(before);
+    expect(await card.locator('.panel__media img').evaluate((img) => getComputedStyle(img).scale)).toBe('none');
+  });
+});
+
+test('About chapters carry a title card, not an empty box', async ({ page }) => {
+  await page.goto('/about/');
+  const sides = await page.locator('.chapter__side').count();
+  await expect(page.locator('.chapter__side > .speed')).toHaveCount(sides);
+});
