@@ -162,6 +162,7 @@
 /* ---------- doors ---------- */
 .split {
   --cut: 4rem;
+  position: relative;
   display: grid;
   grid-template-columns: 1fr;
 }
@@ -180,6 +181,27 @@
 .split__door > :not(.tone-mid):not(.tone-coarse):not(.sfx):not(.speed):not(.split__lines) {
   position: relative;
   z-index: 1;
+}
+/* the doors are the volume's contents: one inked label on the seam above them */
+.split__contents {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-start: 50%;
+  z-index: 3;
+  translate: -50% -50%;
+  padding: 0.35rem 0.9rem;
+  border: 2px solid var(--paper);
+  background: var(--ink);
+  color: var(--paper);
+  font: 400 0.9rem/1 var(--font-display);
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+}
+[dir='rtl'] .split__contents {
+  translate: 50% -50%;
+}
+.split__door > .kicker {
+  margin-block-end: -0.5rem;
 }
 .split__door > .tone-mid,
 .split__door > .tone-coarse,

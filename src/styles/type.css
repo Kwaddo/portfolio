@@ -173,3 +173,13 @@ h3 {
 h2 > .ink-draw {
   margin-block-start: 0.2em;
 }
+
+/* ---------- chapter kicker: the small numbered line over a chapter's title ---------- */
+.kicker {
+  font: 400 clamp(0.85rem, 1.4vw, 1rem) / 1 var(--font-display);
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+}
+.kicker + h1 {
+  margin-block-start: 0.35rem;
+}

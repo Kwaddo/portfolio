@@ -1,0 +1,13 @@
+---
+// Decorative chapter number above a primary page's title, numbered from the nav so it never drifts from the menu.
+import { chapterOf } from '../lib/nav';
+
+interface Props {
+  href?: string;
+  short?: boolean;
+  class?: string;
+}
+const { href = Astro.url.pathname, short = false, class: cls } = Astro.props;
+const n = chapterOf(href);
+---
+{n && <p class:list={['kicker', cls]} aria-hidden="true">{short ? 'Ch.' : 'Chapter'} {String(n).padStart(2, '0')}</p>}

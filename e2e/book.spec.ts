@@ -66,3 +66,17 @@ test('SFX letter in more than one look', async ({ page }) => {
   await page.goto('/404.html');
   await expect(page.locator('.sfx.sfx--rough')).toHaveCount(1);
 });
+
+test('section pages open as numbered chapters', async ({ page }) => {
+  for (const [route, label] of [['/work/', 'Chapter 01'], ['/personal/', 'Chapter 02'], ['/journal/', 'Chapter 03'], ['/about/', 'Chapter 04'], ['/contact/', 'Chapter 05']] as const) {
+    await page.goto(route);
+    await expect(page.locator('main .kicker').first(), route).toHaveText(label);
+  }
+});
+
+test('the landing doors read as a contents page', async ({ page }) => {
+  await page.goto('/');
+  await expect(page.locator('.split__contents')).toHaveText('Contents');
+  await expect(page.locator('.split__door--work .kicker')).toHaveText('Ch. 01');
+  await expect(page.locator('.split__door--personal .kicker')).toHaveText('Ch. 02');
+});
