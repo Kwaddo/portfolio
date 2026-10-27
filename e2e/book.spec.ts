@@ -35,7 +35,7 @@ for (const figure of ['a', 'b'] as const) {
 
 test('the Say Hello panel says PSST, and HUH? is left to the 404 page', async ({ page }) => {
   await page.goto('/');
-  await expect(page.locator('.wwm .sfx')).toHaveText('PSST');
+  await expect(page.locator('.wwm__ink > .sfx')).toHaveText('PSST');
   await expect(page.locator('main .sfx', { hasText: 'HUH?' })).toHaveCount(0);
 });
 
@@ -62,7 +62,7 @@ test('SFX letter in more than one look', async ({ page }) => {
   await expect(page.locator('.sfx.sfx--rough')).toHaveCount(1);
   await expect(page.locator('.sfx.sfx--motion')).toHaveCount(1);
   await page.goto('/');
-  await expect(page.locator('.wwm .sfx.sfx--burst')).toHaveCount(1);
+  await expect(page.locator('.wwm__ink > .sfx.sfx--burst')).toHaveCount(1);
   await page.goto('/404.html');
   await expect(page.locator('.sfx.sfx--rough')).toHaveCount(1);
 });
@@ -139,4 +139,26 @@ test('About chapters carry a title card, not an empty box', async ({ page }) => 
   await page.goto('/about/');
   const sides = await page.locator('.chapter__side').count();
   await expect(page.locator('.chapter__side > .speed')).toHaveCount(sides);
+});
+
+test('live and released badges sparkle', async ({ page }) => {
+  await page.goto('/personal/');
+  const bright = await page.locator('.badge--live, .badge--released').count();
+  expect(bright).toBeGreaterThan(0);
+  await expect(page.locator('.badge__spark')).toHaveCount(bright);
+});
+
+test('copying the email pops a COPIED! burst', async ({ page, context }) => {
+  await context.grantPermissions(['clipboard-read', 'clipboard-write']);
+  await page.goto('/contact/');
+  await page.getByRole('button', { name: 'Copy email' }).click();
+  await expect(page.getByRole('status')).toHaveText('Copied');
+  await expect(page.locator('.email__pop')).toBeVisible();
+  await expect(page.locator('.email__pop')).toHaveText('COPIED!');
+  await expect(page.locator('.email__pop')).toBeHidden({ timeout: 2500 });
+});
+
+test('the 404 figure sweats', async ({ page }) => {
+  await page.goto('/404.html');
+  await expect(page.locator('.lost__sweat')).toHaveCount(1);
 });

@@ -4,5 +4,16 @@ interface Props {
 }
 const { status } = Astro.props;
 const labels = { live: 'Live', released: 'Released', prototype: 'Prototype', showcase: 'Showcase', archived: 'Archived' };
+// a shipped project gets a drawn sparkle beside its badge
+const spark = status === 'live' || status === 'released';
 ---
-<span class={`badge badge--${status}`}>{labels[status]}</span>
+<span class="badge-host">
+  <span class={`badge badge--${status}`}>{labels[status]}</span>
+  {
+    spark && (
+      <svg class="badge__spark" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+        <path d="M8 0 9.6 6.4 16 8 9.6 9.6 8 16 6.4 9.6 0 8 6.4 6.4Z" />
+      </svg>
+    )
+  }
+</span>

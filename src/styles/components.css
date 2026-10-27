@@ -468,3 +468,59 @@ a.bubble--ink:focus-visible {
     min-block-size: 7rem;
   }
 }
+
+/* ---------- emanata: small drawn marks around a state ---------- */
+.badge-host {
+  position: relative;
+  display: inline-flex;
+}
+.badge__spark {
+  position: absolute;
+  inset-block-start: -0.55rem;
+  inset-inline-end: -0.55rem;
+  inline-size: 0.95rem;
+  fill: var(--paper);
+  stroke: var(--ink);
+  stroke-width: 1.5;
+  pointer-events: none;
+}
+/* COPIED!: a small burst on the end side of the button row inside a ring of shock lines, clear of the heading and the button label */
+.email {
+  position: relative;
+}
+.email__pop {
+  position: absolute;
+  inset-block-end: 0.25rem;
+  inset-inline-end: -0.5rem;
+  z-index: 3;
+  pointer-events: none;
+}
+.email__pop::before {
+  content: '';
+  position: absolute;
+  inset: -60%;
+  background: repeating-conic-gradient(from 0deg, currentColor 0deg 2deg, transparent 2deg 14deg);
+  mask-image: radial-gradient(circle, transparent 38%, #000 42%, transparent 70%);
+}
+.email__pop > .sfx {
+  position: relative;
+  inset: auto;
+  overflow: visible;
+  font-size: 1.5rem;
+}
+.on-ink .email__pop > .sfx {
+  --sfx-stroke: var(--paper);
+  --sfx-fill: var(--ink);
+}
+/* 404: one sweat drop beside the figure's head */
+.lost__sweat {
+  position: absolute;
+  inset-block-start: 10%;
+  inset-inline-end: 34%;
+  z-index: 4;
+  inline-size: 1.4rem;
+  fill: var(--paper);
+  stroke: var(--ink);
+  stroke-width: 2;
+  rotate: 18deg;
+}
