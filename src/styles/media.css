@@ -437,3 +437,14 @@ html.is-playing {
   color: var(--tone);
   font-size: 0.8rem;
 }
+/* facts panel actions: one equal-width column under Play */
+.facts-panel .cta-row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.75rem;
+}
+.facts-panel .cta-row .btn {
+  justify-content: center;
+  text-align: center;
+  white-space: nowrap;
+}
