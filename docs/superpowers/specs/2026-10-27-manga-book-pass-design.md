@@ -23,7 +23,7 @@ Audit of the built site at 1280 and 390 (2026-10-27):
 
 ## 0. Fixes
 
-- **Hero word:** `KWADDO` is fully visible at every width from 48rem to 1440 px (the clip at 1280 is a regression of `0f889b3`). Add an e2e check that the SFX box sits inside its panel's box at 1024, 1280 and 1440.
+- **Hero word:** `KWADDO` is fully visible at every width from 48rem to 1440 px with either figure. Measured: the figure covers the last one or two letters at 1024, 1280 and 1440 with both figures. Fix: the word is lettered over the figure (manga SFX overlap characters) instead of behind it. e2e: the topmost element at the centre of the last letter is the SFX, for both figures at 1024, 1280 and 1440.
 - **Say Hello panel:** `HUH?` is replaced with `PSST`. `HUH?` stays only on 404.
 - **Work timeline:** the `WORK` SFX no longer overlaps any timeline entry at 1280 (e2e: bounding boxes do not intersect).
 
@@ -32,7 +32,7 @@ Audit of the built site at 1280 and 390 (2026-10-27):
 ### Landing cover frame
 - `VOL. 01` badge, caption-bubble style, top-start corner of the hero spread.
 - Spine: an ink band on the start edge of the hero spread with vertical text `ALI KHALAF · VOL. 01` (`writing-mode: vertical-rl`), `aria-hidden`. Desktop only (48rem and up); hidden on phone.
-- Stamp: a round ink-bordered stamp `AK 2026` at the top-end corner, slight rotation, `aria-hidden`. The year comes from the build date, not typed.
+- Stamp: a round ink-bordered stamp `AK 2026` on the bottom-end corner of the title (shout bubble) panel, clear of the figure's head, slight rotation, `aria-hidden`. The year comes from the build date, not typed.
 - Doors: a small `CONTENTS` label above the split; each door gets a kicker `CH. 01` (Work) and `CH. 02` (Personal) above its heading, `aria-hidden` (the heading text is unchanged).
 
 ### Chapter headers
@@ -44,7 +44,7 @@ Audit of the built site at 1280 and 390 (2026-10-27):
 
 ### Next panels
 - The `NEXT` panel on project and journey pages becomes a "TO BE CONTINUED" arrow tag: a pointed ink arrow box (clip-path) with `TO BE CONTINUED` and the arrow pointing to the inline end (mirrors in RTL). The link's accessible name stays "Next game: <title>" (or the current equivalent).
-- Where there is no next item, the foot shows a non-link `END` caption panel, `aria-hidden`.
+- `END` (no next item) is deferred: project pages always have a next item (`nextProject` wraps), and no journey or story page is built yet. Add it to `JourneyView` when the first journey ships.
 
 ### Footer
 - The copyright line reads `© <year> Ali Khalaf · Vol. 01`.
@@ -54,7 +54,7 @@ Audit of the built site at 1280 and 390 (2026-10-27):
 ### Cards with a cover (`ProjectCard`)
 - The image fills the whole panel (existing wide/tall ratio rules decide cover vs contain on tone).
 - Status badge and title sit in a solid paper caption box with ink border, overlapping the bottom-start corner of the art.
-- Meta and summary sit in a narration box (solid paper, ink border) overlapping the bottom edge. "Read more" stays.
+- Meta, summary and "Read more" sit below in the panel's own paper foot.
 - All text is on solid paper or solid ink, never on art or tone: 4.5:1 contrast holds.
 - Phone: same overlay; the panel has a minimum art height so the boxes never cover more than about half the art.
 
@@ -63,11 +63,11 @@ Audit of the built site at 1280 and 390 (2026-10-27):
 - `.panel__initial` and `.panel__letter` are removed.
 
 ### About chapter panels
-- The empty number boxes beside each About chapter become title-card panels: `CH. N` set huge over speed lines, with the vertical `CHAPTER N` label kept.
+- The empty number boxes beside each About chapter become title-card panels: the chapter numeral set huge and solid over a speed burst, with the `Chapter N` label kept.
 
 ### Hover and focus (impact frame)
-- On hover or focus-visible: the art scales to 1.04 inside the panel (overflow clipped), the speed burst fades in, the border goes up one weight step.
-- Reduced motion: only the border change applies.
+- On hover or focus-visible: the art scales to 1.04 inside the panel (overflow clipped) and the speed burst fades in, on top of the existing lift and inversion. The caption box stays paper.
+- Reduced motion: no scale and no lift; the inversion still applies.
 
 ## 3. SFX variety
 
@@ -78,7 +78,7 @@ Audit of the built site at 1280 and 390 (2026-10-27):
 - `motion`: two or three trailing copies via offset `text-shadow` along the skew direction, like a whoosh.
 - `burst`: the word sits inside the jagged shout polygon (reuse the `Bubble` shout shape), ink fill, paper text.
 
-Placements rotate looks so no page uses the same look twice in a row. Word list grows by `PSST`, `COPIED!`, `END` (the `Sfx` word union is updated to match).
+Placements rotate looks so no page uses the same look twice in a row. Word list grows by `PSST` and `COPIED!`; `NEXT` leaves it (the `Sfx` word union is updated to match).
 
 ### Emanata
 Three placements only, all `aria-hidden`, inline SVG under 1 KB each:
@@ -92,7 +92,7 @@ Three placements only, all `aria-hidden`, inline SVG under 1 KB each:
 - New e2e checks:
   - Each page's page numbers match its spread count.
   - No `.panel__initial` in any built page.
-  - axe colour-contrast passes on `/personal/` and `/work/` with the overlay captions.
+  - Lighthouse accessibility (which includes colour contrast) stays at 95 or above, with `/personal/` and `/work/` added to the Lighthouse URL list for the overlay captions. No new dev dependency for axe.
   - No horizontal scroll at 360 px on every page.
   - Under `prefers-reduced-motion`, hovering a card applies no transform.
   - The hero `KWADDO` box sits inside its panel at 1024, 1280 and 1440.
