@@ -55,7 +55,7 @@ for (const dir of ['ltr', 'rtl'] as const) {
       );
       expect(overflow).toBeLessThanOrEqual(0);
       // side margins: nothing but backgrounds passes the wrap's edges (the wrap box includes its gutter padding); measured once the opening slide has settled
-      await page.evaluate(() => Promise.all(document.getAnimations().map((a) => a.finished.catch(() => {}))));
+      await page.evaluate(() => Promise.all(document.getAnimations().filter((a) => a.effect?.getComputedTiming().iterations !== Infinity).map((a) => a.finished.catch(() => {}))));
       const outside = await page.evaluate(() => {
         const wrap = document.querySelector('main .wrap') ?? document.querySelector('.wrap');
         if (!wrap) return [];
