@@ -10,6 +10,7 @@ const routes = [
   '/personal/games/smobb/play/',
   '/personal/games/skoobl/',
   '/personal/games/gridlock/',
+  '/personal/games/gridlock/play/',
   '/personal/lab/nocturne-network/',
   '/personal/lab/smart-road/',
   '/about/',
