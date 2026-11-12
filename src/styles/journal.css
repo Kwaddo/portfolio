@@ -75,7 +75,10 @@
   place-content: center;
   justify-items: start;
 }
-/* the entry body: tags, prose and the project button in one framed panel */
+/* the entry body: tags, prose and the project button in one framed panel, no wider than the text it holds */
+.panel--entry {
+  max-inline-size: calc(var(--measure) + 2 * clamp(1rem, 3vw, 2rem) + 1rem);
+}
 .entry-panel {
   gap: 1.25rem;
   padding: clamp(1rem, 3vw, 2rem);

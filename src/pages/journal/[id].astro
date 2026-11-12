@@ -32,7 +32,7 @@ const projectHref = !project
   <article class="wrap stack">
     <p><a class="btn btn--back" href="/journal/"><Icon name="arrow-left" />Journal</a></p>
     <DateStamp date={entry.data.date} as="h1" />
-    <Panel weight={4} shadow>
+    <Panel weight={4} shadow class="panel--entry">
       <div class="panel__body entry-panel">
         {
           entry.data.tags.length > 0 && (
