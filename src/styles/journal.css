@@ -75,19 +75,15 @@
   place-content: center;
   justify-items: start;
 }
-/* the entry body: tags, prose and the project button in one framed panel, no wider than the text it holds */
-.panel--entry {
-  max-inline-size: calc(var(--measure) + 2 * clamp(1rem, 3vw, 2rem) + 1rem);
-}
+/* the entry body: prose in one framed panel, tags and neighbours in the facts panel beside it */
 .entry-panel {
   gap: 1.25rem;
   padding: clamp(1rem, 3vw, 2rem);
 }
-.pager {
-  display: flex;
-  flex-wrap: wrap;
+.entry-nav {
+  display: grid;
   gap: 0.75rem;
-  justify-content: space-between;
+  justify-items: start;
 }
 
 /* ---------- timeline ---------- */
@@ -198,4 +194,14 @@ p.timeline__period {
 }
 [dir='rtl'] .spread--ink .timeline__item {
   box-shadow: var(--shadow-ink-rtl);
+}
+
+/* an entry's facts are a short stack of their own: one column, and below the text on small screens */
+@media (max-width: 63.99rem) {
+  .project--entry .facts-panel .panel__body {
+    grid-template-columns: 1fr;
+  }
+  .project--entry .project__aside {
+    order: 2;
+  }
 }

@@ -3,6 +3,7 @@ import Icon from '../../components/Icon.astro';
 import { getCollection, render } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import DateStamp from '../../components/DateStamp.astro';
+import Bubble from '../../components/Bubble.astro';
 import Panel from '../../components/Panel.astro';
 import { firstSentence, neighbors, newestFirst, tagSlug } from '../../lib/journal';
 import { formatDay } from '../../lib/dates';
@@ -32,24 +33,37 @@ const projectHref = !project
   <article class="wrap stack">
     <p><a class="btn btn--back" href="/journal/"><Icon name="arrow-left" />Journal</a></p>
     <DateStamp date={entry.data.date} as="h1" />
-    <Panel weight={4} shadow class="panel--entry">
-      <div class="panel__body entry-panel">
-        {
-          entry.data.tags.length > 0 && (
-            <ul class="chips">
-              {entry.data.tags.map((t) => (
-                <li><a href={`/journal/tag/${tagSlug(t)}/`}>{t}</a></li>
-              ))}
-            </ul>
-          )
-        }
-        <div class={dropcap(entry.body)}><Content /></div>
-        {projectHref && <p><a class="btn" href={projectHref}><Icon name="arrow-right" />About {project}</a></p>}
+    <div class="project project--entry">
+      <aside class="project__aside">
+        <Panel weight={4} tone="fine" shadow class="facts-panel">
+          <div class="panel__body">
+            <div class="panel__caps">
+              <Bubble shape="caption" as="span">Journal entry</Bubble>
+            </div>
+            {
+              entry.data.tags.length > 0 && (
+                <ul class="chips" aria-label="Tags">
+                  {entry.data.tags.map((t) => (
+                    <li><a href={`/journal/tag/${tagSlug(t)}/`}>{t}</a></li>
+                  ))}
+                </ul>
+              )
+            }
+            {projectHref && <p><a class="btn" href={projectHref}><Icon name="arrow-right" />About {project}</a></p>}
+            {(older || newer) && <nav class="entry-nav" aria-label="More entries">
+              {older && <a class="btn" href={`/journal/${older.id}/`}><Icon name="arrow-left" />Older: {formatDay(older.data.date)}</a>}
+              {newer && <a class="btn" href={`/journal/${newer.id}/`}>Newer: {formatDay(newer.data.date)}<Icon name="arrow-right" /></a>}
+            </nav>}
+          </div>
+        </Panel>
+      </aside>
+      <div class="project__main">
+        <Panel weight={4} shadow>
+          <div class="panel__body entry-panel">
+            <div class={dropcap(entry.body)}><Content /></div>
+          </div>
+        </Panel>
       </div>
-    </Panel>
-    {(older || newer) && <nav class="pager" aria-label="More entries">
-      {older ? <a class="btn" href={`/journal/${older.id}/`}><Icon name="arrow-left" />Older: {formatDay(older.data.date)}</a> : <span />}
-      {newer ? <a class="btn" href={`/journal/${newer.id}/`}>Newer: {formatDay(newer.data.date)}<Icon name="arrow-right" /></a> : <span />}
-    </nav>}
+    </div>
   </article>
 </Base>
