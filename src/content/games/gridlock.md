@@ -17,4 +17,4 @@ order: 4
 ---
 Gridlock is a multiplayer first-person shooter written in Rust. The client renders with macroquad and talks to a headless authoritative server over a custom UDP-style protocol.
 
-It was built with a team, and I contributed a large share of the code. It runs in the browser at [gridlock.kwaddo.dev](https://gridlock.kwaddo.dev/): host a match or join one, with nothing to install.
+It was built with a team, and I contributed a large share of the code. [It runs in the browser](https://gridlock.kwaddo.dev/): host a match or join one, with nothing to install.
