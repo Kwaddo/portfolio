@@ -10,7 +10,8 @@
         "/work/index.html",
         "/personal/index.html"
       ],
-      "numberOfRuns": 3
+      "numberOfRuns": 3,
+      "settings": { "chromeFlags": "--no-sandbox --headless=new" }
     },
     "assert": {
       "assertions": {

@@ -94,7 +94,7 @@ const journeys = defineCollection({
 });
 
 const journal = defineCollection({
-  loader: glob({ pattern: '**/*.md', base: './src/content/journal' }),
+  loader: glob({ pattern: ['**/*.md', '!**/_*'], base: './src/content/journal' }),
   schema: z.object({
     date: z.coerce.date(),
     tags: z.array(z.string()).default([]),
