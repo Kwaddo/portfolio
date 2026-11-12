@@ -21,7 +21,7 @@ draft: true      # optional: hidden from the site until removed
 
 - No title and no `# heading`: the date is the title everywhere.
 - The first two lines are the index excerpt and the first sentence is the meta description, so open strong.
-- Short, candid, first person. Daily-friendly beats polished.
+- Short, candid, first person. Gradual beats polished: write one when there is something worth saying, not to keep a streak.
 - Tags: lowercase, short, reused (`gamedev`, `web`, `learning`).
 
 ## Content rules

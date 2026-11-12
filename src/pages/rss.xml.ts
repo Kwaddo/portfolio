@@ -10,7 +10,7 @@ export async function GET(context: APIContext) {
   const entries = newestFirst(published(await getCollection('journal')));
   return rss({
     title: `${site.name}: journal`,
-    description: 'Short daily notes: what is being built, learned and played.',
+    description: 'Short notes, added now and then: what is being built, learned and played.',
     site: context.site!,
     items: entries.map((e) => ({
       title: formatDay(e.data.date),
