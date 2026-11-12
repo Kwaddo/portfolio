@@ -220,7 +220,7 @@
   }
   .project__aside {
     position: sticky;
-    inset-block-start: calc(var(--nav-h) + 1rem);
+    inset-block-start: calc(var(--nav-h) + 4rem);
     grid-column: 9 / -1;
     grid-row: 1;
   }
